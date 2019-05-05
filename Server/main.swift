@@ -8,32 +8,38 @@
 
 import Foundation
 
-print("Hello, World!")
+print("HolyQuest is starting...")
 
-class EchoServer {
+class EchoServer
+{
   let bufferSize = 1024
   let port: Int
   var listenSocket: Socket? = nil
   var connected = [Int32: Socket]()
   var acceptNewConnection = true
 
-  init(port: Int) {
+  init(port: Int)
+  {
     self.port = port
   }
 
-  deinit {
-    for socket in connected.values {
+  deinit
+  {
+    for socket in connected.values
+    {
       socket.close()
     }
     listenSocket?.close()
   }
 
-  func start() throws {
+  func start() throws
+  {
     let socket = try Socket.create()
     listenSocket = socket
     try socket.listen(on: port)
     print("Listening port: \(socket.listeningPort)")
-    repeat {
+    repeat
+    {
       let connectedSocket = try socket.acceptClientConnection()
       print("Connection from: \(connectedSocket.remoteHostname)")
       newConnection(socket: connectedSocket)
@@ -45,14 +51,19 @@ class EchoServer {
     connected[socket.socketfd] = socket
     var cont = true
     var dataRead = Data(capacity: bufferSize)
-    repeat {
-      do {
+    repeat
+    {
+      do
+      {
         let bytes = try socket.read(into: &dataRead)
-        if bytes > 0 {
-          if let readStr = String(data: dataRead, encoding: .utf8) {
+        if bytes > 0
+        {
+          if let readStr = String(data: dataRead, encoding: .utf8)
+          {
             print("Received: \(readStr)")
             try socket.write(from: readStr)
-            if readStr.hasPrefix("quit") {
+            if readStr.hasPrefix("quit")
+            {
               cont = false
               socket.close()
             }
