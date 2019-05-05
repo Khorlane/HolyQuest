@@ -1,0 +1,8 @@
+.DS_Store
+*.xcodeproj/
+/Tests
+/.build
+README.md
+Package.resolved
+/Logs
+*xcworkspace
