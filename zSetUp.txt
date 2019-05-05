@@ -1,0 +1,21 @@
+$ git init
+Initialized empty Git repository in /Users/stephenbryant/Projects/HolyQuest/.git/
+$ git add .
+$ git commit -m "First commit"
+[master (root-commit) 4e6494e] First commit
+ 5 files changed, 4187 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 Server/Socket.swift
+ create mode 100644 Server/SocketProtocols.swift
+ create mode 100644 Server/SocketUtils.swift
+ create mode 100644 Server/main.swift
+$ git remote add origin https://github.com/Khorlane/HolyQuest.git
+$ git push origin master --force
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (8/8), 22.67 KiB | 5.67 MiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0)
+To https://github.com/Khorlane/HolyQuest.git
+ + d287b58...4e6494e master -> master (forced update)
