@@ -5,11 +5,13 @@
 //  Created by Stephen Bryant on 5/5/19.
 //  Copyright © 2019 CodePlain. All rights reserved.
 //
+
 public func porthtons(port: in_port_t) -> in_port_t
 {
   let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
   return isLittleEndian ? _OSSwapInt16(port) : port
 }
+
 import Foundation
 
 print("HolyQuest is starting...")
@@ -18,8 +20,6 @@ var MyListenSocket : Int32
 var MyListenAddr : sockaddr_in! = sockaddr_in()
 var port : in_port_t
 port = 7777
-
-
 
 MyListenAddr.sin_len = UInt8(MemoryLayout.size(ofValue: sockaddr_in.self))
 MyListenAddr.sin_family = sa_family_t(AF_INET)
