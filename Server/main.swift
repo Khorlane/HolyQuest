@@ -6,36 +6,19 @@
 //  Copyright © 2019 CodePlain. All rights reserved.
 //
 
-public func porthtons(port: in_port_t) -> in_port_t
-{
-  let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
-  return isLittleEndian ? _OSSwapInt16(port) : port
-}
-
 import Foundation
+
 
 print("HolyQuest is starting...")
 
-var MyListenSocket : Int32
-var MyListenAddr : sockaddr_in! = sockaddr_in()
-var port : in_port_t
-port = 7777
+let x = ChatServer()
+print (type(of: x))
+print(x)
 
-MyListenAddr.sin_len = UInt8(MemoryLayout.size(ofValue: sockaddr_in.self))
-MyListenAddr.sin_family = sa_family_t(AF_INET)
-MyListenAddr.sin_addr.s_addr = inet_addr("127.0.0.1")
-MyListenAddr.sin_port = porthtons(port: in_port_t(port))
-MyListenAddr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
+let y = TimeServer()
+print (type(of: y))
+print(y)
 
-MyListenSocket = Darwin.socket(AF_INET, Int32(SOCK_STREAM), 0)
-print (type(of: MyListenSocket))
-
-withUnsafePointer(to: &MyListenAddr)
-{
-  sockaddrInPtr in
-  let sockaddrPtr = UnsafeRawPointer(sockaddrInPtr).assumingMemoryBound(to: sockaddr.self)
-  Darwin.bind(MyListenSocket, sockaddrPtr, UInt32(MemoryLayout<sockaddr_in>.stride))
-}
 print("HolyQuest is Listening on Port 7777")
 
 class EchoServer
