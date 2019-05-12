@@ -9,9 +9,8 @@
 #ifndef MySocket_h
 #define MySocket_h
 
-//#include <stdio.h>
-
-int TimeServer(void);
+int Initialize(void);
 int ChatServer(void);
+int PutMessage(void);
 
 #endif /* MySocket_h */
