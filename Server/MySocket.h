@@ -13,4 +13,7 @@ int Initialize(void);
 int ChatServer(void);
 int PutMessage(void);
 
+char * ReturnBuffer(void);
+char * PassReturnString(char * StringInp);
+
 #endif /* MySocket_h */

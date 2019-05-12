@@ -15,6 +15,34 @@ x = Initialize();
 
 x = PutMessage()
 
+var pTmpStr1 : UnsafeMutablePointer<Int8>?
+var pTmpStr2 : UnsafeMutablePointer<Int8>?
+var TmpStr1  : String
+var TmpStr2  : String
+
+var y       : UnsafeMutablePointer<Int8>?
+var s       : String
+
+
+y = ReturnBuffer()
+print (type(of: y))
+print(y!)
+s = String(cString: y!)
+print(s)
+
+pTmpStr1 = ReturnBuffer()
+print (type(of: pTmpStr1))
+print(pTmpStr1!)
+TmpStr1 = String(cString: pTmpStr1!)
+print(TmpStr1)
+
+TmpStr1 = "This is my test string"
+pTmpStr1 = GetStrPtr(from: TmpStr1)
+pTmpStr2 = PassReturnString(pTmpStr1)
+TmpStr2 = String(cString: pTmpStr2!)
+print()
+print("String after returning:", TmpStr2)
+
 x = ChatServer()
 print (type(of: x))
 print(x)

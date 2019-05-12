@@ -124,3 +124,17 @@ extension String
     self = self.lowercased()
   }
 }
+
+func GetStrPtr(from Str: String) -> UnsafeMutablePointer<Int8>
+{
+  var Count  : Int
+  var Result : UnsafeMutablePointer<Int8>
+
+  Count = Str.utf8.count + 1
+  Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
+  Str.withCString
+  { (BaseAddress) in
+    Result.initialize(from: BaseAddress, count: Count)
+  }
+  return Result
+}
