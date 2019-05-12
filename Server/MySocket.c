@@ -77,8 +77,6 @@ char * PassReturnString(char * StringInp)
 {
   printf("String from inside PassReturnString: %s", StringInp);
   strcpy(buffer, StringInp);
-  if (buffer[strlen(StringInp)] == '\0')
-    printf("\r\nzero");
   buffer[strlen(StringInp)] = '!';
   buffer[strlen(StringInp)+1] = '\0';
   return buffer;

@@ -125,6 +125,7 @@ extension String
   }
 }
 
+// string2cstring.swift
 func GetStrPtr(from Str: String) -> UnsafeMutablePointer<Int8>
 {
   var Count  : Int

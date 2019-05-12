@@ -20,19 +20,9 @@ var pTmpStr2 : UnsafeMutablePointer<Int8>?
 var TmpStr1  : String
 var TmpStr2  : String
 
-var y       : UnsafeMutablePointer<Int8>?
-var s       : String
-
-
-y = ReturnBuffer()
-print (type(of: y))
-print(y!)
-s = String(cString: y!)
-print(s)
-
 pTmpStr1 = ReturnBuffer()
-print (type(of: pTmpStr1))
-print(pTmpStr1!)
+print("pTmpStr1 value:", pTmpStr1!)
+print ("pTmpStr1 type:", type(of: pTmpStr1))
 TmpStr1 = String(cString: pTmpStr1!)
 print(TmpStr1)
 
