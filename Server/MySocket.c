@@ -7,6 +7,7 @@
 //
 
 // ChatServer includes
+#include <fcntl.h>
 #include <stdio.h>        // perror puts printf
 #include <stdlib.h>       // exit EXIT_FAILURE
 #include <string.h>       // strlen
@@ -22,28 +23,36 @@
 #define TRUE  1
 #define FALSE 0
 #define PORT  7777
+#define COMMS_WAIT_SEC  5
+#define COMMS_WAIT_USEC 500000
 
 int     activity;
 int     addrlen;
 int     i;
+int     j;
 int     master_socket;
 int     max_clients;
 int     max_sd;
 char *  message;
 int     new_socket;
 int     opt;
+int     ReturnCode;
 int     sd;
 int     valread;
 
 char    buffer[1025];       //data buffer of 1K
 int     client_socket[30];
 
+struct  linger      ld;
 struct  sockaddr_in address;
+struct  timeval     timeoutx;
 
 fd_set  readfds;            // set of socket descriptors
 
 int Initialize(void)
 {
+  i = 0;
+  j = 0;
   message     = "ECHO Daemon v1.0 \r\n";
   max_clients = 30;
   opt         = TRUE;
@@ -51,6 +60,10 @@ int Initialize(void)
   {
     client_socket[i] = 0;
   }
+  ld.l_onoff  = 0;
+  ld.l_linger = 0;
+  timeoutx.tv_sec  = COMMS_WAIT_SEC;
+  timeoutx.tv_usec = COMMS_WAIT_USEC;
   return 0;
 }
 
@@ -72,8 +85,24 @@ int ChatServer(void)
     exit(EXIT_FAILURE);
   }
 
-  // set master socket to allow multiple connections ,
-  // this is just a good habit, it will work without this
+  // Set master socket to non-blocking
+  ReturnCode = fcntl(master_socket, F_SETFL, FNDELAY);
+  if (ReturnCode < 0)
+  {
+    perror("Set non-blocking");
+    exit(EXIT_FAILURE);
+  }
+
+  // Don't allow closed sockets to hang around
+  ReturnCode = setsockopt(master_socket, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+
+  if (ReturnCode < 0)
+  {
+    perror("Set SO_LINGER");
+    exit(EXIT_FAILURE);
+  }
+
+  // Set master socket to allow multiple connections, this is just a good habit, it will work without this
   if (setsockopt(master_socket, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) < 0 )
   {
     perror("setsockopt");
@@ -86,7 +115,7 @@ int ChatServer(void)
   address.sin_port        = htons(PORT);
 
   // bind the socket to localhost port 7777
-  if (bind(master_socket, (struct sockaddr *)&address, sizeof(address)) < 0)
+  if (bind(master_socket, (struct sockaddr *) &address, sizeof(address)) < 0)
   {
     perror("bind failed");
     exit(EXIT_FAILURE);
@@ -129,7 +158,11 @@ int ChatServer(void)
     }
 
     // Wait for an activity on one of the sockets, timeout is NULL, so wait indefinitely
-    activity = select(max_sd + 1, &readfds, NULL, NULL, NULL);
+    j++;
+    printf("\r\n");
+    printf("Before Select %i\r\n", j);
+    activity = select(max_sd + 1, &readfds, NULL, NULL, &timeoutx);
+    printf("After Select %i\r\n", j);
 
     if ((activity < 0) && (errno != EINTR))
     {
