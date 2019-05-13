@@ -1,10 +1,8 @@
-//
-//  MySocket.h
-//  HolyQuest
-//
-//  Created by Stephen Bryant on 5/9/19.
-//  Copyright © 2019 CodePlain. All rights reserved.
-//
+// HolyQuest
+// MySocket.h
+// Socket stuff header
+// Created by Steve Bryant on 05/09/2019.
+// Copyright © 2019 Steve Bryant. All rights reserved.
 
 #ifndef MySocket_h
 #define MySocket_h

@@ -1,10 +1,8 @@
-//
-//  MySocket.c
-//  HolyQuest
-//
-//  Created by Stephen Bryant on 5/9/19.
-//  Copyright © 2019 CodePlain. All rights reserved.
-//
+// HolyQuest
+// MySocket.c
+// Socket stuff code
+// Created by Steve Bryant on 05/09/2019.
+// Copyright © 2019 Steve Bryant. All rights reserved.
 
 // ChatServer includes
 #include <fcntl.h>
