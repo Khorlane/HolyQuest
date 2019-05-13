@@ -11,10 +11,6 @@ import Foundation
 print("HolyQuest is starting...")
 var x : Int32
 
-x = Initialize();
-
-x = PutMessage()
-
 var pTmpStr1 : UnsafeMutablePointer<Int8>?
 var pTmpStr2 : UnsafeMutablePointer<Int8>?
 var TmpStr1  : String
@@ -33,9 +29,11 @@ TmpStr2 = String(cString: pTmpStr2!)
 print()
 print("String after returning:", TmpStr2)
 
-x = ChatServer()
-print (type(of: x))
-print(x)
+ChatServerInit()
 
+PutMessage()
 
+ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
+
+ChatServerLooper()

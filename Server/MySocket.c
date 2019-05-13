@@ -49,24 +49,6 @@ struct  timeval     timeoutx;
 
 fd_set  readfds;            // set of socket descriptors
 
-int Initialize(void)
-{
-  i = 0;
-  j = 0;
-  message     = "ECHO Daemon v1.0 \r\n";
-  max_clients = 30;
-  opt         = TRUE;
-  for (i = 0; i < max_clients; i++)   // initialise all client_socket[] to 0 so not checked
-  {
-    client_socket[i] = 0;
-  }
-  ld.l_onoff  = 0;
-  ld.l_linger = 0;
-  timeoutx.tv_sec  = COMMS_WAIT_SEC;
-  timeoutx.tv_usec = COMMS_WAIT_USEC;
-  return 0;
-}
-
 char * ReturnBuffer(void)
 {
   strcpy(buffer, "My Buffer");
@@ -82,13 +64,31 @@ char * PassReturnString(char * StringInp)
   return buffer;
 }
 
-int PutMessage(void)
+void PutMessage(void)
 {
   printf("%s\r\n", message);
-  return 0;
+  return;
 }
 
-int ChatServer(void)
+void ChatServerInit(void)
+{
+  i = 0;
+  j = 0;
+  message     = "ECHO Daemon v1.0 \r\n";
+  max_clients = 30;
+  opt         = TRUE;
+  for (i = 0; i < max_clients; i++)   // initialise all client_socket[] to 0 so not checked
+  {
+    client_socket[i] = 0;
+  }
+  ld.l_onoff  = 0;
+  ld.l_linger = 0;
+  timeoutx.tv_sec  = COMMS_WAIT_SEC;
+  timeoutx.tv_usec = COMMS_WAIT_USEC;
+  return;
+}
+
+void ChatServerListen(void)
 {
   // Example code: A simple server side code, which echos back the received message.
   // Handle multiple socket connections with select and fd_set on Linux
@@ -148,6 +148,11 @@ int ChatServer(void)
   addrlen = sizeof(address);
   puts("Waiting for connections ...");
 
+  return;
+}
+
+void ChatServerLooper(void)
+{
   while(TRUE)
   {
     // Clear the socket set
@@ -241,11 +246,11 @@ int ChatServer(void)
           // set the string terminating NULL byte on the end of the data read
           buffer[valread] = '\0';
           if (buffer[0] == 'q')
-            return 0;
+            return;
           send(sd, buffer, strlen(buffer), 0 );
         }
       }
     }
   }
-  return 0;
+  return;
 }
