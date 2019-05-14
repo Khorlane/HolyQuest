@@ -16,7 +16,7 @@ var TmpStr2  : String
 
 pTmpStr1 = ReturnBuffer()
 print("pTmpStr1 value:", pTmpStr1!)
-print ("pTmpStr1 type:", type(of: pTmpStr1))
+print("pTmpStr1 type:", type(of: pTmpStr1))
 TmpStr1 = String(cString: pTmpStr1!)
 print(TmpStr1)
 
@@ -30,8 +30,7 @@ print("String after returning:", TmpStr2)
 ChatServerInit()
 
 PutMessage()
-
 ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
 
-ChatServerLooper()
+while ChatServerLooper() == 1 {usleep(5000000)}

@@ -9,7 +9,8 @@
 
 void ChatServerInit(void);
 void ChatServerListen(void);
-void ChatServerLooper(void);
+int  ChatServerLooper(void);
+void AcceptNewConnection(void);
 
 void Initialize(void);
 void PutMessage(void);
