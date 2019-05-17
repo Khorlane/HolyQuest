@@ -10,7 +10,7 @@ func ProcessCommand()
 {
   Command.Strip()
   LogIt(Message: Command)
-  SetPlayerPtr()
+  PlayerSetLookUp()
   pActor = pPlayer
 
   // Player Name
@@ -81,7 +81,7 @@ func DoWho()
   pActor.Output += "\r\n"
   pActor.Output += "--------------"
   pActor.Output += "\r\n"
-  for p in PlayerList
+  for p in PlayerSet
   {
     if p.State == Player.States.Playing
     {

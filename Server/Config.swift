@@ -10,24 +10,25 @@ import Foundation
 // FileHandle
 // URL
 
-var Command       : String           = ""
-var GameShutdown  : Bool             = false
-var HostAdr       : String           = ""
-var Index         : Int              = 0
-var LogFile       : URL              = URL.init(fileURLWithPath: "/")
-var LogFileName   : String           = ""
-var LogHandle     : FileHandle       = FileHandle()
-var LogPath       : String           = ""
-var PlayerList    : [Player]         = []
-var PortNbr       : Int              = 0
-var SockLocAdr    : String           = ""
-var SockRmtAdr    : String           = ""
-var TimeStamp     : Date             = Date()
-var TimeStampFmt  : DateFormatter    = DateFormatter()
-var TmpStr        : String           = ""
+var Command       : String          = ""
+var GameShutdown  : Bool            = false
+var HostAdr       : String          = ""
+var Index         : Int             = 0
+var LogFile       : URL             = URL.init(fileURLWithPath: "/")
+var LogFileName   : String          = ""
+var LogHandle     : FileHandle      = FileHandle()
+var LogPath       : String          = ""
+//var PlayerList    : [Player]        = []
+var PortNbr       : Int             = 0
+var SockLocAdr    : String          = ""
+var SockRmtAdr    : String          = ""
+var TimeStamp     : Date            = Date()
+var TimeStampFmt  : DateFormatter   = DateFormatter()
+var TmpStr        : String          = ""
 
-var pActor        : Player!          = nil
-var pPlayer       : Player!          = nil
+var pActor        : Player!         = nil
+var pPlayer       : Player!         = nil
+var PlayerSet                       = Set<Player>()
 
 let ValidNamesPswd = ["Steve":"alys1","Dawn":"alys2", "Sherry":"alys3", "Chris":"alys4"]
 

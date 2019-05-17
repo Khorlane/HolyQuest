@@ -40,12 +40,28 @@ class Player
   }
 }
 
-func SetPlayerPtr()
+extension Player: Hashable
 {
-  Index = -1
-  for p in PlayerList
+  static func == (lhs: Player, rhs: Player) -> Bool
   {
-    Index = Index + 1
+    return lhs.Name == rhs.Name
+  }
+  func hash(into hasher: inout Hasher)
+  {
+    hasher.combine(Name)
+  }
+}
+
+func PlayerAdd()
+{
+  pPlayer = Player.init(Name: "*", SockRmtAdr: SockRmtAdr)
+  PlayerSetInsert()
+}
+
+func PlayerSetLookUp()
+{
+  for p in PlayerSet
+  {
     if p.SockRmtAdr == SockRmtAdr
     {
       pPlayer = p
@@ -54,14 +70,20 @@ func SetPlayerPtr()
   }
 }
 
-func PlayerAdd()
+func PlayerSetInsert()
 {
-  pPlayer = Player.init(Name: "*", SockRmtAdr: SockRmtAdr)
-  PlayerList.append(pPlayer!)
+  let Good = PlayerSet.insert(pPlayer)
+  if Good.inserted == false
+  {
+    print("PlayerSetInsert failed")
+  }
 }
 
-func PlayerDel()
+func PlayerSetRemove()
 {
-  PlayerList.remove(at: Index)
-  pPlayer = nil
+  let Good = PlayerSet.remove(pPlayer)
+  if Good == nil
+  {
+    print("PlayerSetRemove failed")
+  }
 }

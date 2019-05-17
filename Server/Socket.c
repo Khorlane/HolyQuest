@@ -16,7 +16,7 @@
 #include <arpa/inet.h>    // inet_ntoa
 #include <sys/time.h>     // select
 
-#include "MySocket.h"
+#include "Socket.h"
 
 #define TRUE  1
 #define FALSE 0

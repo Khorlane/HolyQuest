@@ -4,8 +4,8 @@
 // Created by Steve Bryant on 05/09/2019.
 // Copyright © 2019 Steve Bryant. All rights reserved.
 
-#ifndef MySocket_h
-#define MySocket_h
+#ifndef Socket_h
+#define Socket_h
 
 void ChatServerInit(void);
 void ChatServerListen(void);
@@ -18,4 +18,4 @@ void PutMessage(void);
 char * ReturnBuffer(void);
 char * PassReturnString(char * StringInp);
 
-#endif /* MySocket_h */
+#endif /* Socket_h */
