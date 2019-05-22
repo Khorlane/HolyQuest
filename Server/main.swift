@@ -32,5 +32,6 @@ ChatServerInit()
 PutMessage()
 ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
+print(GetListenSocket())
 
 while ChatServerLooper() == 1 {usleep(5000000)}

@@ -157,7 +157,12 @@ void ChatServerListen(void)
     perror("listen");
     exit(EXIT_FAILURE);
   }
-  printf("Listener on port %d\r\n", PORT);
+  printf("Listener  %d on port %d\r\n", ListenSocket, PORT);
+}
+
+int GetListenSocket(void)
+{
+  return ListenSocket;
 }
 
 int ChatServerLooper(void)

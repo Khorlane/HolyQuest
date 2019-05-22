@@ -12,6 +12,8 @@ void ChatServerListen(void);
 int  ChatServerLooper(void);
 void AcceptNewConnection(void);
 
+int  GetListenSocket(void);
+
 void Initialize(void);
 void PutMessage(void);
 
