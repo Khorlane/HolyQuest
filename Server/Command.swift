@@ -2,7 +2,7 @@
 // Command.swift
 // Process commands
 // Created by Steve Bryant on 12/25/2018.
-// Copyright © 2019 Steve Bryant. All rights reserved.
+// Copyright 2019 Steve Bryant. All rights reserved.
 
 import Foundation   // Not required at this time
 
@@ -85,7 +85,7 @@ func DoWho()
   {
     if p.State == Player.States.Playing
     {
-      print(p.Name, p.SockRmtAdr)
+      print(p.Name, p.SocketAddr)
       pActor.Output += p.Name
       if p.Afk == true
       {

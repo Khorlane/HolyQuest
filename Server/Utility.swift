@@ -2,7 +2,7 @@
 // Utility.swift
 // Utility functions
 // Created by Steve Bryant on 12/25/2018.
-// Copyright © 2019 Steve Bryant. All rights reserved.
+// Copyright 2019 Steve Bryant. All rights reserved.
 
 import Foundation
 // Date()
@@ -134,8 +134,8 @@ func GetStrPtr(from Str: String) -> UnsafeMutablePointer<Int8>
   Count = Str.utf8.count + 1
   Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
   Str.withCString
-  { (BaseAddress) in
-    Result.initialize(from: BaseAddress, count: Count)
+    { (BaseAddress) in
+      Result.initialize(from: BaseAddress, count: Count)
   }
   return Result
 }

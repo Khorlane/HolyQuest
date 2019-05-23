@@ -2,7 +2,7 @@
 // MySocket.c
 // Socket stuff code
 // Created by Steve Bryant on 05/09/2019.
-// Copyright © 2019 Steve Bryant. All rights reserved.
+// Copyright 2019 Steve Bryant. All rights reserved.
 
 // ChatServer includes
 #include <fcntl.h>
@@ -95,7 +95,7 @@ void ChatServerInit(void)
   }
 }
 
-void ChatServerListen(void)
+int ChatServerListen(void)
 {
   //****************
   // Create socket *
@@ -103,7 +103,7 @@ void ChatServerListen(void)
   ListenSocket = socket(AF_INET, SOCK_STREAM, 0);
   if (ListenSocket == 0)
   {
-    perror("Create listening socket failed");
+    perror("-- Create listening socket failed\r\n");
     exit(EXIT_FAILURE);
   }
   //*******************
@@ -112,7 +112,7 @@ void ChatServerListen(void)
   ReturnCode = fcntl(ListenSocket, F_SETFL, FNDELAY);
   if (ReturnCode < 0)
   {
-    perror("Set non-blocking failed");
+    perror("-- Set non-blocking failed\r\n");
     exit(EXIT_FAILURE);
   }
   //****************
@@ -121,7 +121,7 @@ void ChatServerListen(void)
   ReturnCode = setsockopt(ListenSocket, SOL_SOCKET, SO_LINGER, &Linger, LingerSize);
   if (ReturnCode < 0)
   {
-    perror("Set SO_LINGER failed");
+    perror("-- Set SO_LINGER failed\r\n");
     exit(EXIT_FAILURE);
   }
   //*******************
@@ -130,7 +130,7 @@ void ChatServerListen(void)
   ReturnCode = setsockopt(ListenSocket, SOL_SOCKET, SO_REUSEADDR, &OptVal, OptValSize);
   if (ReturnCode < 0)
   {
-    perror("Set SO_REUSEADDR failed");
+    perror("-- Set SO_REUSEADDR failed\r\n");
     exit(EXIT_FAILURE);
   }
   //************************
@@ -145,7 +145,7 @@ void ChatServerListen(void)
   BindResult = bind(ListenSocket, (struct sockaddr *) &Socket, SocketSize);
   if (BindResult < 0)
   {
-    perror("Bind failed");
+    perror("-- Bind failed\r\n");
     exit(EXIT_FAILURE);
   }
   //*********
@@ -154,36 +154,35 @@ void ChatServerListen(void)
   ListenResult = listen(ListenSocket, 20);
   if (ListenResult < 0)
   {
-    perror("listen");
+    perror("-- Listen failed\r\n");
     exit(EXIT_FAILURE);
   }
-  printf("Listener  %d on port %d\r\n", ListenSocket, PORT);
-}
-
-int GetListenSocket(void)
-{
+  printf("Listener on port %d\r\n", PORT);
   return ListenSocket;
 }
 
-int ChatServerLooper(void)
+void SetUpSelect1(void)
 {
   //**********************
   // Set up for select() *
   //**********************
+  printf("*** SetUpSelect1 ***\r\n");
   FD_ZERO(&InpSet);                               // Clear the socket set
   FD_SET(ListenSocket, &InpSet);                  // Add master socket to set
-  MaxSocketHandle = ListenSocket;                 // Figure
-  for (i = 0; i < MaxClients; i++)                //  out
-  {                                               //   max socket handle
-    SocketHandle1 = ClientSocketList[i];          //    and
-    if (SocketHandle1 > 0)                        //     add
-      FD_SET(SocketHandle1, &InpSet);             //      acitve
-    if (SocketHandle1 > MaxSocketHandle)          //       clients
-      MaxSocketHandle = SocketHandle1;            //        to InpSet
-  }
+}
+
+void SetUpSelect2(int SocketHandle)
+{
+  printf("*** SetUpSelect2 ***\r\n");
+  FD_SET(SocketHandle, &InpSet);
+}
+
+void CheckForSocketActivity(int MaxSocketHandle)
+{
   //************************************
   // Check for activity using select() *
   //************************************
+  printf("*** CheckForSocketActivity ***\r\n");
   j++;
   printf("\r\n");
   printf("Before Select %i\r\n", j);
@@ -191,50 +190,68 @@ int ChatServerLooper(void)
   printf("After Select %i\r\n", j);
   if ((SocketCount < 0) && (errno != EINTR))
   {
-    printf("select error");
+    printf("-- Select error\r\n");
   }
+}
+
+int IsNewConnection(void)
+{
+  printf("*** IsNewConnection ***\r\n");
   if (FD_ISSET(ListenSocket, &InpSet))
   {
-    AcceptNewConnection();
+    return TRUE;
   }
+  return FALSE;
+}
+
+int CheckClient(int SocketHandle1)
+{
   //******************************************
   // Check for activity on other connections *
   //******************************************
-  for (i = 0; i < MaxClients; i++)
+  printf("*** CheckClient ***\r\n");
+  if (FD_ISSET(SocketHandle1, &InpSet))
   {
-    SocketHandle1 = ClientSocketList[i];
-    if (FD_ISSET(SocketHandle1, &InpSet))
-    {
-      ReadByteCount = read(SocketHandle1, Buffer, 1024);
-      if (ReadByteCount == 0)           // Somebody disconnected, get his details and print
-      {
-        getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
-        printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-        close(SocketHandle1);           // Close the socket
-        ClientSocketList[i] = 0;        // Mark as 0 in list for reuse
-      }
-      else  // Echo back the message that came in
-      {
-        Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
-        if (Buffer[0] == 'q')
-          return 0;
-        BufferLen = strlen(Buffer);
-        send(SocketHandle1, Buffer, BufferLen, 0);
-      }
-    }
+    return TRUE;
   }
-  return 1;
+  return FALSE;
 }
 
-void AcceptNewConnection(void)
+long ReadClient(int SocketHandle1)
+{
+  printf("*** ReadClient ***\r\n");
+  ReadByteCount = read(SocketHandle1, Buffer, 1024);
+  if (Buffer[0] == 'q')
+    return 0;
+  return ReadByteCount;
+}
+
+void DisconnectClient(int SocketHandle1)
+{
+  printf("*** DisconnectClient ***\r\n");
+  getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
+  printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
+  close(SocketHandle1);           // Close the socket
+}
+
+void SendClient(int SocketHandle1)
+{
+  printf("*** SendClient ***\r\n");
+  Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
+  BufferLen = strlen(Buffer);
+  send(SocketHandle1, Buffer, BufferLen, 0);
+}
+
+int AcceptNewConnection(void)
 {
   //****************************
   // Accept the new connection *
   //****************************
+  printf("*** AcceptNewConnection ***\r\n");
   SocketHandle2 = accept(ListenSocket, (struct sockaddr *) &Socket, (socklen_t *) &SocketSize);
   if (SocketHandle2 < 0)
   {
-    perror("Accept failed");
+    perror("-- Accept failed\r\n");
     exit(EXIT_FAILURE);
   }
   //***********************
@@ -245,7 +262,7 @@ void AcceptNewConnection(void)
   SendResult = send(SocketHandle2, Message, MessageLen, 0);
   if (SendResult != MessageLen)
   {
-    perror("Send failed");
+    perror("-- Send failed\r\n");
   }
   printf("Welcome message sent successfully\r\n");
   //************************************
@@ -260,4 +277,5 @@ void AcceptNewConnection(void)
       break;
     }
   }
+  return SocketHandle2;
 }
