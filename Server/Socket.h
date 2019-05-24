@@ -24,6 +24,7 @@ void Initialize(void);
 void PutMessage(void);
 
 char * GetBuffer(void);
+void SetBuffer(char * StringInp);
 char * PassReturnString(char * StringInp);
 
 #endif /* Socket_h */

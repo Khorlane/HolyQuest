@@ -75,6 +75,11 @@ char * GetBuffer(void)
   return Buffer;
 }
 
+void SetBuffer(char * StringInp)
+{
+  strcpy(Buffer, StringInp);
+}
+
 void ChatServerInit(void)
 {
   i               = 0;

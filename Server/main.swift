@@ -33,7 +33,7 @@ PutMessage()
 ListenSocket = ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
 
-while Running
+while !GameShutdown
 {
   SetUpSelect1()
   MaxSocketHandle = ListenSocket
@@ -67,12 +67,16 @@ while Running
         continue
       }
       pTmpStr1 = GetBuffer()
-      TmpStr1 = String(cString: pTmpStr1!)
-      print("Buffer: ", TmpStr1)
-      if TmpStr1 == "shutdown\n"
-      {
-        Running = false
-      }
+      Command = String(cString: pTmpStr1!)
+      print("Buffer: ", Command)
+      ProcessCommand()
+      //SendClient(p.SocketHandle)
+    }
+  }
+  for p in PlayerSet
+  {
+    if p.Output.count > 0
+    {
       SendClient(p.SocketHandle)
     }
   }

@@ -10,34 +10,7 @@ func ProcessCommand()
 {
   Command.Strip()
   LogIt(Message: Command)
-  PlayerSetLookUp()
-  pActor = pPlayer
-
-  // Player Name
-  if pPlayer.State == Player.States.GetName
-  {
-    pPlayer.Name = Command
-    if pPlayer.IsValidName()
-    {
-      pPlayer.State = Player.States.GetPassword
-      return
-    }
-    print("Invalid name")
-    pPlayer.Name = "*"
-    return
-  }
-
-  // Player Password
-  if pPlayer.State == Player.States.GetPassword
-  {
-    if ValidNamesPswd[pPlayer.Name]! == Command
-    {
-      pPlayer.State = Player.States.Playing
-      return
-    }
-    print("Invalid password")
-    return
-  }
+  //DoPlayerStuff()
 
   // Process Command
   Command.Lower()
@@ -47,8 +20,8 @@ func ProcessCommand()
   case "shutdown" : DoShutdown()
   case "who"      : DoWho()
   default         : DoZitsBroken()
-  pActor.Output += "Invalid command"
-  pActor.Output += "\r\n"
+  //pActor.Output += "Invalid command"
+  //pActor.Output += "\r\n"
   }
   // chatHandler.SendToPlayers()
 }
@@ -99,4 +72,45 @@ func DoWho()
 func DoZitsBroken()
 {
   print("She's a pumping mud, shut 'er down!")
+}
+
+func DoPlayerStuff()
+{
+  PlayerSetLookUp()
+  pActor = pPlayer
+  GetPlayerName()
+  GetPlayerPswd()
+}
+
+func GetPlayerName()
+
+// Player Name
+{
+  if pPlayer.State == Player.States.GetName
+  {
+    pPlayer.Name = Command
+    if pPlayer.IsValidName()
+    {
+      pPlayer.State = Player.States.GetPassword
+      return
+    }
+    print("Invalid name")
+    pPlayer.Name = "*"
+    return
+  }
+}
+
+func GetPlayerPswd()
+{
+  // Player Password
+  if pPlayer.State == Player.States.GetPassword
+  {
+    if ValidNamesPswd[pPlayer.Name]! == Command
+    {
+      pPlayer.State = Player.States.Playing
+      return
+    }
+    print("Invalid password")
+    return
+  }
 }
