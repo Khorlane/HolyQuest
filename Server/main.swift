@@ -14,7 +14,7 @@ var pTmpStr2 : UnsafeMutablePointer<Int8>?
 var TmpStr1  : String
 var TmpStr2  : String
 
-pTmpStr1 = ReturnBuffer()
+pTmpStr1 = GetBuffer()
 print("pTmpStr1 value:", pTmpStr1!)
 print("pTmpStr1 type:", type(of: pTmpStr1))
 TmpStr1 = String(cString: pTmpStr1!)
@@ -33,7 +33,7 @@ PutMessage()
 ListenSocket = ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
 
-while true
+while Running
 {
   SetUpSelect1()
   MaxSocketHandle = ListenSocket
@@ -65,6 +65,13 @@ while true
         DisconnectClient(p.SocketHandle)
         PlayerDel()
         continue
+      }
+      pTmpStr1 = GetBuffer()
+      TmpStr1 = String(cString: pTmpStr1!)
+      print("Buffer: ", TmpStr1)
+      if TmpStr1 == "shutdown\n"
+      {
+        Running = false
       }
       SendClient(p.SocketHandle)
     }

@@ -24,6 +24,7 @@ var MaxSocketHandle : Int32           = 0
 var NewConnection   : Int32           = 0
 var PortNbr         : Int             = 0
 var ReadBytes       : Int             = 0
+var Running         : Bool            = true
 var SocketAddr      : String          = ""
 var SocketHandle1   : Int32           = 0
 var SockLocAdr      : String          = ""

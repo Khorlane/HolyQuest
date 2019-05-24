@@ -23,7 +23,7 @@ void DisconnectClient(int SocketHandle1);
 void Initialize(void);
 void PutMessage(void);
 
-char * ReturnBuffer(void);
+char * GetBuffer(void);
 char * PassReturnString(char * StringInp);
 
 #endif /* Socket_h */
