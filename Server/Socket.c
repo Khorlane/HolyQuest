@@ -82,6 +82,7 @@ void SetBuffer(char * StringInp)
 
 void ChatServerInit(void)
 {
+  printf("*** ChatServerInit ***\r\n");
   i               = 0;
   j               = 0;
   Linger.l_onoff  = 0;
@@ -102,6 +103,7 @@ void ChatServerInit(void)
 
 int ChatServerListen(void)
 {
+  printf("*** ChatServerListen ***\r\n");
   //****************
   // Create socket *
   //****************

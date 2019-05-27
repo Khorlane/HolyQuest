@@ -8,9 +8,10 @@ import Foundation   // Not required at this time
 
 func ProcessCommand()
 {
+  print ("*** ProcessCommand ***")
   Command.Strip()
   LogIt(Message: Command)
-  //DoPlayerStuff()
+  DoPlayerStuff()
 
   // Process Command
   Command.Lower()
@@ -20,18 +21,18 @@ func ProcessCommand()
   case "shutdown" : DoShutdown()
   case "who"      : DoWho()
   default         : DoZitsBroken()
-  //pActor.Output += "Invalid command"
-  //pActor.Output += "\r\n"
+  pActor.Output += "Invalid command"
+  pActor.Output += "\r\n"
   }
-  // chatHandler.SendToPlayers()
 }
 
 func DoAfk()
 {
+  print("*** DoAfk ***")
   if pActor.Afk == true
   {
     pActor.Afk = false
-    pActor.Output += "Your are no longer AFK"
+    pActor.Output += "You are no longer AFK"
     pActor.Output += "\r\n"
   }
   else
@@ -44,23 +45,25 @@ func DoAfk()
 
 func DoShutdown()
 {
+  print("*** DoShutdown ***")
   GameShutdown = true
 }
 
 func DoWho()
 {
+  print("*** DoWho ***")
   pActor.Output += "\r\n"
   pActor.Output += "Players online"
   pActor.Output += "\r\n"
   pActor.Output += "--------------"
   pActor.Output += "\r\n"
-  for p in PlayerSet
+  for p1 in PlayerSet
   {
-    if p.State == Player.States.Playing
+    if p1.State == Player.States.Playing
     {
-      print(p.Name, p.SocketAddr)
-      pActor.Output += p.Name
-      if p.Afk == true
+      print(p1.Name, p1.SocketAddr)
+      pActor.Output += p1.Name
+      if p1.Afk == true
       {
         pActor.Output += "(AFK)"
       }
@@ -71,21 +74,23 @@ func DoWho()
 
 func DoZitsBroken()
 {
+  print("*** DoZitsBroken ***")
   print("She's a pumping mud, shut 'er down!")
 }
 
 func DoPlayerStuff()
 {
-  PlayerSetLookUp()
+  print("*** DoPlayerStuff ***")
+  //PlayerSetLookUp()
   pActor = pPlayer
   GetPlayerName()
   GetPlayerPswd()
 }
 
 func GetPlayerName()
-
-// Player Name
 {
+  if PlayerName != "abc" {return}
+  print("*** GetPlayerName ***")
   if pPlayer.State == Player.States.GetName
   {
     pPlayer.Name = Command
@@ -95,14 +100,14 @@ func GetPlayerName()
       return
     }
     print("Invalid name")
-    pPlayer.Name = "*"
     return
   }
 }
 
 func GetPlayerPswd()
 {
-  // Player Password
+  if PlayerName != "abc" {return}
+  print("*** GetPlayerPswd ***")
   if pPlayer.State == Player.States.GetPassword
   {
     if ValidNamesPswd[pPlayer.Name]! == Command

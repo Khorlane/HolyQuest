@@ -50,7 +50,7 @@ while !GameShutdown
   if NewConnection == 1
   {
     SocketHandle1 = AcceptNewConnection();
-    SocketAddr = String(SocketHandle1)
+    PlayerName = String(SocketHandle1)
     PlayerAdd()
   }
   for p in PlayerSet
@@ -70,14 +70,18 @@ while !GameShutdown
       Command = String(cString: pTmpStr1!)
       print("Buffer: ", Command)
       ProcessCommand()
-      //SendClient(p.SocketHandle)
     }
   }
   for p in PlayerSet
   {
+    print("$$$ ", p.Name)
     if p.Output.count > 0
     {
+      print("!!! ", p.Name)
+      pTmpStr1 = GetStrPtr(from: p.Output)
+      SetBuffer(pTmpStr1)
       SendClient(p.SocketHandle)
+      p.Output = ""
     }
   }
   usleep(5000000)

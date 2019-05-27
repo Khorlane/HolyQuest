@@ -24,6 +24,7 @@ class Player
 
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
+    print("*** Player Class init ***")
     self.Name         = Name
     self.Afk          = false
     self.Output       = ""
@@ -34,6 +35,7 @@ class Player
 
   func IsValidName() -> Bool
   {
+    print("*** IsValidName ***")
     if ValidNamesPswd[pPlayer.Name] != nil
     {
       return true
@@ -56,23 +58,26 @@ extension Player: Hashable
 
 func PlayerAdd()
 {
+  print("*** PlayerAdd ***")
   print("PlayerAdd", SocketAddr)
-  pPlayer = Player.init(Name: SocketAddr, SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
+  pPlayer = Player.init(Name: PlayerName, SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
   PlayerSetInsert()
 }
 
 func PlayerDel()
 {
+  print("*** PlayerDel ***")
   PlayerSetRemove()
 }
 
 func PlayerSetLookUp()
 {
-  for p in PlayerSet
+  print("*** PlayerSetLookUp ***")
+  for p1 in PlayerSet
   {
-    if p.SocketAddr == SocketAddr
+    if p1.Name == PlayerName
     {
-      pPlayer = p
+      pPlayer = p1
       break
     }
   }
@@ -80,6 +85,7 @@ func PlayerSetLookUp()
 
 func PlayerSetInsert()
 {
+  print("*** PlayerSetInsert ***")
   let Good = PlayerSet.insert(pPlayer)
   if Good.inserted == false
   {
@@ -89,6 +95,7 @@ func PlayerSetInsert()
 
 func PlayerSetRemove()
 {
+  print("*** PlayerSetRemove ***")
   let Good = PlayerSet.remove(pPlayer)
   if Good == nil
   {
