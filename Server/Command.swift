@@ -12,8 +12,6 @@ func ProcessCommand()
   Command.Strip()
   LogIt(Message: Command)
   DoPlayerStuff()
-
-  // Process Command
   Command.Lower()
   switch Command
   {
@@ -81,7 +79,7 @@ func DoZitsBroken()
 func DoPlayerStuff()
 {
   print("*** DoPlayerStuff ***")
-  //PlayerSetLookUp()
+  PlayerSetLookUp()
   pActor = pPlayer
   GetPlayerName()
   GetPlayerPswd()

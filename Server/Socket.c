@@ -18,11 +18,13 @@
 
 #include "Socket.h"
 
-#define TRUE  1
-#define FALSE 0
-#define PORT  7777
+#define TRUE            1
+#define FALSE           0
+#define PORT            7777
 #define COMMS_WAIT_SEC  0
 #define COMMS_WAIT_USEC 1
+#define DEBUGIT(x)      if (DEBUGIT_LVL >= x) {printf("*** ");printf(__FUNCTION__);printf(" ***\r\n");}
+#define DEBUGIT_LVL     1
 
 int       BindResult;
 size_t    BufferLen;
@@ -82,7 +84,7 @@ void SetBuffer(char * StringInp)
 
 void ChatServerInit(void)
 {
-  printf("*** ChatServerInit ***\r\n");
+  DEBUGIT(1);
   i               = 0;
   j               = 0;
   Linger.l_onoff  = 0;
@@ -103,7 +105,7 @@ void ChatServerInit(void)
 
 int ChatServerListen(void)
 {
-  printf("*** ChatServerListen ***\r\n");
+  DEBUGIT(1);
   //****************
   // Create socket *
   //****************
@@ -173,14 +175,14 @@ void SetUpSelect1(void)
   //**********************
   // Set up for select() *
   //**********************
-  printf("*** SetUpSelect1 ***\r\n");
+  DEBUGIT(5);
   FD_ZERO(&InpSet);                               // Clear the socket set
   FD_SET(ListenSocket, &InpSet);                  // Add master socket to set
 }
 
 void SetUpSelect2(int SocketHandle)
 {
-  printf("*** SetUpSelect2 ***\r\n");
+  DEBUGIT(5);
   FD_SET(SocketHandle, &InpSet);
 }
 
@@ -189,12 +191,8 @@ void CheckForSocketActivity(int MaxSocketHandle)
   //************************************
   // Check for activity using select() *
   //************************************
-  printf("*** CheckForSocketActivity ***\r\n");
-  j++;
-  printf("\r\n");
-  printf("Before Select %i\r\n", j);
+  DEBUGIT(1);
   SocketCount = select(MaxSocketHandle + 1, &InpSet, NULL, NULL, &TimeOut);
-  printf("After Select %i\r\n", j);
   if ((SocketCount < 0) && (errno != EINTR))
   {
     printf("-- Select error\r\n");
@@ -203,7 +201,7 @@ void CheckForSocketActivity(int MaxSocketHandle)
 
 int IsNewConnection(void)
 {
-  printf("*** IsNewConnection ***\r\n");
+  DEBUGIT(5);
   if (FD_ISSET(ListenSocket, &InpSet))
   {
     return TRUE;
@@ -216,7 +214,7 @@ int CheckClient(int SocketHandle1)
   //******************************************
   // Check for activity on other connections *
   //******************************************
-  printf("*** CheckClient ***\r\n");
+  DEBUGIT(5);
   if (FD_ISSET(SocketHandle1, &InpSet))
   {
     return TRUE;
@@ -226,7 +224,7 @@ int CheckClient(int SocketHandle1)
 
 long ReadClient(int SocketHandle1)
 {
-  printf("*** ReadClient ***\r\n");
+  DEBUGIT(1);
   ReadByteCount = read(SocketHandle1, Buffer, 1024);
   Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
   if (Buffer[0] == 'q')
@@ -236,7 +234,7 @@ long ReadClient(int SocketHandle1)
 
 void DisconnectClient(int SocketHandle1)
 {
-  printf("*** DisconnectClient ***\r\n");
+  DEBUGIT(1);
   getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
   printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
   close(SocketHandle1);           // Close the socket
@@ -244,7 +242,7 @@ void DisconnectClient(int SocketHandle1)
 
 void SendClient(int SocketHandle1)
 {
-  printf("*** SendClient ***\r\n");
+  DEBUGIT(1);
   BufferLen = strlen(Buffer);
   send(SocketHandle1, Buffer, BufferLen, 0);
 }
@@ -254,7 +252,7 @@ int AcceptNewConnection(void)
   //****************************
   // Accept the new connection *
   //****************************
-  printf("*** AcceptNewConnection ***\r\n");
+  DEBUGIT(1);
   SocketHandle2 = accept(ListenSocket, (struct sockaddr *) &Socket, (socklen_t *) &SocketSize);
   if (SocketHandle2 < 0)
   {

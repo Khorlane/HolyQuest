@@ -69,15 +69,14 @@ while !GameShutdown
       pTmpStr1 = GetBuffer()
       Command = String(cString: pTmpStr1!)
       print("Buffer: ", Command)
+      PlayerName = String(p.SocketHandle)
       ProcessCommand()
     }
   }
   for p in PlayerSet
   {
-    print("$$$ ", p.Name)
     if p.Output.count > 0
     {
-      print("!!! ", p.Name)
       pTmpStr1 = GetStrPtr(from: p.Output)
       SetBuffer(pTmpStr1)
       SendClient(p.SocketHandle)
