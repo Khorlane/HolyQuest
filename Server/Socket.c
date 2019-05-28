@@ -191,7 +191,7 @@ void CheckForSocketActivity(int MaxSocketHandle)
   //************************************
   // Check for activity using select() *
   //************************************
-  DEBUGIT(1);
+  DEBUGIT(5);
   SocketCount = select(MaxSocketHandle + 1, &InpSet, NULL, NULL, &TimeOut);
   if ((SocketCount < 0) && (errno != EINTR))
   {

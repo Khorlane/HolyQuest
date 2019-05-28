@@ -28,7 +28,6 @@ func LogIt
   TimeStamp = Date()
   TmpStr = TimeStampFmt.string(from: TimeStamp)
   TmpStr = TmpStr + " \(Message) (File: \(file), Function: \(function), Line: \(line))"
-  print(TmpStr)
   TmpStr = TmpStr + "\r\n"
   LogHandle = try! FileHandle(forWritingTo: LogFile)
   LogHandle.seekToEndOfFile()

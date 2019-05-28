@@ -7,6 +7,7 @@
 import Foundation     // Not required at this time
 
 print("HolyQuest is starting...")
+Initialization()
 var x : Int32
 
 var pTmpStr1 : UnsafeMutablePointer<Int8>?
@@ -83,5 +84,5 @@ while !GameShutdown
       p.Output = ""
     }
   }
-  usleep(5000000)
+  usleep(0100000)
 }
