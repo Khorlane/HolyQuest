@@ -51,7 +51,7 @@ while !GameShutdown
   if NewConnection == 1
   {
     SocketHandle1 = AcceptNewConnection();
-    PlayerName = String(SocketHandle1)
+    PlayerSocketHandle = SocketHandle1
     PlayerAdd()
   }
   for p in PlayerSet
@@ -70,7 +70,7 @@ while !GameShutdown
       pTmpStr1 = GetBuffer()
       Command = String(cString: pTmpStr1!)
       print("Buffer: ", Command)
-      PlayerName = String(p.SocketHandle)
+      PlayerSocketHandle = p.SocketHandle
       ProcessCommand()
     }
   }

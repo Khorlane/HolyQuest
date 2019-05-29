@@ -61,6 +61,8 @@ func DoWho()
     {
       print(p1.Name, p1.SocketAddr)
       pActor.Output += p1.Name
+      pActor.Output += p1.SocketAddr
+      pActor.Output += String(p1.SocketHandle)
       if p1.Afk == true
       {
         pActor.Output += "(AFK)"
@@ -81,13 +83,19 @@ func DoPlayerStuff()
   print("*** DoPlayerStuff ***")
   PlayerSetLookUp()
   pActor = pPlayer
-  GetPlayerName()
-  GetPlayerPswd()
+  if pPlayer.State == Player.States.GetName
+  {
+    GetPlayerName()
+  }
+  else
+  if pPlayer.State == Player.States.GetPassword
+  {
+    GetPlayerPswd()
+  }
 }
 
 func GetPlayerName()
 {
-  if PlayerName != "abc" {return}
   print("*** GetPlayerName ***")
   if pPlayer.State == Player.States.GetName
   {
@@ -104,7 +112,6 @@ func GetPlayerName()
 
 func GetPlayerPswd()
 {
-  if PlayerName != "abc" {return}
   print("*** GetPlayerPswd ***")
   if pPlayer.State == Player.States.GetPassword
   {

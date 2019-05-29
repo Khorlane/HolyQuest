@@ -48,11 +48,11 @@ extension Player: Hashable
 {
   static func == (lhs: Player, rhs: Player) -> Bool
   {
-    return lhs.Name == rhs.Name
+    return lhs.SocketHandle == rhs.SocketHandle
   }
   func hash(into hasher: inout Hasher)
   {
-    hasher.combine(Name)
+    hasher.combine(SocketHandle)
   }
 }
 
@@ -60,7 +60,7 @@ func PlayerAdd()
 {
   print("*** PlayerAdd ***")
   print("PlayerAdd", SocketAddr)
-  pPlayer = Player.init(Name: PlayerName, SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
+  pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
   PlayerSetInsert()
 }
 
