@@ -8,12 +8,17 @@ import Foundation   // Not required at this time
 
 class Player
 {
-  var Name          : String
-  var Afk           : Bool
+  // Player variables
   var Output        : String
   var SocketHandle  : Int32
   var SocketAddr    : String
   var State         = States.GetName
+  // Player file variables
+  var Name          : String
+  var Password      : String
+  var Admin         : Bool
+  var Afk           : Bool
+  var RoomNbr       : Int
 
   enum States
   {
@@ -25,12 +30,17 @@ class Player
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
     print("*** Player Class init ***")
-    self.Name         = Name
-    self.Afk          = false
+    // Initialize variables
     self.Output       = ""
     self.SocketAddr   = SocketAddr
     self.SocketHandle = SocketHandle
     self.State        = States.GetName
+    // Initialize file variables
+    self.Name         = ""
+    self.Password     = ""
+    self.Admin        = false
+    self.Afk          = false
+    self.RoomNbr      = START_ROOM
   }
 
   func IsValidName() -> Bool

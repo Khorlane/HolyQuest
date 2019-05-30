@@ -11,16 +11,20 @@ func ProcessCommand()
   print ("*** ProcessCommand ***")
   Command.Strip()
   LogIt(Message: Command)
+  MudCmd = Command.components(separatedBy: " ").first!
   DoPlayerStuff()
-  Command.Lower()
-  switch Command
+  MudCmd.Lower()
+  Command = Command.deletingPrefix(MudCmd)
+  Command.Strip()
+  switch MudCmd
   {
-  case "afk"      : DoAfk()
-  case "shutdown" : DoShutdown()
-  case "who"      : DoWho()
-  default         : DoZitsBroken()
-  pActor.Output += "Invalid command"
-  pActor.Output += "\r\n"
+    case "afk"      : DoAfk()
+    case "say"      : DoSay()
+    case "shutdown" : DoShutdown()
+    case "who"      : DoWho()
+    default         : DoZitsBroken()
+    pActor.Output += "Invalid command"
+    pActor.Output += "\r\n"
   }
 }
 
@@ -39,6 +43,23 @@ func DoAfk()
     pActor.Output += "You are now AFK"
     pActor.Output += "\r\n"
   }
+  pActor.Output += "> "
+}
+
+func DoSay()
+{
+  TmpStr1 = Command
+  pActor.Output = ""
+  pActor.Output += "You say: "
+  pActor.Output += TmpStr1
+  pActor.Output += "\r\n"
+  pActor.Output += "> "
+  MsgTxt = ""
+  MsgTxt += pActor.Name
+  MsgTxt += " says: "
+  MsgTxt += TmpStr1
+  MsgTxt += "\r\n"
+  SendToRoom()
 }
 
 func DoShutdown()
@@ -70,6 +91,7 @@ func DoWho()
       pActor.Output += "\r\n"
     }
   }
+  pActor.Output += "> "
 }
 
 func DoZitsBroken()
@@ -99,7 +121,7 @@ func GetPlayerName()
   print("*** GetPlayerName ***")
   if pPlayer.State == Player.States.GetName
   {
-    pPlayer.Name = Command
+    pPlayer.Name = MudCmd
     if pPlayer.IsValidName()
     {
       pPlayer.State = Player.States.GetPassword
@@ -115,12 +137,25 @@ func GetPlayerPswd()
   print("*** GetPlayerPswd ***")
   if pPlayer.State == Player.States.GetPassword
   {
-    if ValidNamesPswd[pPlayer.Name]! == Command
+    if ValidNamesPswd[pPlayer.Name]! == MudCmd
     {
       pPlayer.State = Player.States.Playing
       return
     }
     print("Invalid password")
     return
+  }
+}
+
+func SendToRoom()
+{
+  for p1 in PlayerSet
+  {
+    if p1.Name == pActor.Name {continue}
+    if p1.RoomNbr == pActor.RoomNbr
+    {
+      p1.Output += MsgTxt
+      p1.Output += "> "
+    }
   }
 }

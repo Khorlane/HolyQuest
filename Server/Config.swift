@@ -11,6 +11,7 @@ import Foundation
 // URL
 
 var Command             : String          = ""
+var MudCmd              : String          = ""
 var GameShutdown        : Bool            = false
 var GotInput            : Int32           = 0
 var HostAdr             : String          = ""
@@ -22,7 +23,7 @@ var LogHandle           : FileHandle      = FileHandle()
 var LogPath             : String          = ""
 var MaxSocketHandle     : Int32           = 0
 var PlayerName          : String          = ""
-var PlayerSocketHandle  : Int32           = 0
+var MsgTxt              : String          = ""
 var NewConnection       : Int32           = 0
 var PortNbr             : Int             = 0
 var ReadBytes           : Int             = 0
@@ -41,6 +42,7 @@ let ValidNamesPswd = ["Steve":"alys1","Dawn":"alys2", "Sherry":"alys3", "Chris":
 
 let HOST_ADDRESS_IPV4 = "127.0.0.1"
 let HOST_ADDRESS_IPV6 = "::1"
-let PORT_NUMBER       = 7777
 let LOG_PATH          = "/Users/stephenbryant/Projects/HolyQuest/Logs/"
 let LOG_FILE_NAME     = "Log.txt"
+let PORT_NUMBER       = 7777
+let START_ROOM        = 86

@@ -124,6 +124,15 @@ extension String
   }
 }
 
+extension String
+{
+  mutating func deletingPrefix(_ prefix: String) -> String
+  {
+    guard self.hasPrefix(prefix) else { return self }
+    return String(self.dropFirst(prefix.count))
+  }
+}
+
 // string2cstring.swift
 func GetStrPtr(from Str: String) -> UnsafeMutablePointer<Int8>
 {
