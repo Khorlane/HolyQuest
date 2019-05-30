@@ -71,6 +71,9 @@ func PlayerAdd()
   print("*** PlayerAdd ***")
   print("PlayerAdd", SocketAddr)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
+  pPlayer.Output += "Welome to HolyQuest\r\n"
+  pPlayer.Output += "Name?\r\n"
+  pPlayer.Output += "> "
   PlayerSetInsert()
 }
 

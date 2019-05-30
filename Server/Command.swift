@@ -12,7 +12,18 @@ func ProcessCommand()
   Command.Strip()
   LogIt(Message: Command)
   MudCmd = Command.components(separatedBy: " ").first!
-  DoPlayerStuff()
+  PlayerSetLookUp()
+  pActor = pPlayer
+  if pPlayer.State == Player.States.GetName
+  {
+    GetPlayerName()
+    return
+  }
+  if pPlayer.State == Player.States.GetPassword
+  {
+    GetPlayerPswd()
+    return
+  }
   MudCmd.Lower()
   Command = Command.deletingPrefix(MudCmd)
   Command.Strip()
@@ -25,6 +36,7 @@ func ProcessCommand()
     default         : DoZitsBroken()
     pActor.Output += "Invalid command"
     pActor.Output += "\r\n"
+    pActor.Output += "> "
   }
 }
 
@@ -82,8 +94,11 @@ func DoWho()
     {
       print(p1.Name, p1.SocketAddr)
       pActor.Output += p1.Name
+      pActor.Output += " "
       pActor.Output += p1.SocketAddr
+      pActor.Output += " "
       pActor.Output += String(p1.SocketHandle)
+      pActor.Output += " "
       if p1.Afk == true
       {
         pActor.Output += "(AFK)"
@@ -100,22 +115,6 @@ func DoZitsBroken()
   print("She's a pumping mud, shut 'er down!")
 }
 
-func DoPlayerStuff()
-{
-  print("*** DoPlayerStuff ***")
-  PlayerSetLookUp()
-  pActor = pPlayer
-  if pPlayer.State == Player.States.GetName
-  {
-    GetPlayerName()
-  }
-  else
-  if pPlayer.State == Player.States.GetPassword
-  {
-    GetPlayerPswd()
-  }
-}
-
 func GetPlayerName()
 {
   print("*** GetPlayerName ***")
@@ -125,9 +124,12 @@ func GetPlayerName()
     if pPlayer.IsValidName()
     {
       pPlayer.State = Player.States.GetPassword
+      pPlayer.Output += "Password?\r\n"
+      pPlayer.Output += "> "
       return
     }
-    print("Invalid name")
+    pPlayer.Output += "Didn't find that name.\r\n"
+    pPlayer.Output += "> "
     return
   }
 }
@@ -140,9 +142,11 @@ func GetPlayerPswd()
     if ValidNamesPswd[pPlayer.Name]! == MudCmd
     {
       pPlayer.State = Player.States.Playing
+      pPlayer.Output += "> "
       return
     }
-    print("Invalid password")
+    pPlayer.Output += "Password mis-match\r\n"
+    pPlayer.Output += "> "
     return
   }
 }
