@@ -23,6 +23,7 @@ var LogHandle           : FileHandle      = FileHandle()
 var LogPath             : String          = ""
 var MaxSocketHandle     : Int32           = 0
 var PlayerName          : String          = ""
+var PlayerTargetName    : String          = ""
 var MsgTxt              : String          = ""
 var NewConnection       : Int32           = 0
 var PortNbr             : Int             = 0
@@ -36,6 +37,7 @@ var TmpStr              : String          = ""
 
 var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
+var pTarget             : Player!         = nil
 var PlayerSet                             = Set<Player>()
 
 let ValidNamesPswd = ["Steve":"alys1","Dawn":"alys2", "Sherry":"alys3", "Chris":"alys4"]

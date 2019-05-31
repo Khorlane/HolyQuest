@@ -96,6 +96,19 @@ func PlayerSetLookUp()
   }
 }
 
+func PlayerSetTargetLookUp()
+{
+  print("*** PlayerSetTargetLookUp ***")
+  for p1 in PlayerSet
+  {
+    if p1.Name == PlayerTargetName
+    {
+      pTarget = p1
+      break
+    }
+  }
+}
+
 func PlayerSetInsert()
 {
   print("*** PlayerSetInsert ***")

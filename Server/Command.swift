@@ -32,6 +32,7 @@ func ProcessCommand()
     case "afk"      : DoAfk()
     case "say"      : DoSay()
     case "shutdown" : DoShutdown()
+    case "tell"     : DoTell()
     case "who"      : DoWho()
     default         : DoZitsBroken()
     pActor.Output += "Invalid command"
@@ -78,6 +79,36 @@ func DoShutdown()
 {
   print("*** DoShutdown ***")
   GameShutdown = true
+}
+
+func DoTell()
+{
+  print("*** DoTell ***")
+  PlayerTargetName = Command.components(separatedBy: " ").first!
+  TmpStr = Command.deletingPrefix(PlayerTargetName)
+  TmpStr.Strip()
+  PlayerSetTargetLookUp()
+  if pActor.Name == pTarget.Name
+  {
+    pActor.Output = ""
+    pActor.Output += "Talking to youself?\r\n"
+    pActor.Output += "> "
+    return
+  }
+  pActor.Output = ""
+  pActor.Output += "You tell "
+  pActor.Output += PlayerTargetName
+  pActor.Output += ": "
+  pActor.Output += TmpStr
+  pActor.Output += "\r\n"
+  pActor.Output += "> "
+  pTarget.Output = ""
+  pTarget.Output += "\r\n"
+  pTarget.Output += pActor.Name
+  pTarget.Output += " tells you: "
+  pTarget.Output += TmpStr
+  pTarget.Output += "\r\n"
+  pTarget.Output += "> "
 }
 
 func DoWho()
