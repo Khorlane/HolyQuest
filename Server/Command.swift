@@ -14,18 +14,11 @@ func ProcessCommand()
   MudCmd = Command.components(separatedBy: " ").first!
   PlayerSetLookUp()
   pActor = pPlayer
-  if pPlayer.State == Player.States.GetName
-  {
-    GetPlayerName()
-    return
-  }
-  if pPlayer.State == Player.States.GetPassword
-  {
-    GetPlayerPswd()
-    return
-  }
+  GetPlayerGoing()
+  if pPlayer.State != Player.States.Playing {return}
+  if MudCmd == "" {return}
   MudCmd.Lower()
-  Command = Command.deletingPrefix(MudCmd)
+  Command = Command.DeletePrefix(MudCmd)
   Command.Strip()
   switch MudCmd
   {
@@ -38,6 +31,23 @@ func ProcessCommand()
     pActor.Output += "Invalid command"
     pActor.Output += "\r\n"
     pActor.Output += "> "
+  }
+}
+
+func GetPlayerGoing()
+{
+  if pPlayer.State == Player.States.GetName
+  {
+    GetPlayerName()
+    return
+  }
+  if pPlayer.State == Player.States.GetPassword
+  {
+    GetPlayerPswd()
+    if pPlayer.State == Player.States.SendGreeting
+    {
+      SendGreeting()
+    }
   }
 }
 
@@ -85,13 +95,14 @@ func DoTell()
 {
   print("*** DoTell ***")
   PlayerTargetName = Command.components(separatedBy: " ").first!
-  TmpStr = Command.deletingPrefix(PlayerTargetName)
+  TmpStr = Command.DeletePrefix(PlayerTargetName)
   TmpStr.Strip()
   PlayerSetTargetLookUp()
   if pActor.Name == pTarget.Name
   {
     pActor.Output = ""
-    pActor.Output += "Talking to youself?\r\n"
+    pActor.Output += "Talking to youself?"
+    pActor.Output += "\r\n"
     pActor.Output += "> "
     return
   }
@@ -149,37 +160,46 @@ func DoZitsBroken()
 func GetPlayerName()
 {
   print("*** GetPlayerName ***")
-  if pPlayer.State == Player.States.GetName
+  pPlayer.Name = MudCmd
+  MudCmd = ""
+  if pPlayer.IsValidName()
   {
-    pPlayer.Name = MudCmd
-    if pPlayer.IsValidName()
-    {
-      pPlayer.State = Player.States.GetPassword
-      pPlayer.Output += "Password?\r\n"
-      pPlayer.Output += "> "
-      return
-    }
-    pPlayer.Output += "Didn't find that name.\r\n"
+    pPlayer.State = Player.States.GetPassword
+    pPlayer.Output += "Password?"
+    pPlayer.Output += "\r\n"
     pPlayer.Output += "> "
     return
   }
+  pPlayer.Name = "*"
+  pPlayer.Output += "Didn't find that name."
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "> "
 }
 
 func GetPlayerPswd()
 {
   print("*** GetPlayerPswd ***")
-  if pPlayer.State == Player.States.GetPassword
+  pPlayer.Password = MudCmd
+  MudCmd = ""
+  if ValidNamesPswd[pPlayer.Name]! == pPlayer.Password
   {
-    if ValidNamesPswd[pPlayer.Name]! == MudCmd
-    {
-      pPlayer.State = Player.States.Playing
-      pPlayer.Output += "> "
-      return
-    }
-    pPlayer.Output += "Password mis-match\r\n"
-    pPlayer.Output += "> "
+    pPlayer.State = Player.States.SendGreeting
     return
   }
+  pPlayer.Output += "Password mis-match"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "> "
+  }
+
+func SendGreeting()
+{
+  print("*** SendGreeting ***")
+  pPlayer.State = Player.States.Playing
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "May your travels be safe!"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "> "
 }
 
 func SendToRoom()

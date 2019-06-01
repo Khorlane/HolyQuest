@@ -126,7 +126,7 @@ extension String
 
 extension String
 {
-  mutating func deletingPrefix(_ prefix: String) -> String
+  mutating func DeletePrefix(_ prefix: String) -> String
   {
     guard self.hasPrefix(prefix) else { return self }
     return String(self.dropFirst(prefix.count))

@@ -24,6 +24,7 @@ class Player
   {
     case GetName
     case GetPassword
+    case SendGreeting
     case Playing
   }
 
