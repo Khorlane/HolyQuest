@@ -12,13 +12,14 @@ import Foundation
 
 var Command             : String          = ""
 var CommandWordCount    : Int             = 0
+var Result              : Int32           = 0
 var MudCmd              : String          = ""
 var GameShutdown        : Bool            = false
 var GotInput            : Int32           = 0
 var HostAdr             : String          = ""
 var Index               : Int             = 0
 var ListenSocket        : Int32           = 0
-var LogFile             : URL             = URL.init(fileURLWithPath: "/Users/stephenbryant/Projects/HolyQuest/Logs/Log.txt")
+var LogFile             : URL             = URL.init(fileURLWithPath: "/")
 var LogFileName         : String          = ""
 var LogHandle           : FileHandle      = FileHandle()
 var LogPath             : String          = ""
@@ -36,6 +37,8 @@ var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
 
+
+var pWorldDb            : OpaquePointer?
 var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil

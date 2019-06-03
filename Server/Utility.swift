@@ -16,6 +16,9 @@ func Initialization()
   LogPath     = LOG_PATH
   LogFileName = LOG_FILE_NAME
   OpenLog()
+  Db.Open()
+  Db.DoSqlStmt()
+  Db.Close()
   SetTimestampFmt()
 }
 
