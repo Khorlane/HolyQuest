@@ -11,7 +11,8 @@ func ProcessCommand()
   print ("*** ProcessCommand ***")
   Command.Strip()
   LogIt(Message: Command)
-  MudCmd = Command.components(separatedBy: " ").first!
+  CommandWordCount = Command.Words
+  MudCmd = Command.Word(1)
   PlayerSetLookUp()
   pActor = pPlayer
   GetPlayerGoing()

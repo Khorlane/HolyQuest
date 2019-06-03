@@ -118,32 +118,39 @@ extension String
 
 extension String
 {
-  mutating func Lower()
+  var Words : Int
   {
-    self = self.lowercased()
+    return self.split(separator: " ").count
   }
-}
 
-extension String
-{
   mutating func DeletePrefix(_ prefix: String) -> String
   {
     guard self.hasPrefix(prefix) else { return self }
     return String(self.dropFirst(prefix.count))
   }
-}
 
-// string2cstring.swift
-func GetStrPtr(from Str: String) -> UnsafeMutablePointer<Int8>
-{
-  var Count  : Int
-  var Result : UnsafeMutablePointer<Int8>
-
-  Count = Str.utf8.count + 1
-  Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
-  Str.withCString
-    { (BaseAddress) in
-      Result.initialize(from: BaseAddress, count: Count)
+  mutating func Lower()
+  {
+    self = self.lowercased()
   }
-  return Result
+
+  func Word(_ Nbr: Int) -> String
+  {
+    return String(self.split(separator: " ")[Nbr-1])
+  }
+
+  // Get pointer to a string so we can use it like a C string
+  func GetStrPointer() -> UnsafeMutablePointer<Int8>
+  {
+    var Count  : Int
+    var Result : UnsafeMutablePointer<Int8>
+
+    Count = self.utf8.count + 1
+    Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
+    self.withCString
+      { (BaseAddress) in
+        Result.initialize(from: BaseAddress, count: Count)
+    }
+    return Result
+  }
 }

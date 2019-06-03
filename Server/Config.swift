@@ -11,6 +11,7 @@ import Foundation
 // URL
 
 var Command             : String          = ""
+var CommandWordCount    : Int             = 0
 var MudCmd              : String          = ""
 var GameShutdown        : Bool            = false
 var GotInput            : Int32           = 0

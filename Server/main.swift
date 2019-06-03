@@ -22,7 +22,7 @@ TmpStr1 = String(cString: pTmpStr1!)
 print(TmpStr1)
 
 TmpStr1 = "This is my test string"
-pTmpStr1 = GetStrPtr(from: TmpStr1)
+pTmpStr1 = TmpStr1.GetStrPointer()
 pTmpStr2 = PassReturnString(pTmpStr1)
 TmpStr2 = String(cString: pTmpStr2!)
 print()
@@ -76,7 +76,7 @@ while !GameShutdown
   {
     if p.Output.count > 0
     {
-      pTmpStr1 = GetStrPtr(from: p.Output)
+      pTmpStr1 = p.Output.GetStrPointer()
       SetBuffer(pTmpStr1)
       SendClient(p.SocketHandle)
       p.Output = ""
