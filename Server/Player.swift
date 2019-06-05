@@ -18,6 +18,7 @@ class Player
   var Password      : String
   var Admin         : Bool
   var Afk           : Bool
+  var ArmorClass    : Int
   var RoomNbr       : Int
 
   enum States
@@ -41,17 +42,37 @@ class Player
     self.Password     = ""
     self.Admin        = false
     self.Afk          = false
+    self.ArmorClass   = 0
     self.RoomNbr      = START_ROOM
   }
 
   func IsValidName() -> Bool
   {
     print("*** IsValidName ***")
-    if ValidNamesPswd[pPlayer.Name] != nil
+    SqlStmt = """
+      Select
+        Name,
+        Password,
+        ArmorClass
+      From Player
+      Where Name = '$1'
+    """
+    SqlStmt.Squeeze()
+    SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: pPlayer.Name)
+    Db.OpenCursor()
+    Found = Db.FetchCursor()
+    if Found
     {
+      pPlayer.Password   = Db.GetOneColValStr(ColNbrInSelect: 2)
+      pPlayer.ArmorClass = Db.GetOneColValInt(ColNbrInSelect: 3)
+      Db.CloseCursor()
       return true
     }
-    return false
+    else
+    {
+      Db.CloseCursor()
+      return false
+    }
   }
 }
 
@@ -100,6 +121,7 @@ func PlayerSetLookUp()
 func PlayerSetTargetLookUp()
 {
   print("*** PlayerSetTargetLookUp ***")
+  pTarget = nil
   for p1 in PlayerSet
   {
     if p1.Name == PlayerTargetName

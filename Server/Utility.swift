@@ -114,25 +114,28 @@ func SetTimestampFmt()
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 }
 
-func StopServer()
-{
-  LogHandle.closeFile()
-  //try! group.syncShutdownGracefully()
-}
-
-extension String
-{
-  mutating func Strip()
-  {
-    self = self.trimmingCharacters(in: .whitespacesAndNewlines)
-  }
-}
-
 extension String
 {
   var Words : Int
   {
     return self.split(separator: " ").count
+  }
+
+  mutating func Squeeze()
+  {
+    self.Strip()
+    self = self.replacingOccurrences(of: "\r", with: " ")
+    self = self.replacingOccurrences(of: "\n", with: " ")
+    self = self.replacingOccurrences(of: "\t", with: " ")
+    while self.contains("  ")
+    {
+      self = self.replacingOccurrences(of: "  ", with: " ")
+    }
+  }
+
+  mutating func Strip()
+  {
+    self = self.trimmingCharacters(in: .whitespacesAndNewlines)
   }
 
   mutating func DeletePrefix(_ prefix: String) -> String

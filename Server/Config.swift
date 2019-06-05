@@ -12,7 +12,7 @@ import Foundation
 
 var Command             : String          = ""
 var CommandWordCount    : Int             = 0
-var MudCmd              : String          = ""
+var Found               : Bool            = false
 var GameShutdown        : Bool            = false
 var GotInput            : Int32           = 0
 var HostAdr             : String          = ""
@@ -23,10 +23,11 @@ var LogFileName         : String          = ""
 var LogHandle           : FileHandle      = FileHandle()
 var LogPath             : String          = ""
 var MaxSocketHandle     : Int32           = 0
+var MsgTxt              : String          = ""
+var MudCmd              : String          = ""
+var NewConnection       : Int32           = 0
 var PlayerName          : String          = ""
 var PlayerTargetName    : String          = ""
-var MsgTxt              : String          = ""
-var NewConnection       : Int32           = 0
 var PortNbr             : Int             = 0
 var ReadBytes           : Int             = 0
 var SocketAddr          : String          = ""
@@ -39,7 +40,6 @@ var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
 
-
 var pWorldDb            : OpaquePointer?
 var pSqlResultSet       : OpaquePointer?
 var pActor              : Player!         = nil
@@ -47,7 +47,7 @@ var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
 var PlayerSet                             = Set<Player>()
 
-let ValidNamesPswd = ["Steve":"alys1","Dawn":"alys2", "Sherry":"alys3", "Chris":"alys4"]
+let ShortCommand   = ["l":"look"]
 
 let HOST_ADDRESS_IPV4 = "127.0.0.1"
 let HOST_ADDRESS_IPV6 = "::1"

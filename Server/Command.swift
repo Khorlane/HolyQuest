@@ -18,14 +18,20 @@ func ProcessCommand()
   GetPlayerGoing()
   if pPlayer.State != Player.States.Playing {return}
   if MudCmd == "" {return}
-  MudCmd.Lower()
   Command = Command.DeletePrefix(MudCmd)
+  MudCmd.Lower()
   Command.Strip()
+  if ShortCommand[MudCmd] != nil
+  {
+    MudCmd = ShortCommand[MudCmd]!
+  }
   switch MudCmd
   {
     case "afk"      : DoAfk()
+    case "look"     : DoLook()
     case "say"      : DoSay()
     case "shutdown" : DoShutdown()
+    case "status"   : DoStatus()
     case "tell"     : DoTell()
     case "who"      : DoWho()
     default         : DoZitsBroken()
@@ -70,6 +76,13 @@ func DoAfk()
   pActor.Output += "> "
 }
 
+func DoLook()
+{
+  pActor.Output += "You look around"
+  pActor.Output += "\r\n"
+  pActor.Output += "> "
+}
+
 func DoSay()
 {
   TmpStr1 = Command
@@ -92,13 +105,35 @@ func DoShutdown()
   GameShutdown = true
 }
 
+func DoStatus()
+{
+  pActor.Output += "\r\n"
+  pActor.Output += "Name:        "
+  pActor.Output += pActor.Name
+  pActor.Output += "\r\n"
+  pActor.Output += "Armor Class: "
+  pActor.Output += String(pActor.ArmorClass)
+  pActor.Output += "\r\n"
+  pActor.Output += "> "
+}
+
 func DoTell()
 {
   print("*** DoTell ***")
-  PlayerTargetName = Command.components(separatedBy: " ").first!
+  //PlayerTargetName = Command.components(separatedBy: " ").first!
+  PlayerTargetName = Command.Word(1)
   TmpStr = Command.DeletePrefix(PlayerTargetName)
   TmpStr.Strip()
   PlayerSetTargetLookUp()
+  if pTarget == nil
+  {
+    pActor.Output = ""
+    pActor.Output += "I don't see "
+    pActor.Output += PlayerTargetName
+    pActor.Output += "\r\n"
+    pActor.Output += "> "
+    return
+  }
   if pActor.Name == pTarget.Name
   {
     pActor.Output = ""
@@ -180,13 +215,13 @@ func GetPlayerName()
 func GetPlayerPswd()
 {
   print("*** GetPlayerPswd ***")
-  pPlayer.Password = MudCmd
-  MudCmd = ""
-  if ValidNamesPswd[pPlayer.Name]! == pPlayer.Password
+  if pPlayer.Password == MudCmd
   {
     pPlayer.State = Player.States.SendGreeting
+    MudCmd = ""
     return
   }
+  MudCmd = ""
   pPlayer.Output += "Password mis-match"
   pPlayer.Output += "\r\n"
   pPlayer.Output += "> "
