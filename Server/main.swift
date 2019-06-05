@@ -8,6 +8,20 @@ import Foundation     // Not required at this time
 
 print("HolyQuest is starting...")
 Initialization()
+
+SqlStmt = "Select * from Player where Name = 'Alex'"
+//Db.DoSqlStmt()
+Db.OpenCursor()
+let Found = Db.FetchCursor()
+if Found
+{
+  let Password   = Db.GetOneColValStr(ColNbrInSelect: 2)
+  let ArmorClass = Db.GetOneColValInt(ColNbrInSelect: 7)
+  print("Password:", Password)
+  print("ArmorClass:", ArmorClass)
+}
+Db.CloseCursor()
+
 var x : Int32
 
 var pTmpStr1 : UnsafeMutablePointer<Int8>?
@@ -84,3 +98,5 @@ while !GameShutdown
   }
   usleep(0100000)
 }
+
+ShutItDown()

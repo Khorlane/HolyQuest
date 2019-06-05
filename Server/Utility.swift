@@ -17,9 +17,13 @@ func Initialization()
   LogFileName = LOG_FILE_NAME
   OpenLog()
   Db.Open()
-  Db.DoSqlStmt()
-  Db.Close()
   SetTimestampFmt()
+}
+
+func ShutItDown()
+{
+  Db.Close()
+  CloseLog()
 }
 
 func LogIt
@@ -59,6 +63,11 @@ func OpenLog()
   LogHandle.write(TmpStr.data(using: .utf8)!)
   TmpStr = "------------------\r\n"
   LogHandle.write(TmpStr.data(using: .utf8)!)
+  LogHandle.closeFile()
+}
+
+func CloseLog()
+{
   LogHandle.closeFile()
 }
 

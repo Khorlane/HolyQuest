@@ -12,7 +12,6 @@ import Foundation
 
 var Command             : String          = ""
 var CommandWordCount    : Int             = 0
-var Result              : Int32           = 0
 var MudCmd              : String          = ""
 var GameShutdown        : Bool            = false
 var GotInput            : Int32           = 0
@@ -33,12 +32,16 @@ var ReadBytes           : Int             = 0
 var SocketAddr          : String          = ""
 var SocketHandle1       : Int32           = 0
 var SockLocAdr          : String          = ""
+var SqlStmt             : String          = ""
+var SqlStmtLen          : Int32           = 0
+var SqlCode             : Int32           = 0
 var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
 
 
 var pWorldDb            : OpaquePointer?
+var pSqlResultSet       : OpaquePointer?
 var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
