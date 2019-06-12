@@ -7,7 +7,7 @@
 // ChatServer includes
 #include <fcntl.h>
 #include <stdio.h>        // perror printf
-#include <stdlib.h>       // exit EXIT_FAILURE
+#include <stdlib.h>       // exit
 #include <string.h>       // strlen
 #include <errno.h>        // errno EINTR
 #include <unistd.h>       // read close
@@ -113,7 +113,7 @@ int ChatServerListen(void)
   if (ListenSocket == 0)
   {
     perror("-- Create listening socket failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //*******************
   // Set non-blocking *
@@ -122,7 +122,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set non-blocking failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //****************
   // Set SO_LINGER *
@@ -131,7 +131,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set SO_LINGER failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //*******************
   // Set SO_REUSEADDR *
@@ -140,7 +140,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set SO_REUSEADDR failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //************************
   // Init socket structure *
@@ -155,7 +155,7 @@ int ChatServerListen(void)
   if (BindResult < 0)
   {
     perror("-- Bind failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //*********
   // Listen *
@@ -164,7 +164,7 @@ int ChatServerListen(void)
   if (ListenResult < 0)
   {
     perror("-- Listen failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   printf("Listener on port %d\r\n", PORT);
   return ListenSocket;
@@ -257,7 +257,7 @@ int AcceptNewConnection(void)
   if (SocketHandle2 < 0)
   {
     perror("-- Accept failed\r\n");
-    exit(EXIT_FAILURE);
+    exit(1);
   }
   //***********************
   // Send welcome message *

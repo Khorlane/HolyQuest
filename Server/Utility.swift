@@ -13,7 +13,7 @@ func Initialization()
 {
   HostAdr     = HOST_ADDRESS_IPV4
   PortNbr     = PORT_NUMBER
-  LogPath     = LOG_PATH
+  LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
   LogFileName = LOG_FILE_NAME
   OpenLog()
   Db.Open()
@@ -43,21 +43,27 @@ func LogIt
 
 func OpenLog()
 {
-  LogFile = URL.init(fileURLWithPath: LogPath)
-  LogFile = LogFile.appendingPathComponent(LogFileName)
-  let (output, error, status) = RunCmd(cmd: "/bin/cp", args: "/Users/stephenbryant/Projects/HolyQuest/Logs/Log1.txt", "/Users/stephenbryant/Projects/HolyQuest/Logs/Log.txt")
+  let FromFile = LogPath + LogFileName + ".empty"
+  let ToFile   = LogPath + LogFileName
+  let (output, error, status) = RunCmd(cmd: "/bin/cp", args: FromFile, ToFile)
   if status != 0
   {
     print("Program exited with status \(status)")
-    if output.count > 0 {
+    if output.count > 0
+    {
       print("Program output:")
       print(output)
+      exit(2)
     }
-    if error.count > 0 {
+    if error.count > 0
+    {
       print("Error output:")
       print(error)
+      exit(2)
     }
   }
+  LogFile = URL.init(fileURLWithPath: LogPath)
+  LogFile = LogFile.appendingPathComponent(LogFileName)
   LogHandle = try! FileHandle(forWritingTo: LogFile)
   TmpStr = "HolyQuest Log File\r\n"
   LogHandle.write(TmpStr.data(using: .utf8)!)

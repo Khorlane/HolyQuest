@@ -57,7 +57,12 @@ let ShortCommand =
 
 let HOST_ADDRESS_IPV4 = "127.0.0.1"
 let HOST_ADDRESS_IPV6 = "::1"
-let LOG_PATH          = "/Users/stephenbryant/Projects/HolyQuest/Logs/"
-let LOG_FILE_NAME     = "Log.txt"
 let PORT_NUMBER       = 7777
 let START_ROOM        = 86
+
+let HOME_DIR            = "/Users/stephenbryant/Projects/HolyQuest"
+let GREETING_DIR        = "Library"
+let LOG_DIR             = "Log"
+
+let GREETING_FILE_NAME  = "Greeting.txt"
+let LOG_FILE_NAME       = "Log.txt"
