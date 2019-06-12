@@ -9,8 +9,6 @@ import Foundation     // Not required at this time
 print("HolyQuest is starting...")
 Initialization()
 
-var x : Int32
-
 var pTmpStr1 : UnsafeMutablePointer<Int8>?
 var pTmpStr2 : UnsafeMutablePointer<Int8>?
 var TmpStr1  : String

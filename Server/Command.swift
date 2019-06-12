@@ -13,7 +13,6 @@ func ProcessCommand()
   LogIt(Message: Command)
   CommandWordCount = Command.Words
   MudCmd = Command.Word(1)
-  PlayerSetLookUp()
   pActor = pPlayer
   GetPlayerGoing()
   if pPlayer.State != Player.States.Playing {return}
@@ -34,10 +33,7 @@ func ProcessCommand()
     case "status"   : DoStatus()
     case "tell"     : DoTell()
     case "who"      : DoWho()
-    default         : DoZitsBroken()
-    pActor.Output += "Invalid command"
-    pActor.Output += "\r\n"
-    pActor.Output += "> "
+    default         : BadCmdMsg()
   }
 }
 
@@ -85,16 +81,15 @@ func DoLook()
 
 func DoSay()
 {
-  TmpStr1 = Command
-  pActor.Output = ""
+  TmpStr = Command
   pActor.Output += "You say: "
-  pActor.Output += TmpStr1
+  pActor.Output += TmpStr
   pActor.Output += "\r\n"
   pActor.Output += "> "
   MsgTxt = ""
   MsgTxt += pActor.Name
   MsgTxt += " says: "
-  MsgTxt += TmpStr1
+  MsgTxt += TmpStr
   MsgTxt += "\r\n"
   SendToRoom()
 }
@@ -127,7 +122,6 @@ func DoTell()
   PlayerSetTargetLookUp()
   if pTarget == nil
   {
-    pActor.Output = ""
     pActor.Output += "I don't see "
     pActor.Output += PlayerTargetName
     pActor.Output += "\r\n"
@@ -136,13 +130,11 @@ func DoTell()
   }
   if pActor.Name == pTarget.Name
   {
-    pActor.Output = ""
     pActor.Output += "Talking to youself?"
     pActor.Output += "\r\n"
     pActor.Output += "> "
     return
   }
-  pActor.Output = ""
   pActor.Output += "You tell "
   pActor.Output += PlayerTargetName
   pActor.Output += ": "
@@ -187,10 +179,32 @@ func DoWho()
   pActor.Output += "> "
 }
 
-func DoZitsBroken()
+func BadCmdMsg()
 {
-  print("*** DoZitsBroken ***")
-  print("She's a pumping mud, shut 'er down!")
+  x = Int.random(in: 1 ... 5)
+  switch x
+  {
+  case 1:
+    TmpStr = "How's that?"
+    break;
+  case 2:
+    TmpStr = "You try to give a command, but fail."
+    break;
+  case 3:
+    TmpStr = "Hmmm, making up commands?"
+    break;
+  case 4:
+    TmpStr = "Ehh, what's that again?"
+    break;
+  case 5:
+    TmpStr = "Feeling creative?"
+    break;
+  default :
+    TmpStr = "Your command is not clear."
+  }
+  pActor.Output += TmpStr
+  pActor.Output += "\r\n"
+  pActor.Output += "> "
 }
 
 func GetPlayerName()

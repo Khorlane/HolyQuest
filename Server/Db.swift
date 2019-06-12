@@ -103,10 +103,13 @@ class Db
    * Get a column from a result set - Integer                 *
    ***********************************************************/
 
-  static func GetOneColValInt(ColNbrInSelect: Int32) -> Int
+  static func GetColInt(ColNbrInSelect: Int32) -> Int
   {
-    let x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
-    let Value = Int(sqlite3_column_int(pSqlResultSet, x))
+    var x     : Int32 = 0
+    var Value : Int   = 0
+
+    x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
+    Value = Int(sqlite3_column_int(pSqlResultSet, x))
     return Value
   }
 
@@ -114,11 +117,15 @@ class Db
    * Get a column from a result set - String                  *
    ***********************************************************/
 
-  static func GetOneColValStr(ColNbrInSelect: Int32) -> String
+  static func GetColStr(ColNbrInSelect: Int32) -> String
   {
-    let x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
-    let pTmpStr = sqlite3_column_text(pSqlResultSet, x)
-    let TmpStr = String(cString: pTmpStr!)
-    return TmpStr
+    var pStr : UnsafePointer<UInt8>? = nil
+    var Str  : String                = ""
+    var x    : Int32                 = 0
+
+    x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
+    pStr = sqlite3_column_text(pSqlResultSet, x)
+    Str = String(cString: pStr!)
+    return Str
   }
 }

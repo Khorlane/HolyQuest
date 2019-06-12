@@ -26,7 +26,6 @@ var MaxSocketHandle     : Int32           = 0
 var MsgTxt              : String          = ""
 var MudCmd              : String          = ""
 var NewConnection       : Int32           = 0
-var PlayerName          : String          = ""
 var PlayerTargetName    : String          = ""
 var PortNbr             : Int             = 0
 var ReadBytes           : Int             = 0
@@ -40,6 +39,8 @@ var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
 
+var x                   : Int             = 0
+
 var pWorldDb            : OpaquePointer?
 var pSqlResultSet       : OpaquePointer?
 var pActor              : Player!         = nil
@@ -47,7 +48,12 @@ var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
 var PlayerSet                             = Set<Player>()
 
-let ShortCommand   = ["l":"look"]
+let ShortCommand =
+  [
+    "i":"inventory",
+    "l":"look",
+    "k":"kill"
+  ]
 
 let HOST_ADDRESS_IPV4 = "127.0.0.1"
 let HOST_ADDRESS_IPV6 = "::1"

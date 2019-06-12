@@ -63,8 +63,8 @@ class Player
     Found = Db.FetchCursor()
     if Found
     {
-      pPlayer.Password   = Db.GetOneColValStr(ColNbrInSelect: 2)
-      pPlayer.ArmorClass = Db.GetOneColValInt(ColNbrInSelect: 3)
+      pPlayer.Password   = Db.GetColStr(ColNbrInSelect: 2)
+      pPlayer.ArmorClass = Db.GetColInt(ColNbrInSelect: 3)
       Db.CloseCursor()
       return true
     }
@@ -103,19 +103,6 @@ func PlayerDel()
 {
   print("*** PlayerDel ***")
   PlayerSetRemove()
-}
-
-func PlayerSetLookUp()
-{
-  print("*** PlayerSetLookUp ***")
-  for p1 in PlayerSet
-  {
-    if p1.Name == PlayerName
-    {
-      pPlayer = p1
-      break
-    }
-  }
 }
 
 func PlayerSetTargetLookUp()
