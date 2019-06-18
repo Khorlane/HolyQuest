@@ -21,7 +21,6 @@ void SendClient(int SocketHandle1);
 void DisconnectClient(int SocketHandle1);
 
 void Initialize(void);
-void PutMessage(void);
 
 char * GetBuffer(void);
 void SetBuffer(char * StringInp);

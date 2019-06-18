@@ -35,8 +35,6 @@ int       ListenResult;
 int       ListenSocket;
 int       MaxClients;
 int       MaxSocketHandle;
-char *    Message;
-long      MessageLen;
 int       OptVal;
 int       OptValSize;
 long      ReadByteCount;
@@ -65,12 +63,6 @@ char * PassReturnString(char * StringInp)
   return Buffer;
 }
 
-void PutMessage(void)
-{
-  printf("%s\r\n", Message);
-  return;
-}
-
 char * GetBuffer(void)
 {
   //strcpy(Buffer, "My Buffer");
@@ -93,7 +85,6 @@ void ChatServerInit(void)
   OptVal          = TRUE;
   OptValSize      = sizeof(OptVal);
   MaxClients      = 30;
-  Message         = "ECHO Daemon v1.0 \r\n";
   TimeOut.tv_sec  = COMMS_WAIT_SEC;
   TimeOut.tv_usec = COMMS_WAIT_USEC;
   SocketSize      = sizeof(Socket);
@@ -244,7 +235,11 @@ void SendClient(int SocketHandle1)
 {
   DEBUGIT(1);
   BufferLen = strlen(Buffer);
-  send(SocketHandle1, Buffer, BufferLen, 0);
+  SendResult = send(SocketHandle1, Buffer, BufferLen, 0);
+  if (SendResult != BufferLen)
+  {
+    perror("-- Send failed\r\n");
+  }
 }
 
 int AcceptNewConnection(void)
@@ -259,17 +254,7 @@ int AcceptNewConnection(void)
     perror("-- Accept failed\r\n");
     exit(1);
   }
-  //***********************
-  // Send welcome message *
-  //***********************
   printf("New connection, socket fd is %d , ip is : %s , port : %d\r\n", SocketHandle2, inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-  MessageLen = strlen(Message);
-  SendResult = send(SocketHandle2, Message, MessageLen, 0);
-  if (SendResult != MessageLen)
-  {
-    perror("-- Send failed\r\n");
-  }
-  printf("Welcome message sent successfully\r\n");
   //************************************
   // Add new client to list of clients *
   //************************************

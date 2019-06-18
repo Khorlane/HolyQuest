@@ -29,7 +29,6 @@ print("String after returning:", TmpStr2)
 
 ChatServerInit()
 
-PutMessage()
 ListenSocket = ChatServerListen()
 print("HolyQuest is Listening on Port 7777")
 

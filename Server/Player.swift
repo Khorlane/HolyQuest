@@ -93,8 +93,9 @@ func PlayerAdd()
   print("*** PlayerAdd ***")
   print("PlayerAdd", SocketAddr)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
-  pPlayer.Output += "Welome to HolyQuest\r\n"
-  pPlayer.Output += "Name?\r\n"
+  LogonGreeting()
+  pPlayer.Output += "Name?"
+  pPlayer.Output += "\r\n"
   pPlayer.Output += "> "
   PlayerSetInsert()
 }
@@ -138,4 +139,28 @@ func PlayerSetRemove()
     print("PlayerSetRemove failed")
   }
   print("Player Removed!")
+}
+
+func LogonGreeting()
+{
+  //pPlayer.Output += "Welcome to HolyQuest\r\n"
+
+  let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
+  let GreetingFileName = GREETING_FILE_NAME
+  let GreetingFile   = GreetingPath + GreetingFileName
+  // Determine the file name
+  //let filename = "main.swift"
+
+  // Read the contents of the specified file
+  //let contents = try! String(contentsOfFile: filename)
+  let contents = try! String(contentsOfFile: GreetingFile)
+
+  // Split the file into separate lines
+  let lines = contents.split(separator:"\n")
+
+  // Iterate over each line and print the line
+  for line in lines {
+    pPlayer.Output += line
+  }
+  pPlayer.Output += "\r\n"
 }
