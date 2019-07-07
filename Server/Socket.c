@@ -46,7 +46,6 @@ int       SocketHandle2;
 socklen_t SocketSize;
 
 char    Buffer[1025];         //data buffer of 1K
-int     ClientSocketList[30];
 
 struct  linger      Linger;
 struct  sockaddr_in Socket;
@@ -88,10 +87,6 @@ void ChatServerInit(void)
   TimeOut.tv_sec  = COMMS_WAIT_SEC;
   TimeOut.tv_usec = COMMS_WAIT_USEC;
   SocketSize      = sizeof(Socket);
-  for (i = 0; i < MaxClients; i++)   // Initialise all ClientSocketList[] to 0
-  {
-    ClientSocketList[i] = 0;
-  }
 }
 
 int ChatServerListen(void)
@@ -255,17 +250,5 @@ int AcceptNewConnection(void)
     exit(1);
   }
   printf("New connection, socket fd is %d , ip is : %s , port : %d\r\n", SocketHandle2, inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-  //************************************
-  // Add new client to list of clients *
-  //************************************
-  for (i = 0; i < MaxClients; i++)
-  {
-    if (ClientSocketList[i] == 0)
-    {
-      ClientSocketList[i] = SocketHandle2;
-      printf("Adding to list of sockets as %d\r\n", i);
-      break;
-    }
-  }
   return SocketHandle2;
 }
