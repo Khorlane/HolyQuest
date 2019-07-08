@@ -213,8 +213,6 @@ long ReadClient(int SocketHandle1)
   DEBUGIT(1);
   ReadByteCount = read(SocketHandle1, Buffer, 1024);
   Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
-  if (Buffer[0] == 'q')
-    return 0;
   return ReadByteCount;
 }
 

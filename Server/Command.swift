@@ -28,6 +28,7 @@ func ProcessCommand()
   {
     case "afk"      : DoAfk()
     case "look"     : DoLook()
+    case "quit"     : DoQuit()
     case "say"      : DoSay()
     case "shutdown" : DoShutdown()
     case "status"   : DoStatus()
@@ -77,6 +78,12 @@ func DoLook()
   pActor.Output += "You look around"
   pActor.Output += "\r\n"
   pActor.Output += "> "
+}
+
+func DoQuit()
+{
+  DisconnectClient(pActor.SocketHandle)
+  PlayerDel()
 }
 
 func DoSay()

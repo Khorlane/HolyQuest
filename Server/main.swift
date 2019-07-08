@@ -58,12 +58,6 @@ while !GameShutdown
     if GotInput == 1
     {
       ReadBytes = ReadClient(p.SocketHandle)
-      if ReadBytes == 0
-      {
-        DisconnectClient(p.SocketHandle)
-        PlayerDel()
-        continue
-      }
       pTmpStr1 = GetBuffer()
       Command = String(cString: pTmpStr1!)
       print("Buffer: ", Command)
