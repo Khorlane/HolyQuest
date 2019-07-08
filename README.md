@@ -9,9 +9,7 @@ Much work has done to:
 2) Move as much of the code as possible out of C and into Swift
 
 Article:
-
 Socket Programming in C/C++: Handling multiple clients on server without multi threading
 
 Link:
-
 https://www.geeksforgeeks.org/socket-programming-in-cc-handling-multiple-clients-on-server-without-multi-threading/
