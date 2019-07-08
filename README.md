@@ -1,5 +1,4 @@
 # HolyQuest
-HolyQuest
 This project is a Mud Server written in Swift, except for the socket code which is written in C.
 
 The socket code started as code copied from a contribution by Akshat Sinha on the GeeksforGeeks website.
