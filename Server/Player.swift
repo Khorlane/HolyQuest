@@ -91,7 +91,6 @@ extension Player: Hashable
 func PlayerAdd()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("PlayerAdd", SocketAddr)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
   LogonGreeting()
   pPlayer.Output += "Name?"
@@ -103,14 +102,12 @@ func PlayerAdd()
 func PlayerDel()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** PlayerDel ***")
   PlayerSetRemove()
 }
 
 func PlayerSetTargetLookUp()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** PlayerSetTargetLookUp ***")
   pTarget = nil
   for p1 in PlayerSet
   {
@@ -125,24 +122,23 @@ func PlayerSetTargetLookUp()
 func PlayerSetInsert()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** PlayerSetInsert ***")
   let Good = PlayerSet.insert(pPlayer)
   if Good.inserted == false
   {
-    print("PlayerSetInsert failed")
+    LogIt(LogMsg: "ERROR PlayerSetInsert failed", LogLvl: 0)
+    exit(EXIT_FAILURE)
   }
 }
 
 func PlayerSetRemove()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** PlayerSetRemove ***")
   let Good = PlayerSet.remove(pPlayer)
   if Good == nil
   {
-    print("PlayerSetRemove failed")
+    LogIt(LogMsg: "ERROR PlayerSetRemove failed", LogLvl: 0)
+    exit(EXIT_FAILURE)
   }
-  print("Player Removed!")
 }
 
 func LogonGreeting()

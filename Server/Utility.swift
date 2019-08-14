@@ -17,6 +17,7 @@ func Initialization()
   LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
   LogFileName = LOG_FILE_NAME
   OpenLog()
+  LogIt(LogMsg: "INFOx HolyQuest is starting...", LogLvl: 0)
   Db.Open()
 }
 
@@ -55,13 +56,13 @@ func OpenLog()
     {
       print("Program output:")
       print(output)
-      exit(2)
+      exit(EXIT_FAILURE)
     }
     if error.count > 0
     {
       print("Error output:")
       print(error)
-      exit(2)
+      exit(EXIT_FAILURE)
     }
   }
   LogFile = URL.init(fileURLWithPath: LogPath)

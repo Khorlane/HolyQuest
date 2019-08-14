@@ -21,10 +21,10 @@ class Db
     SqlCode = sqlite3_open("/Users/stephenbryant/Projects/HolyQuest/Library/World.db3", &pWorldDb)
     if SqlCode != SQLITE_OK
     {
-      print("Open Failed")
-      return
+      LogIt(LogMsg: "ERROR Database Open Failed", LogLvl: 0)
+      exit(EXIT_FAILURE)
     }
-    print("Database open worked!")
+    LogIt(LogMsg: "INFOx Database open worked!", LogLvl: 0)
   }
 
   //**********************************************************
@@ -35,10 +35,12 @@ class Db
   {
     LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_close(pWorldDb)
-    if SqlCode == SQLITE_OK
+    if SqlCode != SQLITE_OK
     {
-      print("Database close worked!")
+      LogIt(LogMsg: "ERROR Database Open Failed", LogLvl: 0)
+      exit(EXIT_FAILURE)
     }
+    LogIt(LogMsg: "INFOx Database close worked!", LogLvl: 0)
   }
 
   //**********************************************************
@@ -49,11 +51,11 @@ class Db
   {
     LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_exec(pWorldDb, SqlStmt, nil, nil, nil)
-    if SqlCode == SQLITE_OK
+    if SqlCode != SQLITE_OK
     {
-      print("Database select worked!")
+      LogIt(LogMsg: "ERROR Database exec SQL failed", LogLvl: 0)
+      exit(EXIT_FAILURE)
     }
-    print("Result: ", SqlCode)
   }
 
   //**********************************************************
@@ -67,8 +69,8 @@ class Db
     SqlCode = sqlite3_prepare(pWorldDb, SqlStmt, SqlStmtLen, &pSqlResultSet, nil)
     if SqlCode != SQLITE_OK
     {
-      print("Prepare Failed")
-      return
+      LogIt(LogMsg: "ERROR Database prepare SQL failed", LogLvl: 0)
+      exit(EXIT_FAILURE)
     }
   }
 
@@ -100,8 +102,8 @@ class Db
     SqlCode = sqlite3_finalize(pSqlResultSet)
     if SqlCode != SQLITE_OK
     {
-      print("Close Failed")
-      return
+      LogIt(LogMsg: "ERROR Database finalize SQL failed", LogLvl: 0)
+      exit(EXIT_FAILURE)
     }
   }
 

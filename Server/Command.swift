@@ -14,8 +14,11 @@ func ProcessCommand()
   CommandWordCount = Command.Words
   MudCmd = Command.Word(1)
   pActor = pPlayer
-  GetPlayerGoing()
-  if pPlayer.State != Player.States.Playing {return}
+  if pPlayer.State != Player.States.Playing
+  {
+    GetPlayerGoing()
+    return
+  }
   if MudCmd == "" {return}
   Command = Command.DeletePrefix(MudCmd)
   MudCmd.Lower()
@@ -59,7 +62,6 @@ func GetPlayerGoing()
 func DoAfk()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** DoAfk ***")
   if pActor.Afk == true
   {
     pActor.Afk = false
@@ -109,7 +111,6 @@ func DoSay()
 func DoShutdown()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** DoShutdown ***")
   GameShutdown = true
 }
 
@@ -129,8 +130,6 @@ func DoStatus()
 func DoTell()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** DoTell ***")
-  //PlayerTargetName = Command.components(separatedBy: " ").first!
   PlayerTargetName = Command.Word(1)
   TmpStr = Command.DeletePrefix(PlayerTargetName)
   TmpStr.Strip()
@@ -168,7 +167,6 @@ func DoTell()
 func DoWho()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** DoWho ***")
   pActor.Output += "\r\n"
   pActor.Output += "Players online"
   pActor.Output += "\r\n"
@@ -178,7 +176,6 @@ func DoWho()
   {
     if p1.State == Player.States.Playing
     {
-      print(p1.Name, p1.SocketAddr)
       pActor.Output += p1.Name
       pActor.Output += " "
       pActor.Output += p1.SocketAddr
@@ -227,7 +224,6 @@ func BadCmdMsg()
 func GetPlayerName()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** GetPlayerName ***")
   pPlayer.Name = MudCmd
   MudCmd = ""
   if pPlayer.IsValidName()
@@ -247,7 +243,6 @@ func GetPlayerName()
 func GetPlayerPswd()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  print("*** GetPlayerPswd ***")
   if pPlayer.Password == MudCmd
   {
     pPlayer.State = Player.States.SendGreeting
@@ -262,7 +257,7 @@ func GetPlayerPswd()
 
 func SendGreeting()
 {
-  print("*** SendGreeting ***")
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   pPlayer.State = Player.States.Playing
   pPlayer.Output += "\r\n"
   pPlayer.Output += "May your travels be safe!"

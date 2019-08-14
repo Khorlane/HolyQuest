@@ -75,7 +75,7 @@ void SetBuffer(char * StringInp)
 
 void ChatServerInit(void)
 {
-  DEBUGIT(1);
+  DEBUGIT(5);
   i               = 0;
   j               = 0;
   Linger.l_onoff  = 0;
@@ -91,7 +91,7 @@ void ChatServerInit(void)
 
 int ChatServerListen(void)
 {
-  DEBUGIT(1);
+  DEBUGIT(5);
   //****************
   // Create socket *
   //****************
@@ -99,7 +99,7 @@ int ChatServerListen(void)
   if (ListenSocket == 0)
   {
     perror("-- Create listening socket failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   //*******************
   // Set non-blocking *
@@ -108,7 +108,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set non-blocking failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   //****************
   // Set SO_LINGER *
@@ -117,7 +117,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set SO_LINGER failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   //*******************
   // Set SO_REUSEADDR *
@@ -126,7 +126,7 @@ int ChatServerListen(void)
   if (ReturnCode < 0)
   {
     perror("-- Set SO_REUSEADDR failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   //************************
   // Init socket structure *
@@ -141,7 +141,7 @@ int ChatServerListen(void)
   if (BindResult < 0)
   {
     perror("-- Bind failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   //*********
   // Listen *
@@ -150,9 +150,8 @@ int ChatServerListen(void)
   if (ListenResult < 0)
   {
     perror("-- Listen failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
-  printf("Listener on port %d\r\n", PORT);
   return ListenSocket;
 }
 
@@ -210,7 +209,7 @@ int CheckClient(int SocketHandle1)
 
 long ReadClient(int SocketHandle1)
 {
-  DEBUGIT(1);
+  DEBUGIT(5);
   ReadByteCount = read(SocketHandle1, Buffer, 1024);
   Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
   return ReadByteCount;
@@ -218,7 +217,7 @@ long ReadClient(int SocketHandle1)
 
 void DisconnectClient(int SocketHandle1)
 {
-  DEBUGIT(1);
+  DEBUGIT(5);
   getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
   printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
   close(SocketHandle1);           // Close the socket
@@ -226,7 +225,7 @@ void DisconnectClient(int SocketHandle1)
 
 void SendClient(int SocketHandle1)
 {
-  DEBUGIT(1);
+  DEBUGIT(5);
   BufferLen = strlen(Buffer);
   SendResult = send(SocketHandle1, Buffer, BufferLen, 0);
   if (SendResult != BufferLen)
@@ -240,12 +239,12 @@ int AcceptNewConnection(void)
   //****************************
   // Accept the new connection *
   //****************************
-  DEBUGIT(1);
+  DEBUGIT(5);
   SocketHandle2 = accept(ListenSocket, (struct sockaddr *) &Socket, (socklen_t *) &SocketSize);
   if (SocketHandle2 < 0)
   {
     perror("-- Accept failed\r\n");
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   printf("New connection, socket fd is %d , ip is : %s , port : %d\r\n", SocketHandle2, inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
   return SocketHandle2;
