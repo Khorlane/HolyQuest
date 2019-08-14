@@ -13,20 +13,6 @@ var pTmpStr2 : UnsafeMutablePointer<Int8>?
 var TmpStr1  : String
 var TmpStr2  : String
 
-/* Don't need any of this */
-//pTmpStr1 = GetBuffer()
-//print("pTmpStr1 value:", pTmpStr1!)
-//print("pTmpStr1 type:", type(of: pTmpStr1))
-//TmpStr1 = String(cString: pTmpStr1!)
-//print(TmpStr1)
-
-//TmpStr1 = "This is my test string"
-//pTmpStr1 = TmpStr1.GetStrPointer()
-//pTmpStr2 = PassReturnString(pTmpStr1)
-//TmpStr2 = String(cString: pTmpStr2!)
-//print()
-//print("String after returning:", TmpStr2)
-
 ChatServerInit()
 
 ListenSocket = ChatServerListen()
