@@ -20,6 +20,9 @@ class Player
   var Afk           : Bool
   var ArmorClass    : Int
   var RoomNbr       : Int
+  // Player table variables
+  var Player_Password   : Int = 2
+  var Player_ArmorClass : Int = 3
 
   enum States
   {
@@ -63,8 +66,8 @@ class Player
     Found = Db.FetchCursor()
     if Found
     {
-      pPlayer.Password   = Db.GetColStr(ColNbrInSelect: 2)
-      pPlayer.ArmorClass = Db.GetColInt(ColNbrInSelect: 3)
+      pPlayer.Password   = Db.GetColStr(ColNbrInSelect: Player_Password)
+      pPlayer.ArmorClass = Db.GetColInt(ColNbrInSelect: Player_ArmorClass)
       Db.CloseCursor()
       return true
     }
