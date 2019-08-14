@@ -8,9 +8,9 @@ import Foundation   // Not required at this time
 
 func ProcessCommand()
 {
-  print ("*** ProcessCommand ***")
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   Command.Strip()
-  LogIt(Message: Command)
+  LogIt(LogMsg: Command, LogLvl: 1)
   CommandWordCount = Command.Words
   MudCmd = Command.Word(1)
   pActor = pPlayer
@@ -40,6 +40,7 @@ func ProcessCommand()
 
 func GetPlayerGoing()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   if pPlayer.State == Player.States.GetName
   {
     GetPlayerName()
@@ -57,6 +58,7 @@ func GetPlayerGoing()
 
 func DoAfk()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** DoAfk ***")
   if pActor.Afk == true
   {
@@ -75,6 +77,7 @@ func DoAfk()
 
 func DoLook()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   pActor.Output += "You look around"
   pActor.Output += "\r\n"
   pActor.Output += "> "
@@ -82,12 +85,14 @@ func DoLook()
 
 func DoQuit()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   DisconnectClient(pActor.SocketHandle)
   PlayerDel()
 }
 
 func DoSay()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   TmpStr = Command
   pActor.Output += "You say: "
   pActor.Output += TmpStr
@@ -103,12 +108,14 @@ func DoSay()
 
 func DoShutdown()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** DoShutdown ***")
   GameShutdown = true
 }
 
 func DoStatus()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   pActor.Output += "\r\n"
   pActor.Output += "Name:        "
   pActor.Output += pActor.Name
@@ -121,6 +128,7 @@ func DoStatus()
 
 func DoTell()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** DoTell ***")
   //PlayerTargetName = Command.components(separatedBy: " ").first!
   PlayerTargetName = Command.Word(1)
@@ -159,6 +167,7 @@ func DoTell()
 
 func DoWho()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** DoWho ***")
   pActor.Output += "\r\n"
   pActor.Output += "Players online"
@@ -188,6 +197,7 @@ func DoWho()
 
 func BadCmdMsg()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   x = Int.random(in: 1 ... 5)
   switch x
   {
@@ -216,6 +226,7 @@ func BadCmdMsg()
 
 func GetPlayerName()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** GetPlayerName ***")
   pPlayer.Name = MudCmd
   MudCmd = ""
@@ -235,6 +246,7 @@ func GetPlayerName()
 
 func GetPlayerPswd()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** GetPlayerPswd ***")
   if pPlayer.Password == MudCmd
   {
@@ -261,6 +273,7 @@ func SendGreeting()
 
 func SendToRoom()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   for p1 in PlayerSet
   {
     if p1.Name == pActor.Name {continue}

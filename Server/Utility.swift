@@ -11,13 +11,13 @@ import Foundation
 
 func Initialization()
 {
+  SetTimestampFmt()
   HostAdr     = HOST_ADDRESS_IPV4
   PortNbr     = PORT_NUMBER
   LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
   LogFileName = LOG_FILE_NAME
   OpenLog()
   Db.Open()
-  SetTimestampFmt()
 }
 
 func ShutItDown()
@@ -27,14 +27,16 @@ func ShutItDown()
 }
 
 func LogIt
-  (Message:  String,
-   function: String = #function,
-   file:     String = #file,
-   line:     Int    = #line)
+  (LogMsg:    String,
+   LogLvl:    Int,
+   function:  String = #function,
+   file:      String = #file,
+   line:      Int    = #line)
 {
+  if LogLvl > LogLvlMax {return}
   TimeStamp = Date()
   TmpStr = TimeStampFmt.string(from: TimeStamp)
-  TmpStr = TmpStr + " \(Message) (File: \(file), Function: \(function), Line: \(line))"
+  TmpStr = TmpStr + " \(LogMsg) (File: \(file), Function: \(function), Line: \(line))"
   TmpStr = TmpStr + "\r\n"
   LogHandle = try! FileHandle(forWritingTo: LogFile)
   LogHandle.seekToEndOfFile()

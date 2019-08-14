@@ -17,6 +17,7 @@ class Db
 
   static func Open()
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_open("/Users/stephenbryant/Projects/HolyQuest/Library/World.db3", &pWorldDb)
     if SqlCode != SQLITE_OK
     {
@@ -32,6 +33,7 @@ class Db
 
   static func Close()
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_close(pWorldDb)
     if SqlCode == SQLITE_OK
     {
@@ -45,6 +47,7 @@ class Db
 
   static func DoSqlStmt()
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_exec(pWorldDb, SqlStmt, nil, nil, nil)
     if SqlCode == SQLITE_OK
     {
@@ -59,6 +62,7 @@ class Db
 
   static func OpenCursor()
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlStmtLen = Int32(SqlStmt.count)
     SqlCode = sqlite3_prepare(pWorldDb, SqlStmt, SqlStmtLen, &pSqlResultSet, nil)
     if SqlCode != SQLITE_OK
@@ -74,6 +78,7 @@ class Db
 
   static func FetchCursor() -> Bool
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_step(pSqlResultSet)
     if (SqlCode == SQLITE_ROW)
     {
@@ -91,6 +96,7 @@ class Db
 
   static func CloseCursor()
   {
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlCode = sqlite3_finalize(pSqlResultSet)
     if SqlCode != SQLITE_OK
     {
@@ -108,6 +114,7 @@ class Db
     var x     : Int32 = 0
     var Value : Int   = 0
 
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
     Value = Int(sqlite3_column_int(pSqlResultSet, x))
     return Value
@@ -123,6 +130,7 @@ class Db
     var Str  : String                = ""
     var x    : Int32                 = 0
 
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     x = ColNbrInSelect - 1  // SQLite uses index 0 for 1st column
     pStr = sqlite3_column_text(pSqlResultSet, x)
     Str = String(cString: pStr!)

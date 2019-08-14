@@ -22,6 +22,7 @@ var LogFile             : URL             = URL.init(fileURLWithPath: "/")
 var LogFileName         : String          = ""
 var LogHandle           : FileHandle      = FileHandle()
 var LogPath             : String          = ""
+var LogLvlMax           : Int             = 5
 var MaxSocketHandle     : Int32           = 0
 var MsgTxt              : String          = ""
 var MudCmd              : String          = ""

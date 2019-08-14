@@ -31,7 +31,7 @@ class Player
 
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
-    print("*** Player Class init ***")
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     // Initialize variables
     self.Output       = ""
     self.SocketAddr   = SocketAddr
@@ -48,7 +48,7 @@ class Player
 
   func IsValidName() -> Bool
   {
-    print("*** IsValidName ***")
+    LogIt(LogMsg: "DEBUG", LogLvl: 5)
     SqlStmt = """
       Select
         Name,
@@ -90,7 +90,7 @@ extension Player: Hashable
 
 func PlayerAdd()
 {
-  print("*** PlayerAdd ***")
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("PlayerAdd", SocketAddr)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
   LogonGreeting()
@@ -102,12 +102,14 @@ func PlayerAdd()
 
 func PlayerDel()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** PlayerDel ***")
   PlayerSetRemove()
 }
 
 func PlayerSetTargetLookUp()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** PlayerSetTargetLookUp ***")
   pTarget = nil
   for p1 in PlayerSet
@@ -122,6 +124,7 @@ func PlayerSetTargetLookUp()
 
 func PlayerSetInsert()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** PlayerSetInsert ***")
   let Good = PlayerSet.insert(pPlayer)
   if Good.inserted == false
@@ -132,6 +135,7 @@ func PlayerSetInsert()
 
 func PlayerSetRemove()
 {
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   print("*** PlayerSetRemove ***")
   let Good = PlayerSet.remove(pPlayer)
   if Good == nil
@@ -143,16 +147,12 @@ func PlayerSetRemove()
 
 func LogonGreeting()
 {
-  //pPlayer.Output += "Welcome to HolyQuest\r\n"
-
+  LogIt(LogMsg: "DEBUG", LogLvl: 5)
   let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
   let GreetingFileName = GREETING_FILE_NAME
   let GreetingFile   = GreetingPath + GreetingFileName
-  // Determine the file name
-  //let filename = "main.swift"
 
   // Read the contents of the specified file
-  //let contents = try! String(contentsOfFile: filename)
   let contents = try! String(contentsOfFile: GreetingFile)
 
   // Split the file into separate lines
