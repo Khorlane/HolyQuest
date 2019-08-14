@@ -107,9 +107,9 @@ class Db
     }
   }
 
-  /***********************************************************
-   * Get a column from a result set - Integer                 *
-   ***********************************************************/
+  //**********************************************************
+  // Get a column from a result set - Integer                *
+  //**********************************************************
 
   static func GetColInt(ColNbrInSelect: Int) -> Int
   {
@@ -122,9 +122,9 @@ class Db
     return Value
   }
 
-  /***********************************************************
-   * Get a column from a result set - String                  *
-   ***********************************************************/
+  //**********************************************************
+  // Get a column from a result set - String                 *
+  //**********************************************************
 
   static func GetColStr(ColNbrInSelect: Int) -> String
   {
@@ -139,3 +139,64 @@ class Db
     return Str
   }
 }
+
+//**********************************************************
+// Table definitions                                       *
+//**********************************************************
+
+// Calendar
+let Calendar_Type       = 1
+let Calendar_SeqNbr     = 2
+let Calendar_Desc       = 3
+
+// Command
+let Command_Name        = 1
+let Command_Admin       = 2
+let Command_Level       = 3
+let Command_MinPosition = 4
+let Command_Social      = 5
+let Command_Fight       = 6
+let Command_MinWords    = 7
+let Command_Parts       = 8
+let Command_Message     = 9
+
+// Explored
+let Explored_Name       = 1
+let Explored_RoomTrack  = 2
+
+// Loot
+let Loot_Loot_Id        = 1
+
+// LootObject
+let LootObject_Loot_Id  = 1
+let LootObject_ObjectId = 2
+let LootObject_Count    = 3
+let LootObject_Percent  = 4
+
+// Mob
+let Mob_MobNbr          = 1
+let Mob_MobileId        = 2
+let Mob_HitPoints       = 3
+
+// Mobile
+let Mobile_MobileId     = 1
+let Mobile_Sex          = 2
+let Mobile_Desc1        = 3
+let Mobile_Desc2        = 4
+let Mobile_Desc3        = 5
+let Mobile_Action       = 6
+let Mobile_Faction      = 7
+let Mobile_Level        = 8
+let Mobile_HitPoints    = 9
+let Mobile_Armor        = 10
+let Mobile_Attack       = 11
+let Mobile_Damage       = 12
+let Mobile_ExpPoints    = 13
+let Mobile_LootId       = 14
+let Mobile_TalkId       = 15
+let Mobile_InWorld      = 16
+
+// Player
+let Player_Name         = 1
+let Player_Password     = 2
+let Player_ArmorClass   = 3

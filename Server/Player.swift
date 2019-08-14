@@ -20,10 +20,7 @@ class Player
   var Afk           : Bool
   var ArmorClass    : Int
   var RoomNbr       : Int
-  // Player table variables
-  var Player_Password   : Int = 2
-  var Player_ArmorClass : Int = 3
-
+  
   enum States
   {
     case GetName
@@ -95,7 +92,7 @@ func PlayerAdd()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
-  LogonGreeting()
+  PlayerGreeting()
   pPlayer.Output += "Name?"
   pPlayer.Output += "\r\n"
   pPlayer.Output += "> "
@@ -144,7 +141,7 @@ func PlayerSetRemove()
   }
 }
 
-func LogonGreeting()
+func PlayerGreeting()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
   let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
