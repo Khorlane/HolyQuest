@@ -111,6 +111,13 @@ func DoSay()
 func DoShutdown()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  for p1 in PlayerSet
+  {
+    if p1.State == Player.States.Playing
+    {
+      DisconnectClient(p1.SocketHandle)
+    }
+  }
   GameShutdown = true
 }
 

@@ -23,6 +23,7 @@ func Initialization()
 
 func ShutItDown()
 {
+  LogIt(LogMsg: "INFOx HolyQuest is stopping...", LogLvl: 0)
   Db.Close()
   CloseLog()
 }
@@ -77,6 +78,11 @@ func OpenLog()
 
 func CloseLog()
 {
+  TmpStr =          "-------------------------\r\n"
+  TmpStr = TmpStr + "HolyQuest End of Log File\r\n"
+  LogHandle = try! FileHandle(forWritingTo: LogFile)
+  LogHandle.seekToEndOfFile()
+  LogHandle.write(TmpStr.data(using: .utf8)!)
   LogHandle.closeFile()
 }
 
