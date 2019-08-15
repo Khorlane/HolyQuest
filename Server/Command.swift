@@ -62,15 +62,15 @@ func GetPlayerGoing()
 func DoAfk()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  if pActor.Afk == true
+  if pActor.Afk == "Yes"
   {
-    pActor.Afk = false
+    pActor.Afk = "No"
     pActor.Output += "You are no longer AFK"
     pActor.Output += "\r\n"
   }
   else
   {
-    pActor.Afk = true
+    pActor.Afk = "Yes"
     pActor.Output += "You are now AFK"
     pActor.Output += "\r\n"
   }
@@ -89,7 +89,7 @@ func DoQuit()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
   DisconnectClient(pActor.SocketHandle)
-  PlayerDel()
+  PlayerSetRemove()
 }
 
 func DoSay()
@@ -189,7 +189,7 @@ func DoWho()
       pActor.Output += " "
       pActor.Output += String(p1.SocketHandle)
       pActor.Output += " "
-      if p1.Afk == true
+      if p1.Afk == "Yes"
       {
         pActor.Output += "(AFK)"
       }

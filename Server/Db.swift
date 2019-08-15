@@ -126,17 +126,17 @@ class Db
   // Get a column from a result set - String                 *
   //**********************************************************
 
-  static func GetColStr(ColNbrInSelect: Int) -> String
+  static func GetColTxt(ColNbrInSelect: Int) -> String
   {
-    var pStr : UnsafePointer<UInt8>? = nil
-    var Str  : String                = ""
+    var pTxt : UnsafePointer<UInt8>? = nil
+    var Txt  : String                = ""
     var x    : Int32                 = 0
 
     LogIt(LogMsg: "DEBUG", LogLvl: 5)
     x = Int32(ColNbrInSelect - 1)  // SQLite uses index 0 for 1st column
-    pStr = sqlite3_column_text(pSqlResultSet, x)
-    Str = String(cString: pStr!)
-    return Str
+    pTxt = sqlite3_column_text(pSqlResultSet, x)
+    Txt = String(cString: pTxt!)
+    return Txt
   }
 }
 
@@ -196,7 +196,143 @@ let Mobile_LootId       = 14
 let Mobile_TalkId       = 15
 let Mobile_InWorld      = 16
 
+// NextMobNbr
+let NextMobNbr_MobNbr   = 1
+
+// NextObjNbr
+let NextObjNbr_ObjNbr   = 1
+
+// Obj
+let Obj_ObjNbr          = 1
+let Obj_ObjectId        = 2
+
+// Object
+let Object_ObjectId     = 1
+let Object_Desc1        = 2
+let Object_Desc2        = 3
+let Object_Desc3        = 4
+let Object_Weight       = 5
+let Object_Cost         = 6
+let Object_Type         = 7
+let Object_SubType      = 8
+let Object_Value        = 9
+
 // Player
 let Player_Name         = 1
 let Player_Password     = 2
-let Player_ArmorClass   = 3
+let Player_Admin        = 3
+let Player_Afk          = 4
+let Player_AllowAssist  = 5
+let Player_AllowGroup   = 6
+let Player_ArmorClass   = 7
+let Player_Born         = 8
+let Player_Color        = 9
+let Player_Experience   = 10
+let Player_GoToArrive   = 11
+let Player_GoToDepart   = 12
+let Player_HitPoints    = 13
+let Player_Hunger       = 14
+let Player_Invisible    = 15
+let Player_Level        = 16
+let Player_MovePoints   = 17
+let Player_OneWhack     = 18
+let Player_Online       = 19
+let Player_Position     = 20
+let Player_RoomInfo     = 21
+let Player_Sex          = 22
+let Player_Silver       = 23
+let Player_SkillAxe     = 24
+let Player_SkillClub    = 25
+let Player_SkillDagger  = 26
+let Player_SkillHammer  = 27
+let Player_SkillSpear   = 28
+let Player_SkillStaff   = 29
+let Player_SkillSword   = 30
+let Player_Thirst       = 31
+let Player_TimePlayed   = 32
+let Player_Title        = 33
+let Player_WeaponDamage = 34
+let Player_WeaponDesc1  = 35
+let Player_WeaponType   = 36
+
+// PlayerMob
+let PlayerMob_Name      = 1
+let PlayerMob_MobNbr    = 2
+let PlayerMob_Action    = 3
+
+// PlayerObj
+let PlayerObj_Name      = 1
+let PlayerObj_ObjNbr    = 2
+let PlayerObj_Position  = 3
+
+// PlayerRoom
+let PlayerRoom_Name     = 1
+let PlayerRoom_RoomNbr  = 2
+
+// Room
+let Room_RoomNbr        = 1
+let Room_Terrain        = 2
+let Room_Type           = 3
+let Room_Name           = 4
+let Room_Desc           = 5
+
+// RoomExit
+let RoomExit_RoomNbr    = 1
+let RoomExit_Direction  = 2
+let RoomExit_ToRoomNbr  = 3
+let RoomExit_Desc       = 4
+
+// RoomList
+let RoomList_ListNbr    = 1
+let RoomList_RoomNbr    = 2
+
+// RoomMob
+let RoomMob_RoomNbr     = 1
+let RoomMob_MobNbr      = 2
+
+// RoomObj
+let RoomObj_RoomNbr     = 1
+let RoomObj_ObjNbr      = 2
+
+// Shop
+let Shop_RoomNbr        = 1
+let Shop_Name           = 2
+let Shop_Desc           = 3
+
+// ShopObject
+let ShopObject_RoomNbr  = 1
+let ShopObject_ObjectId = 2
+
+// Social
+let Social_Name         = 1
+let Social_MessageNbr   = 2
+let Social_Message      = 3
+
+// Spawn
+let Spawn_MobileId      = 1
+let Spawn_ListNbr       = 2
+let Spawn_Maximum       = 3
+let Spawn_Seconds       = 4
+let Spawn_Minutes       = 5
+let Spawn_Hours         = 6
+let Spawn_Days          = 7
+let Spawn_Weeks         = 8
+let Spawn_Months        = 9
+let Spawn_Years         = 10
+
+// Synonym
+let Synonym_Name        = 1
+let Synonym_Command     = 2
+let Synonym_Info        = 3
+
+// Talk
+let Talk_TalkId         = 1
+
+// TalkMsg
+let TalkMsg_TalkId      = 1
+let TalkMsg_MessageNbr  = 2
+let TalkMsg_Message     = 3
+
+// ValidName
+let ValidName_Name      = 1
+let ValidName_Sex       = 2

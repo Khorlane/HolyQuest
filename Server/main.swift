@@ -35,7 +35,7 @@ while !GameShutdown
   if NewConnection == 1
   {
     SocketHandle1 = AcceptNewConnection();
-    PlayerAdd()
+    PlayerNew()
   }
   for p in PlayerSet
   {
