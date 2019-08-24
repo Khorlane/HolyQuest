@@ -4,7 +4,7 @@
 // Created by Steve Bryant on 05/09/2019.
 // Copyright 2019 Steve Bryant. All rights reserved.
 
-// ChatServer includes
+// Mud Server includes
 #include <fcntl.h>
 #include <stdio.h>        // perror printf
 #include <stdlib.h>       // exit
@@ -53,18 +53,8 @@ struct  timeval     TimeOut;
 
 fd_set  InpSet;               // set of socket descriptors
 
-char * PassReturnString(char * StringInp)
-{
-  printf("String from inside PassReturnString: %s", StringInp);
-  strcpy(Buffer, StringInp);
-  Buffer[strlen(StringInp)] = '!';
-  Buffer[strlen(StringInp)+1] = '\0';
-  return Buffer;
-}
-
 char * GetBuffer(void)
 {
-  //strcpy(Buffer, "My Buffer");
   return Buffer;
 }
 
@@ -73,7 +63,7 @@ void SetBuffer(char * StringInp)
   strcpy(Buffer, StringInp);
 }
 
-void ChatServerInit(void)
+void SocketServerInit(void)
 {
   DEBUGIT(5);
   i               = 0;
@@ -89,7 +79,7 @@ void ChatServerInit(void)
   SocketSize      = sizeof(Socket);
 }
 
-int ChatServerListen(void)
+int SocketServerListen(void)
 {
   DEBUGIT(5);
   //****************
@@ -155,18 +145,21 @@ int ChatServerListen(void)
   return ListenSocket;
 }
 
-void SetUpSelect1(void)
+void SetUpSelectMaster(void)
 {
-  //**********************
-  // Set up for select() *
-  //**********************
+  //***************************
+  // Add master socket to set *
+  //***************************
   DEBUGIT(5);
-  FD_ZERO(&InpSet);                               // Clear the socket set
-  FD_SET(ListenSocket, &InpSet);                  // Add master socket to set
+  FD_ZERO(&InpSet); // Clear the socket set
+  FD_SET(ListenSocket, &InpSet);
 }
 
-void SetUpSelect2(int SocketHandle)
+void SetUpSelectPlayer(int SocketHandle)
 {
+  //****************************
+  // Add player sockets to set *
+  //****************************
   DEBUGIT(5);
   FD_SET(SocketHandle, &InpSet);
 }

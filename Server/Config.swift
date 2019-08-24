@@ -48,6 +48,7 @@ var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
 var PlayerSet                             = Set<Player>()
+var pTmpStr : UnsafeMutablePointer<Int8>?
 
 let ShortCommand =
   [
