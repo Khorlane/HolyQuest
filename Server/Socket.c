@@ -81,6 +81,9 @@ void SocketServerInit(void)
 
 int SocketServerListen(void)
 {
+  //**************************
+  // Establish master socket *
+  //**************************
   DEBUGIT(5);
   //****************
   // Create socket *
@@ -145,26 +148,26 @@ int SocketServerListen(void)
   return ListenSocket;
 }
 
-void SetUpSelectMaster(void)
+void PrepForSelectMaster(void)
 {
-  //***************************
-  // Add master socket to set *
-  //***************************
+  //*********************************
+  // Add master socket to input set *
+  //*********************************
   DEBUGIT(5);
   FD_ZERO(&InpSet); // Clear the socket set
   FD_SET(ListenSocket, &InpSet);
 }
 
-void SetUpSelectPlayer(int SocketHandle)
+void PrepForSelectPlayer(int SocketHandle)
 {
-  //****************************
-  // Add player sockets to set *
-  //****************************
+  //**********************************
+  // Add player sockets to input set *
+  //**********************************
   DEBUGIT(5);
   FD_SET(SocketHandle, &InpSet);
 }
 
-void CheckForSocketActivity(int MaxSocketHandle)
+void SocketSelect(int MaxSocketHandle)
 {
   //************************************
   // Check for activity using select() *
@@ -179,12 +182,31 @@ void CheckForSocketActivity(int MaxSocketHandle)
 
 int IsNewConnection(void)
 {
+  //****************************
+  // Check for new connections *
+  //****************************
   DEBUGIT(5);
   if (FD_ISSET(ListenSocket, &InpSet))
   {
     return TRUE;
   }
   return FALSE;
+}
+
+int AcceptNewConnection(void)
+{
+  //****************************
+  // Accept the new connection *
+  //****************************
+  DEBUGIT(5);
+  SocketHandle2 = accept(ListenSocket, (struct sockaddr *) &Socket, (socklen_t *) &SocketSize);
+  if (SocketHandle2 < 0)
+  {
+    perror("-- Accept failed\r\n");
+    exit(EXIT_FAILURE);
+  }
+  printf("New connection, socket fd is %d , ip is : %s , port : %d\r\n", SocketHandle2, inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
+  return SocketHandle2;
 }
 
 int CheckClient(int SocketHandle1)
@@ -202,22 +224,20 @@ int CheckClient(int SocketHandle1)
 
 long ReadClient(int SocketHandle1)
 {
+  //*************************
+  // Read input into Buffer *
+  //*************************
   DEBUGIT(5);
   ReadByteCount = read(SocketHandle1, Buffer, 1024);
   Buffer[ReadByteCount] = '\0';   // Set the string terminating NULL byte on the end of the data read
   return ReadByteCount;
 }
 
-void DisconnectClient(int SocketHandle1)
-{
-  DEBUGIT(5);
-  getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
-  printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-  close(SocketHandle1);           // Close the socket
-}
-
 void SendClient(int SocketHandle1)
 {
+  //**************************
+  // Send output from Buffer *
+  //**************************
   DEBUGIT(5);
   BufferLen = strlen(Buffer);
   SendResult = send(SocketHandle1, Buffer, BufferLen, 0);
@@ -227,18 +247,13 @@ void SendClient(int SocketHandle1)
   }
 }
 
-int AcceptNewConnection(void)
+void DisconnectClient(int SocketHandle1)
 {
-  //****************************
-  // Accept the new connection *
-  //****************************
+  //******************************
+  // Disconnect and close socket *
+  //******************************
   DEBUGIT(5);
-  SocketHandle2 = accept(ListenSocket, (struct sockaddr *) &Socket, (socklen_t *) &SocketSize);
-  if (SocketHandle2 < 0)
-  {
-    perror("-- Accept failed\r\n");
-    exit(EXIT_FAILURE);
-  }
-  printf("New connection, socket fd is %d , ip is : %s , port : %d\r\n", SocketHandle2, inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-  return SocketHandle2;
+  getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
+  printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
+  close(SocketHandle1);           // Close the socket
 }

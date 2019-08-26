@@ -18,7 +18,19 @@ func BigDog()
   LogIt(LogMsg: TmpStr, LogLvl: 0)
   while !GameShutdown
   {
-    CheckForPlayers()
+    CheckSocketActivity()
+    CheckForNewPlayers()
+    if PlayerSet.isEmpty
+    {
+      LogIt(LogMsg: "INFOx No Connections: Going to sleep", LogLvl: 0)
+      while PlayerSet.isEmpty
+      {
+        usleep(0100000)
+        CheckSocketActivity()
+        CheckForNewPlayers()
+      }
+      LogIt(LogMsg: "INFOx Waking up", LogLvl: 0)
+    }
     GetPlayerInput()
     SendPlayerOutput()
     usleep(0100000)
@@ -26,19 +38,23 @@ func BigDog()
   ShutItDown()
 }
 
-func CheckForPlayers()
+func CheckSocketActivity()
 {
-  SetUpSelectMaster()
+  PrepForSelectMaster()
   MaxSocketHandle = ListenSocket
   for p in PlayerSet
   {
-    SetUpSelectPlayer(p.SocketHandle)
+    PrepForSelectPlayer(p.SocketHandle)
     if p.SocketHandle > MaxSocketHandle
     {
       MaxSocketHandle = p.SocketHandle
     }
   }
-  CheckForSocketActivity(MaxSocketHandle)
+  SocketSelect(MaxSocketHandle)
+}
+
+func CheckForNewPlayers()
+{
   NewConnection = IsNewConnection()
   if NewConnection == 1
   {

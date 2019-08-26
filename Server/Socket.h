@@ -9,7 +9,7 @@
 
 int   AcceptNewConnection(void);
 int   CheckClient(int SocketHandle1);
-void  CheckForSocketActivity(int MaxSocketHandle);
+void  SocketSelect(int MaxSocketHandle);
 void  DisconnectClient(int SocketHandle1);
 char *GetBuffer(void);
 int   IsNewConnection(void);
@@ -18,7 +18,7 @@ int   SocketServerListen(void);
 long  ReadClient(int SocketHandle1);
 void  SendClient(int SocketHandle1);
 void  SetBuffer(char * StringInp);
-void  SetUpSelectMaster(void);
-void  SetUpSelectPlayer(int SocketHandle);
+void  PrepForSelectMaster(void);
+void  PrepForSelectPlayer(int SocketHandle);
 
 #endif /* Socket_h */
