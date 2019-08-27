@@ -12,6 +12,7 @@ func ProcessCommand()
   Command.Strip()
   LogIt(LogMsg: Command, LogLvl: 1)
   CommandWordCount = Command.Words
+  // Add code here to check for minimum number of words e.g. the TELL command must have at least 3 words (tell steve hi)
   MudCmd = Command.Word(1)
   pActor = pPlayer
   if pPlayer.State != Player.States.Playing
@@ -20,7 +21,7 @@ func ProcessCommand()
     return
   }
   if MudCmd == "" {return}
-  Command = Command.DeletePrefix(MudCmd)
+  Command = Command.RemoveWord(1)
   MudCmd.Lower()
   Command.Strip()
   if ShortCommand[MudCmd] != nil
@@ -138,7 +139,7 @@ func DoTell()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
   PlayerTargetName = Command.Word(1)
-  TmpStr = Command.DeletePrefix(PlayerTargetName)
+  TmpStr = Command.RemoveWord(1)
   TmpStr.Strip()
   PlayerSetTargetLookUp()
   if pTarget == nil

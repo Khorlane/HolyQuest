@@ -57,8 +57,8 @@ let ShortCommand =
     "k":"kill"
   ]
 
-let HOST_ADDRESS_IPV4 = "127.0.0.1"
-let HOST_ADDRESS_IPV6 = "::1"
+//let HOST_ADDRESS_IPV4 = "127.0.0.1"
+//let HOST_ADDRESS_IPV6 = "::1"
 let PORT_NUMBER       = 7777
 let START_ROOM        = 86
 

@@ -10,12 +10,8 @@ import Foundation
 
 func BigDog()
 {
-  Initialization()
-  SocketServerInit()
-  ListenSocket = SocketServerListen()
-  TmpStr = "INFOx HolyQuest is Listening on Port "
-  TmpStr += String(PORT_NUMBER)
-  LogIt(LogMsg: TmpStr, LogLvl: 0)
+  StartItUp()
+
   while !GameShutdown
   {
     CheckSocketActivity()

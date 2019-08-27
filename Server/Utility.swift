@@ -9,16 +9,15 @@ import Foundation
 // FileHandle
 // URL
 
-func Initialization()
+func StartItUp()
 {
-  SetTimestampFmt()
-  HostAdr     = HOST_ADDRESS_IPV4
-  PortNbr     = PORT_NUMBER
-  LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
-  LogFileName = LOG_FILE_NAME
   OpenLog()
-  LogIt(LogMsg: "INFOx HolyQuest is starting...", LogLvl: 0)
   Db.Open()
+  SocketServerInit()
+  ListenSocket = SocketServerListen(Int32(PORT_NUMBER))
+  TmpStr = "INFOx HolyQuest is Listening on Port "
+  TmpStr += String(PORT_NUMBER)
+  LogIt(LogMsg: TmpStr, LogLvl: 0)
 }
 
 func ShutItDown()
@@ -47,6 +46,8 @@ func LogIt
 
 func OpenLog()
 {
+  LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
+  LogFileName = LOG_FILE_NAME
   let FromFile = LogPath + LogFileName + ".empty"
   let ToFile   = LogPath + LogFileName
   let (output, error, status) = RunCmd(cmd: "/bin/cp", args: FromFile, ToFile)
@@ -74,6 +75,7 @@ func OpenLog()
   TmpStr = "------------------\r\n"
   LogHandle.write(TmpStr.data(using: .utf8)!)
   LogHandle.closeFile()
+  SetTimestampFmt()
 }
 
 func CloseLog()
@@ -131,11 +133,13 @@ func SetTimestampFmt()
 
 extension String
 {
+  // Return count of words in a string
   var Words : Int
   {
     return self.split(separator: " ").count
   }
 
+  // Remove extra whitespace
   mutating func Squeeze()
   {
     self.Strip()
@@ -148,22 +152,25 @@ extension String
     }
   }
 
+  // Trim leadng and trailing whitespace and newlines
   mutating func Strip()
   {
     self = self.trimmingCharacters(in: .whitespacesAndNewlines)
   }
 
-  mutating func DeletePrefix(_ prefix: String) -> String
+  // Delete first word from a string
+  mutating func RemoveWord(_ Nbr: Int) -> String
   {
-    guard self.hasPrefix(prefix) else { return self }
-    return String(self.dropFirst(prefix.count))
+    return String(self.dropFirst(self.Word(Nbr).count))
   }
 
+  // Force string to lowercase
   mutating func Lower()
   {
     self = self.lowercased()
   }
 
+  // Return the nth word in a string
   func Word(_ Nbr: Int) -> String
   {
     return String(self.split(separator: " ")[Nbr-1])

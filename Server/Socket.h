@@ -14,7 +14,7 @@ void  DisconnectClient(int SocketHandle1);
 char *GetBuffer(void);
 int   IsNewConnection(void);
 void  SocketServerInit(void);
-int   SocketServerListen(void);
+int   SocketServerListen(int Port);
 long  ReadClient(int SocketHandle1);
 void  SendClient(int SocketHandle1);
 void  SetBuffer(char * StringInp);

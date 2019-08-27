@@ -20,7 +20,6 @@
 
 #define TRUE            1
 #define FALSE           0
-#define PORT            7777
 #define COMMS_WAIT_SEC  0
 #define COMMS_WAIT_USEC 1
 #define DEBUGIT(x)      if (DEBUGIT_LVL >= x) {printf("*** ");printf(__FUNCTION__);printf(" ***\r\n");}
@@ -79,7 +78,7 @@ void SocketServerInit(void)
   SocketSize      = sizeof(Socket);
 }
 
-int SocketServerListen(void)
+int SocketServerListen(int Port)
 {
   //**************************
   // Establish master socket *
@@ -126,7 +125,7 @@ int SocketServerListen(void)
   //************************
   Socket.sin_family      = AF_INET;
   Socket.sin_addr.s_addr = INADDR_ANY;
-  Socket.sin_port        = htons(PORT);
+  Socket.sin_port        = htons(Port);
   //*******
   // Bind *
   //*******
