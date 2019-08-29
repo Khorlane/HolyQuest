@@ -68,3 +68,5 @@ let LOG_DIR             = "Log"
 
 let GREETING_FILE_NAME  = "Greeting.txt"
 let LOG_FILE_NAME       = "Log.txt"
+
+let SLEEP_TIME          = 0100000

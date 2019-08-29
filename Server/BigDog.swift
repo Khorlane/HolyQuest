@@ -6,14 +6,13 @@
 //  Copyright © 2019 CodePlain. All rights reserved.
 //
 
-import Foundation
-
 func BigDog()
 {
   StartItUp()
 
   while !GameShutdown
   {
+    HeartBeat()
     CheckSocketActivity()
     CheckForNewPlayers()
     if PlayerSet.isEmpty
@@ -21,7 +20,7 @@ func BigDog()
       LogIt(LogMsg: "INFOx No Connections: Going to sleep", LogLvl: 0)
       while PlayerSet.isEmpty
       {
-        usleep(0100000)
+        Sleep()
         CheckSocketActivity()
         CheckForNewPlayers()
       }
@@ -29,9 +28,15 @@ func BigDog()
     }
     GetPlayerInput()
     SendPlayerOutput()
-    usleep(0100000)
+    Sleep()
   }
   ShutItDown()
+}
+
+func HeartBeat()
+{
+  let MobsMove = "GoGo"
+  if MobsMove == "GoGo" {return}
 }
 
 func CheckSocketActivity()

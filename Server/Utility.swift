@@ -8,6 +8,7 @@ import Foundation
 // Date()
 // FileHandle
 // URL
+// usleep
 
 func StartItUp()
 {
@@ -129,6 +130,11 @@ func SetTimestampFmt()
   TimeStampFmt.dateStyle = .full
   TimeStampFmt.timeStyle = .full
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
+}
+
+func Sleep()
+{
+  usleep(useconds_t(SLEEP_TIME))
 }
 
 extension String
