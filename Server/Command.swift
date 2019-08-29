@@ -21,7 +21,7 @@ func ProcessCommand()
     return
   }
   if MudCmd == "" {return}
-  Command = Command.RemoveWord(1)
+  Command.DelFirstWord()
   MudCmd.Lower()
   Command.Strip()
   if ShortCommand[MudCmd] != nil
@@ -139,8 +139,8 @@ func DoTell()
 {
   LogIt(LogMsg: "DEBUG", LogLvl: 5)
   PlayerTargetName = Command.Word(1)
-  TmpStr = Command.RemoveWord(1)
-  TmpStr.Strip()
+  Command.DelFirstWord()
+  Command.Strip()
   PlayerSetTargetLookUp()
   if pTarget == nil
   {
@@ -160,14 +160,14 @@ func DoTell()
   pActor.Output += "You tell "
   pActor.Output += PlayerTargetName
   pActor.Output += ": "
-  pActor.Output += TmpStr
+  pActor.Output += Command
   pActor.Output += "\r\n"
   pActor.Output += "> "
   pTarget.Output = ""
   pTarget.Output += "\r\n"
   pTarget.Output += pActor.Name
   pTarget.Output += " tells you: "
-  pTarget.Output += TmpStr
+  pTarget.Output += Command
   pTarget.Output += "\r\n"
   pTarget.Output += "> "
 }
@@ -261,7 +261,7 @@ func GetPlayerPswd()
   pPlayer.Output += "Password mis-match"
   pPlayer.Output += "\r\n"
   pPlayer.Output += "> "
-  }
+}
 
 func SendGreeting()
 {

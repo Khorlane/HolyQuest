@@ -159,9 +159,9 @@ extension String
   }
 
   // Delete first word from a string
-  mutating func RemoveWord(_ Nbr: Int) -> String
+  mutating func DelFirstWord()
   {
-    return String(self.dropFirst(self.Word(Nbr).count))
+    self = String(self.dropFirst(self.Word(1).count+1))
   }
 
   // Force string to lowercase
