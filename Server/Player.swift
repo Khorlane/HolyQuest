@@ -58,6 +58,7 @@ class Player
     case GetPassword
     case SendGreeting
     case Playing
+    case Disconnect
   }
 
   init(Name: String, SocketAddr: String, SocketHandle: Int32)

@@ -24,6 +24,7 @@
 #define COMMS_WAIT_USEC 1
 #define DEBUGIT(x)      if (DEBUGIT_LVL >= x) {printf("*** ");printf(__FUNCTION__);printf(" ***\r\n");}
 #define DEBUGIT_LVL     1
+#define MSG_NOSIGNAL    0x2000 /* don't raise SIGPIPE */
 
 int       BindResult;
 size_t    BufferLen;
@@ -76,6 +77,7 @@ void SocketServerInit(void)
   TimeOut.tv_sec  = COMMS_WAIT_SEC;
   TimeOut.tv_usec = COMMS_WAIT_USEC;
   SocketSize      = sizeof(Socket);
+  signal(SIGPIPE, SIG_IGN);
 }
 
 int SocketServerListen(int Port)
@@ -242,7 +244,12 @@ void SendClient(int SocketHandle1)
   SendResult = send(SocketHandle1, Buffer, BufferLen, 0);
   if (SendResult != BufferLen)
   {
+    strcpy(Buffer,"quit\0");
     perror("-- Send failed\r\n");
+  }
+  else
+  {
+    Buffer[0] = '\0';
   }
 }
 

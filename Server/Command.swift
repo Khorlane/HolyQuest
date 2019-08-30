@@ -12,9 +12,18 @@ func ProcessCommand()
   Command.Strip()
   LogIt(LogMsg: Command, LogLvl: 1)
   CommandWordCount = Command.Words
+  if CommandWordCount == 0
+  {
+    Command = "NOCOMMAND"
+  }
   // Add code here to check for minimum number of words e.g. the TELL command must have at least 3 words (tell steve hi)
   MudCmd = Command.Word(1)
   pActor = pPlayer
+  if pPlayer.State == Player.States.Disconnect
+  {
+    DoQuit()
+    return
+  }
   if pPlayer.State != Player.States.Playing
   {
     GetPlayerGoing()

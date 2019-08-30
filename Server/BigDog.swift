@@ -89,6 +89,15 @@ func SendPlayerOutput()
       pTmpStr = p.Output.GetStrPointer()
       SetBuffer(pTmpStr)
       SendClient(p.SocketHandle)
+      // In case we try to write to a closed socket, simulate the player issuing the quit command
+      pTmpStr = GetBuffer()
+      Command = String(cString: pTmpStr!)
+      if Command == "quit"
+      {
+        pPlayer.State = Player.States.Disconnect
+        ProcessCommand()
+        Command = ""
+      }
       p.Output = ""
     }
   }

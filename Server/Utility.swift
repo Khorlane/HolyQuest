@@ -179,6 +179,7 @@ extension String
   // Return the nth word in a string
   func Word(_ Nbr: Int) -> String
   {
+    if self.split(separator: " ").count == 0 {return ""}
     return String(self.split(separator: " ")[Nbr-1])
   }
 
