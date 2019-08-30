@@ -174,9 +174,11 @@ func DoTell()
   pActor.Output += "> "
   pTarget.Output = ""
   pTarget.Output += "\r\n"
+  pTarget.Output += Magenta
   pTarget.Output += pActor.Name
   pTarget.Output += " tells you: "
   pTarget.Output += Command
+  pTarget.Output += Normal
   pTarget.Output += "\r\n"
   pTarget.Output += "> "
 }

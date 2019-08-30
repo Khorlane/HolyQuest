@@ -70,3 +70,7 @@ let GREETING_FILE_NAME  = "Greeting.txt"
 let LOG_FILE_NAME       = "Log.txt"
 
 let SLEEP_TIME          = 0100000
+
+// Color codes
+let Normal  = "\u{001B}[0;m"
+let Magenta = "\u{001B}[1;35m"
