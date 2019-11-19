@@ -1,10 +1,8 @@
-//
-//  Db.swift
-//  HolyQuest
-//
-//  Created by Stephen Bryant on 6/3/19.
-//  Copyright © 2019 CodePlain. All rights reserved.
-//
+// HolyQuest
+// Db.swift
+// SQLite database
+// Created by Steve Bryant on 06/03/2019.
+// Copyright 2019 CodePlain. All rights reserved.
 
 import Foundation
 import SQLite3

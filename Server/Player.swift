@@ -2,7 +2,7 @@
 // Player.swift
 // Player class
 // Created by Steve Bryant on 12/31/2018.
-// Copyright 2019 Steve Bryant. All rights reserved.
+// Copyright 2019 CodePlain. All rights reserved.
 
 import Foundation   // Not required at this time
 

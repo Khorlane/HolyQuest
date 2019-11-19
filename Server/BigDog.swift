@@ -1,10 +1,8 @@
-//
-//  BigDog.swift
-//  HolyQuest
-//
-//  Created by Stephen Bryant on 8/23/19.
-//  Copyright © 2019 CodePlain. All rights reserved.
-//
+// HolyQuest
+// BigDog.swift
+// Game loop
+// Created by Steve Bryant on 08/23/2019.
+// Copyright 2019 CodePlain. All rights reserved.
 
 func BigDog()
 {
@@ -89,7 +87,7 @@ func SendPlayerOutput()
       pTmpStr = p.Output.GetStrPointer()
       SetBuffer(pTmpStr)
       SendClient(p.SocketHandle)
-      // In case we try to write to a closed socket, simulate the player issuing the quit command
+      // If socket is closed or other issue, SendClient() sticks 'quit' in the buffer
       pTmpStr = GetBuffer()
       Command = String(cString: pTmpStr!)
       if Command == "quit"

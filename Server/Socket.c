@@ -1,8 +1,8 @@
 // HolyQuest
 // MySocket.c
-// Socket stuff code
+// Sockets
 // Created by Steve Bryant on 05/09/2019.
-// Copyright 2019 Steve Bryant. All rights reserved.
+// Copyright 2019 CodePlain. All rights reserved.
 
 // Mud Server includes
 #include <fcntl.h>
