@@ -8,29 +8,10 @@ import Foundation
 // Date()
 // FileHandle
 // URL
-// usleep
 
-func StartItUp()
-{
-  OpenLog()
-  Db.Open()
-  SocketServerInit()
-  ListenSocket = SocketServerListen(Int32(PORT_NUMBER))
-  TmpStr = "INFOx HolyQuest is Listening on Port "
-  TmpStr += String(PORT_NUMBER)
-  LogIt(LogMsg: TmpStr, LogLvl: 0)
-}
-
-func ShutItDown()
-{
-  LogIt(LogMsg: "INFOx HolyQuest is stopping...", LogLvl: 0)
-  Db.Close()
-  CloseLog()
-}
-
-func LogIt
-  (LogMsg:    String,
-   LogLvl:    Int,
+func LogIt                                    // Called from all over the place
+  (_ LogMsg:  String,
+   _ LogLvl:  Int,
    function:  String = #function,
    file:      String = #file,
    line:      Int    = #line)
@@ -45,7 +26,7 @@ func LogIt
   LogHandle.write(TmpStr.data(using: .utf8)!)
 }
 
-func OpenLog()
+func OpenLog()                                // BigDog.swift StartItUp()
 {
   LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
   LogFileName = LOG_FILE_NAME
@@ -76,10 +57,10 @@ func OpenLog()
   TmpStr = "------------------\r\n"
   LogHandle.write(TmpStr.data(using: .utf8)!)
   LogHandle.closeFile()
-  SetTimestampFmt()
+  SetTimestampFmt()                           // Utility.swift
 }
 
-func CloseLog()
+func CloseLog()                               // BigDog.swift ShutItDown()
 {
   TmpStr =          "-------------------------\r\n"
   TmpStr = TmpStr + "HolyQuest End of Log File\r\n"
@@ -89,7 +70,7 @@ func CloseLog()
   LogHandle.closeFile()
 }
 
-func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String], exitCode: Int32)
+func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String], exitCode: Int32) // Utility.swift OpenLog()
 {
   var output : [String] = []
   var error  : [String] = []
@@ -125,16 +106,11 @@ func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String
   return (output, error, status)
 }
 
-func SetTimestampFmt()
+func SetTimestampFmt()                        // Utility.swift OpenLog()
 {
   TimeStampFmt.dateStyle = .full
   TimeStampFmt.timeStyle = .full
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
-}
-
-func Sleep()
-{
-  usleep(useconds_t(SLEEP_TIME))
 }
 
 extension String

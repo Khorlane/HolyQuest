@@ -28,6 +28,7 @@ var MsgTxt              : String          = ""
 var MudCmd              : String          = ""
 var NewConnection       : Int32           = 0
 var PlayerTargetName    : String          = ""
+var PlayerSet                             = Set<Player>()
 var PortNbr             : Int             = 0
 var ReadBytes           : Int             = 0
 var SocketAddr          : String          = ""
@@ -40,15 +41,14 @@ var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
 
-var x                   : Int             = 0
-
-var pWorldDb            : OpaquePointer?
 var pSqlResultSet       : OpaquePointer?
+var pWorldDb            : OpaquePointer?
+
 var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
-var PlayerSet                             = Set<Player>()
-var pTmpStr : UnsafeMutablePointer<Int8>?
+
+var pCh                 : UnsafeMutablePointer<Int8>?
 
 let ShortCommand =
   [
@@ -59,18 +59,20 @@ let ShortCommand =
 
 //let HOST_ADDRESS_IPV4 = "127.0.0.1"
 //let HOST_ADDRESS_IPV6 = "::1"
-let PORT_NUMBER       = 7777
-let START_ROOM        = 86
+let PORT_NUMBER         = 7777
+let START_ROOM          = 86
 
 let HOME_DIR            = "/Users/stephenbryant/Projects/HolyQuest"
 let GREETING_DIR        = "Library"
 let LOG_DIR             = "Log"
+let WORLD_DIR           = "Library"
 
 let GREETING_FILE_NAME  = "Greeting.txt"
 let LOG_FILE_NAME       = "Log.txt"
+let WORLD_FILE_NAME     = "World.db3"
 
 let SLEEP_TIME          = 0100000
 
 // Color codes
-let Normal  = "\u{001B}[0;m"
-let Magenta = "\u{001B}[1;35m"
+let Normal              = "\u{001B}[0;m"
+let Magenta             = "\u{001B}[1;35m"

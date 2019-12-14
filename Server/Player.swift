@@ -63,7 +63,7 @@ class Player
 
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     // Initialize variables
     self.Output       = ""
     self.RoomNbr      = START_ROOM
@@ -109,9 +109,9 @@ class Player
     self.WeaponType   = ""
   }
 
-  func IsValidName() -> Bool
+  func IsValidName() -> Bool                  // Command.swift
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlStmt = """
       Select
         Name,
@@ -199,7 +199,7 @@ class Player
     }
     else
     {
-      Db.CloseCursor()
+      Db.CloseCursor()                        // Db.swift
       return false
     }
   }
@@ -217,23 +217,23 @@ extension Player: Hashable
   }
 }
 
-func PlayerNew()
+func PlayerNew()                              // BigDog.swift CheckForNewPlayers()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1)
-  PlayerGreeting()
+  LogIt("DEBUG", 5)
+  pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1) // Player.swift
+  PlayerGreeting()                            // Player.swift
   pPlayer.Output += "Name?"
   pPlayer.Output += "\r\n"
   pPlayer.Output += "> "
-  PlayerSetInsert()
+  PlayerSetInsert()                           // Player.swift
 }
 
-func PlayerGreeting()
+func PlayerGreeting()                         // Player.swift PlayerNew()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
   let GreetingFileName = GREETING_FILE_NAME
-  let GreetingFile   = GreetingPath + GreetingFileName
+  let GreetingFile     = GreetingPath + GreetingFileName
 
   // Read the contents of the specified file
   let contents = try! String(contentsOfFile: GreetingFile)
@@ -248,9 +248,9 @@ func PlayerGreeting()
   pPlayer.Output += "\r\n"
 }
 
-func PlayerSetTargetLookUp()
+func PlayerTargetLookUp()                     // Command.swift
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pTarget = nil
   for p1 in PlayerSet
   {
@@ -262,24 +262,24 @@ func PlayerSetTargetLookUp()
   }
 }
 
-func PlayerSetInsert()
+func PlayerSetInsert()                        // Player.swift PlayerNew()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   let Good = PlayerSet.insert(pPlayer)
   if Good.inserted == false
   {
-    LogIt(LogMsg: "ERROR PlayerSetInsert failed", LogLvl: 0)
+    LogIt("ERROR PlayerSetInsert failed", 0)
     exit(EXIT_FAILURE)
   }
 }
 
-func PlayerSetRemove()
+func PlayerSetRemove()                        // Command.swift DoQuit()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   let Good = PlayerSet.remove(pPlayer)
   if Good == nil
   {
-    LogIt(LogMsg: "ERROR PlayerSetRemove failed", LogLvl: 0)
+    LogIt("ERROR PlayerSetRemove failed", 0)
     exit(EXIT_FAILURE)
   }
 }

@@ -53,17 +53,17 @@ struct  timeval     TimeOut;
 
 fd_set  InpSet;               // set of socket descriptors
 
-char * GetBuffer(void)
+char * GetBuffer(void)                        // BigDog.swift
 {
   return Buffer;
 }
 
-void SetBuffer(char * StringInp)
+void SetBuffer(char * StringInp)              // BigDog.swift
 {
   strcpy(Buffer, StringInp);
 }
 
-void SocketServerInit(void)
+void SocketServerInit(void)                   // Utility.swift
 {
   DEBUGIT(5);
   i               = 0;
@@ -80,7 +80,7 @@ void SocketServerInit(void)
   signal(SIGPIPE, SIG_IGN);
 }
 
-int SocketServerListen(int Port)
+int SocketServerListen(int Port)              // BigDog.swift
 {
   //**************************
   // Establish master socket *
@@ -149,7 +149,7 @@ int SocketServerListen(int Port)
   return ListenSocket;
 }
 
-void PrepForSelectMaster(void)
+void PrepForSelectMaster(void)                // BigDog.swift
 {
   //*********************************
   // Add master socket to input set *
@@ -159,7 +159,7 @@ void PrepForSelectMaster(void)
   FD_SET(ListenSocket, &InpSet);
 }
 
-void PrepForSelectPlayer(int SocketHandle)
+void PrepForSelectPlayer(int SocketHandle)    // BigDog.swift
 {
   //**********************************
   // Add player sockets to input set *
@@ -168,7 +168,7 @@ void PrepForSelectPlayer(int SocketHandle)
   FD_SET(SocketHandle, &InpSet);
 }
 
-void SocketSelect(int MaxSocketHandle)
+void SocketSelect(int MaxSocketHandle)        // BigDog.swift
 {
   //************************************
   // Check for activity using select() *
@@ -181,7 +181,7 @@ void SocketSelect(int MaxSocketHandle)
   }
 }
 
-int IsNewConnection(void)
+int IsNewConnection(void)                     // BigDog.swift
 {
   //****************************
   // Check for new connections *
@@ -194,7 +194,7 @@ int IsNewConnection(void)
   return FALSE;
 }
 
-int AcceptNewConnection(void)
+int AcceptNewConnection(void)                 // BigDog.swift
 {
   //****************************
   // Accept the new connection *
@@ -210,7 +210,7 @@ int AcceptNewConnection(void)
   return SocketHandle2;
 }
 
-int CheckClient(int SocketHandle1)
+int CheckClient(int SocketHandle1)            // BigDog.swift
 {
   //******************************************
   // Check for activity on other connections *
@@ -223,7 +223,7 @@ int CheckClient(int SocketHandle1)
   return FALSE;
 }
 
-long ReadClient(int SocketHandle1)
+long ReadClient(int SocketHandle1)            // BigDog.swift
 {
   //*************************
   // Read input into Buffer *
@@ -234,7 +234,7 @@ long ReadClient(int SocketHandle1)
   return ReadByteCount;
 }
 
-void SendClient(int SocketHandle1)
+void SendClient(int SocketHandle1)            // BigDog.swift
 {
   //**************************
   // Send output from Buffer *
@@ -253,7 +253,7 @@ void SendClient(int SocketHandle1)
   }
 }
 
-void DisconnectClient(int SocketHandle1)
+void DisconnectClient(int SocketHandle1)      // Command.swift
 {
   //******************************
   // Disconnect and close socket *

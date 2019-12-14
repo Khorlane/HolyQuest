@@ -13,45 +13,48 @@ class Db
   // Db open                                                 *
   //**********************************************************
 
-  static func Open()
+  static func Open()                          // BigDog.swift StartItUp()
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
-    SqlCode = sqlite3_open("/Users/stephenbryant/Projects/HolyQuest/Library/World.db3", &pWorldDb)
+    LogIt("DEBUG", 5)
+    let WorldPath     = HOME_DIR + "/" + WORLD_DIR + "/"
+    let WorldFileName = WORLD_FILE_NAME
+    let WorldFile     = WorldPath + WorldFileName
+    SqlCode = sqlite3_open(WorldFile, &pWorldDb)
     if SqlCode != SQLITE_OK
     {
-      LogIt(LogMsg: "ERROR Database Open Failed", LogLvl: 0)
+      LogIt("ERROR Database Open Failed", 0)
       exit(EXIT_FAILURE)
     }
-    LogIt(LogMsg: "INFOx Database open worked!", LogLvl: 0)
+    LogIt("INFOx Database open worked!", 0)
   }
 
   //**********************************************************
   // Db close                                                *
   //**********************************************************
 
-  static func Close()
+  static func Close()                         // BigDog.swift ShutItDown()
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlCode = sqlite3_close(pWorldDb)
     if SqlCode != SQLITE_OK
     {
-      LogIt(LogMsg: "ERROR Database Open Failed", LogLvl: 0)
+      LogIt("ERROR Database Open Failed", 0)
       exit(EXIT_FAILURE)
     }
-    LogIt(LogMsg: "INFOx Database close worked!", LogLvl: 0)
+    LogIt("INFOx Database close worked!", 0)
   }
 
   //**********************************************************
   // Handles insert, update, delete statements               *
   //**********************************************************
 
-  static func DoSqlStmt()
+  static func DoSqlStmt()                     // No callers, yet
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlCode = sqlite3_exec(pWorldDb, SqlStmt, nil, nil, nil)
     if SqlCode != SQLITE_OK
     {
-      LogIt(LogMsg: "ERROR Database exec SQL failed", LogLvl: 0)
+      LogIt("ERROR Database exec SQL failed", 0)
       exit(EXIT_FAILURE)
     }
   }
@@ -60,14 +63,14 @@ class Db
   // Open cursor                                             *
   //**********************************************************
 
-  static func OpenCursor()
+  static func OpenCursor()                    // Player.swift IsValidName()
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlStmtLen = Int32(SqlStmt.count)
     SqlCode = sqlite3_prepare(pWorldDb, SqlStmt, SqlStmtLen, &pSqlResultSet, nil)
     if SqlCode != SQLITE_OK
     {
-      LogIt(LogMsg: "ERROR Database prepare SQL failed", LogLvl: 0)
+      LogIt("ERROR Database prepare SQL failed", 0)
       exit(EXIT_FAILURE)
     }
   }
@@ -76,9 +79,9 @@ class Db
   // Fetch cursor                                            *
   //**********************************************************
 
-  static func FetchCursor() -> Bool
+  static func FetchCursor() -> Bool           // Player.swift IsValidName()
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlCode = sqlite3_step(pSqlResultSet)
     if (SqlCode == SQLITE_ROW)
     {
@@ -94,13 +97,13 @@ class Db
   // Close cursor                                            *
   //**********************************************************
 
-  static func CloseCursor()
+  static func CloseCursor()                   // Player.swift IsValidName()
   {
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     SqlCode = sqlite3_finalize(pSqlResultSet)
     if SqlCode != SQLITE_OK
     {
-      LogIt(LogMsg: "ERROR Database finalize SQL failed", LogLvl: 0)
+      LogIt("ERROR Database finalize SQL failed", 0)
       exit(EXIT_FAILURE)
     }
   }
@@ -109,12 +112,12 @@ class Db
   // Get a column from a result set - Integer                *
   //**********************************************************
 
-  static func GetColInt(ColNbrInSelect: Int) -> Int
+  static func GetColInt(ColNbrInSelect: Int) -> Int // Player.swift IsValidName()
   {
     var x     : Int32 = 0
     var Value : Int   = 0
 
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     x = Int32(ColNbrInSelect - 1)  // SQLite uses index 0 for 1st column
     Value = Int(sqlite3_column_int(pSqlResultSet, x))
     return Value
@@ -124,13 +127,13 @@ class Db
   // Get a column from a result set - String                 *
   //**********************************************************
 
-  static func GetColTxt(ColNbrInSelect: Int) -> String
+  static func GetColTxt(ColNbrInSelect: Int) -> String // Player.swift IsValidName()
   {
     var pTxt : UnsafePointer<UInt8>? = nil
     var Txt  : String                = ""
     var x    : Int32                 = 0
 
-    LogIt(LogMsg: "DEBUG", LogLvl: 5)
+    LogIt("DEBUG", 5)
     x = Int32(ColNbrInSelect - 1)  // SQLite uses index 0 for 1st column
     pTxt = sqlite3_column_text(pSqlResultSet, x)
     Txt = String(cString: pTxt!)

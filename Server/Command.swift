@@ -6,11 +6,11 @@
 
 import Foundation   // Not required at this time
 
-func ProcessCommand()
+func ProcessCommand()                         // BigDog.swift
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   Command.Strip()
-  LogIt(LogMsg: Command, LogLvl: 1)
+  LogIt(Command, 1)
   CommandWordCount = Command.Words
   if CommandWordCount == 0
   {
@@ -26,7 +26,7 @@ func ProcessCommand()
   }
   if pPlayer.State != Player.States.Playing
   {
-    GetPlayerGoing()
+    GetPlayerGoing()                          // Command.swift
     return
   }
   if MudCmd == "" {return}
@@ -39,39 +39,39 @@ func ProcessCommand()
   }
   switch MudCmd
   {
-    case "afk"      : DoAfk()
-    case "look"     : DoLook()
-    case "quit"     : DoQuit()
-    case "say"      : DoSay()
-    case "shutdown" : DoShutdown()
-    case "status"   : DoStatus()
-    case "tell"     : DoTell()
-    case "who"      : DoWho()
-    default         : BadCmdMsg()
+    case "afk"      : DoAfk()                 // Command.swift
+    case "look"     : DoLook()                // Command.swift
+    case "quit"     : DoQuit()                // Command.swift
+    case "say"      : DoSay()                 // Command.swift
+    case "shutdown" : DoShutdown()            // Command.swift
+    case "status"   : DoStatus()              // Command.swift
+    case "tell"     : DoTell()                // Command.swift
+    case "who"      : DoWho()                 // Command.swift
+    default         : BadCmdMsg()             // Command.swift
   }
 }
 
-func GetPlayerGoing()
+func GetPlayerGoing()                         // Command.swift
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   if pPlayer.State == Player.States.GetName
   {
-    GetPlayerName()
+    GetPlayerName()                           // Command.swift
     return
   }
   if pPlayer.State == Player.States.GetPassword
   {
-    GetPlayerPswd()
+    GetPlayerPswd()                           // Command.swift
     if pPlayer.State == Player.States.SendGreeting
     {
-      SendGreeting()
+      SendGreeting()                          // Command.swift
     }
   }
 }
 
-func DoAfk()
+func DoAfk()                                  // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   if pActor.Afk == "Yes"
   {
     pActor.Afk = "No"
@@ -87,24 +87,24 @@ func DoAfk()
   pActor.Output += "> "
 }
 
-func DoLook()
+func DoLook()                                 // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pActor.Output += "You look around"
   pActor.Output += "\r\n"
   pActor.Output += "> "
 }
 
-func DoQuit()
+func DoQuit()                                 // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  DisconnectClient(pActor.SocketHandle)
-  PlayerSetRemove()
+  LogIt("DEBUG", 5)
+  DisconnectClient(pActor.SocketHandle)       // Socket.c
+  PlayerSetRemove()                           // Player.swift
 }
 
-func DoSay()
+func DoSay()                                  // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   TmpStr = Command
   pActor.Output += "You say: "
   pActor.Output += TmpStr
@@ -115,25 +115,25 @@ func DoSay()
   MsgTxt += " says: "
   MsgTxt += TmpStr
   MsgTxt += "\r\n"
-  SendToRoom()
+  SendToRoom()                                // Command.swift
 }
 
-func DoShutdown()
+func DoShutdown()                             // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   for p1 in PlayerSet
   {
     if p1.State == Player.States.Playing
     {
-      DisconnectClient(p1.SocketHandle)
+      DisconnectClient(p1.SocketHandle)       // Socket.c
     }
   }
   GameShutdown = true
 }
 
-func DoStatus()
+func DoStatus()                               // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pActor.Output += "\r\n"
   pActor.Output += "Name:        "
   pActor.Output += pActor.Name
@@ -144,13 +144,13 @@ func DoStatus()
   pActor.Output += "> "
 }
 
-func DoTell()
+func DoTell()                                 // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
-  PlayerSetTargetLookUp()
+  PlayerTargetLookUp()                        // Player.swift
   if pTarget == nil
   {
     pActor.Output += "I don't see "
@@ -183,9 +183,9 @@ func DoTell()
   pTarget.Output += "> "
 }
 
-func DoWho()
+func DoWho()                                  // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pActor.Output += "\r\n"
   pActor.Output += "Players online"
   pActor.Output += "\r\n"
@@ -211,10 +211,10 @@ func DoWho()
   pActor.Output += "> "
 }
 
-func BadCmdMsg()
+func BadCmdMsg()                              // Command.swift ProcessCommand()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
-  x = Int.random(in: 1 ... 5)
+  LogIt("DEBUG", 5)
+  let x = Int.random(in: 1 ... 5)
   switch x
   {
   case 1:
@@ -240,12 +240,12 @@ func BadCmdMsg()
   pActor.Output += "> "
 }
 
-func GetPlayerName()
+func GetPlayerName()                          // Command.swift GetPlayerGoing()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pPlayer.Name = MudCmd
   MudCmd = ""
-  if pPlayer.IsValidName()
+  if pPlayer.IsValidName()                    // Player.swift
   {
     pPlayer.State = Player.States.GetPassword
     pPlayer.Output += "Password?"
@@ -259,9 +259,9 @@ func GetPlayerName()
   pPlayer.Output += "> "
 }
 
-func GetPlayerPswd()
+func GetPlayerPswd()                          // Command.swift GetPlayerGoing()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   if pPlayer.Password == MudCmd
   {
     pPlayer.State = Player.States.SendGreeting
@@ -274,9 +274,9 @@ func GetPlayerPswd()
   pPlayer.Output += "> "
 }
 
-func SendGreeting()
+func SendGreeting()                           // Command.swift GetPlayerGoing()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   pPlayer.State = Player.States.Playing
   pPlayer.Output += "\r\n"
   pPlayer.Output += "May your travels be safe!"
@@ -285,9 +285,9 @@ func SendGreeting()
   pPlayer.Output += "> "
 }
 
-func SendToRoom()
+func SendToRoom()                             // Command.swift DoSay()
 {
-  LogIt(LogMsg: "DEBUG", LogLvl: 5)
+  LogIt("DEBUG", 5)
   for p1 in PlayerSet
   {
     if p1.Name == pActor.Name {continue}
