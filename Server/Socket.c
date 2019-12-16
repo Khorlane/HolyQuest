@@ -45,13 +45,13 @@ int       SocketHandle1;
 int       SocketHandle2;
 socklen_t SocketSize;
 
-char    Buffer[1025];         //data buffer of 1K
+char    Buffer[1025];
 
 struct  linger      Linger;
 struct  sockaddr_in Socket;
 struct  timeval     TimeOut;
 
-fd_set  InpSet;               // set of socket descriptors
+fd_set  InpSet;
 
 char * GetBuffer(void)                        // BigDog.swift
 {
@@ -261,5 +261,5 @@ void DisconnectClient(int SocketHandle1)      // Command.swift
   DEBUGIT(5);
   getpeername(SocketHandle1, (struct sockaddr *) &Socket, &SocketSize);
   printf("Client disconnected, ip %s, port %d\r\n", inet_ntoa(Socket.sin_addr), ntohs(Socket.sin_port));
-  close(SocketHandle1);           // Close the socket
+  close(SocketHandle1);
 }

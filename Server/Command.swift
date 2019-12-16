@@ -99,7 +99,7 @@ func DoQuit()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
   DisconnectClient(pActor.SocketHandle)       // Socket.c
-  PlayerSetRemove()                           // Player.swift
+  Player.SetRemove()                          // Player.swift
 }
 
 func DoSay()                                  // Command.swift ProcessCommand()
@@ -150,7 +150,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
-  PlayerTargetLookUp()                        // Player.swift
+  Player.TargetLookUp()                       // Player.swift
   if pTarget == nil
   {
     pActor.Output += "I don't see "
@@ -166,13 +166,13 @@ func DoTell()                                 // Command.swift ProcessCommand()
     pActor.Output += "> "
     return
   }
-  pActor.Output += "You tell "
-  pActor.Output += PlayerTargetName
-  pActor.Output += ": "
-  pActor.Output += Command
-  pActor.Output += "\r\n"
-  pActor.Output += "> "
-  pTarget.Output = ""
+  pActor.Output  += "You tell "
+  pActor.Output  += PlayerTargetName
+  pActor.Output  += ": "
+  pActor.Output  += Command
+  pActor.Output  += "\r\n"
+  pActor.Output  += "> "
+  pTarget.Output  = ""
   pTarget.Output += "\r\n"
   pTarget.Output += Magenta
   pTarget.Output += pActor.Name

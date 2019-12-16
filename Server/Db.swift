@@ -9,10 +9,6 @@ import SQLite3
 
 class Db
 {
-  //**********************************************************
-  // Db open                                                 *
-  //**********************************************************
-
   static func Open()                          // BigDog.swift StartItUp()
   {
     LogIt("DEBUG", 5)
@@ -28,10 +24,6 @@ class Db
     LogIt("INFOx Database open worked!", 0)
   }
 
-  //**********************************************************
-  // Db close                                                *
-  //**********************************************************
-
   static func Close()                         // BigDog.swift ShutItDown()
   {
     LogIt("DEBUG", 5)
@@ -44,10 +36,6 @@ class Db
     LogIt("INFOx Database close worked!", 0)
   }
 
-  //**********************************************************
-  // Handles insert, update, delete statements               *
-  //**********************************************************
-
   static func DoSqlStmt()                     // No callers, yet
   {
     LogIt("DEBUG", 5)
@@ -58,10 +46,6 @@ class Db
       exit(EXIT_FAILURE)
     }
   }
-
-  //**********************************************************
-  // Open cursor                                             *
-  //**********************************************************
 
   static func OpenCursor()                    // Player.swift IsValidName()
   {
@@ -74,10 +58,6 @@ class Db
       exit(EXIT_FAILURE)
     }
   }
-
-  //**********************************************************
-  // Fetch cursor                                            *
-  //**********************************************************
 
   static func FetchCursor() -> Bool           // Player.swift IsValidName()
   {
@@ -93,10 +73,6 @@ class Db
     }
   }
 
-  //**********************************************************
-  // Close cursor                                            *
-  //**********************************************************
-
   static func CloseCursor()                   // Player.swift IsValidName()
   {
     LogIt("DEBUG", 5)
@@ -108,10 +84,6 @@ class Db
     }
   }
 
-  //**********************************************************
-  // Get a column from a result set - Integer                *
-  //**********************************************************
-
   static func GetColInt(ColNbrInSelect: Int) -> Int // Player.swift IsValidName()
   {
     var x     : Int32 = 0
@@ -122,10 +94,6 @@ class Db
     Value = Int(sqlite3_column_int(pSqlResultSet, x))
     return Value
   }
-
-  //**********************************************************
-  // Get a column from a result set - String                 *
-  //**********************************************************
 
   static func GetColTxt(ColNbrInSelect: Int) -> String // Player.swift IsValidName()
   {
@@ -140,10 +108,6 @@ class Db
     return Txt
   }
 }
-
-//**********************************************************
-// Table definitions                                       *
-//**********************************************************
 
 // Calendar
 let Calendar_Type       = 1

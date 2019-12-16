@@ -203,6 +203,62 @@ class Player
       return false
     }
   }
+
+  static func SetInsert()                     // BigDog.swift PlayerNew()
+  {
+    LogIt("DEBUG", 5)
+    let Good = PlayerSet.insert(pPlayer)
+    if Good.inserted == false
+    {
+      LogIt("ERROR PlayerSetInsert failed", 0)
+      exit(EXIT_FAILURE)
+    }
+  }
+
+  static func SetRemove()                     // Command.swift DoQuit()
+  {
+    LogIt("DEBUG", 5)
+    let Good = PlayerSet.remove(pPlayer)
+    if Good == nil
+    {
+      LogIt("ERROR PlayerSetRemove failed", 0)
+      exit(EXIT_FAILURE)
+    }
+  }
+
+  static func Greeting()                      // Player.swift PlayerNew()
+  {
+    LogIt("DEBUG", 5)
+    let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
+    let GreetingFileName = GREETING_FILE_NAME
+    let GreetingFile     = GreetingPath + GreetingFileName
+
+    // Read the contents of the specified file
+    let contents = try! String(contentsOfFile: GreetingFile)
+
+    // Split the file into separate lines
+    let lines = contents.split(separator:"\n")
+
+    // Iterate over each line and print the line
+    for line in lines {
+      pPlayer.Output += line
+    }
+    pPlayer.Output += "\r\n"
+  }
+
+  static func TargetLookUp()                  // Command.swift
+  {
+    LogIt("DEBUG", 5)
+    pTarget = nil
+    for p1 in PlayerSet
+    {
+      if p1.Name == PlayerTargetName
+      {
+        pTarget = p1
+        break
+      }
+    }
+  }
 }
 
 extension Player: Hashable
@@ -214,72 +270,5 @@ extension Player: Hashable
   func hash(into hasher: inout Hasher)
   {
     hasher.combine(SocketHandle)
-  }
-}
-
-func PlayerNew()                              // BigDog.swift CheckForNewPlayers()
-{
-  LogIt("DEBUG", 5)
-  pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1) // Player.swift
-  PlayerGreeting()                            // Player.swift
-  pPlayer.Output += "Name?"
-  pPlayer.Output += "\r\n"
-  pPlayer.Output += "> "
-  PlayerSetInsert()                           // Player.swift
-}
-
-func PlayerGreeting()                         // Player.swift PlayerNew()
-{
-  LogIt("DEBUG", 5)
-  let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
-  let GreetingFileName = GREETING_FILE_NAME
-  let GreetingFile     = GreetingPath + GreetingFileName
-
-  // Read the contents of the specified file
-  let contents = try! String(contentsOfFile: GreetingFile)
-
-  // Split the file into separate lines
-  let lines = contents.split(separator:"\n")
-
-  // Iterate over each line and print the line
-  for line in lines {
-    pPlayer.Output += line
-  }
-  pPlayer.Output += "\r\n"
-}
-
-func PlayerTargetLookUp()                     // Command.swift
-{
-  LogIt("DEBUG", 5)
-  pTarget = nil
-  for p1 in PlayerSet
-  {
-    if p1.Name == PlayerTargetName
-    {
-      pTarget = p1
-      break
-    }
-  }
-}
-
-func PlayerSetInsert()                        // Player.swift PlayerNew()
-{
-  LogIt("DEBUG", 5)
-  let Good = PlayerSet.insert(pPlayer)
-  if Good.inserted == false
-  {
-    LogIt("ERROR PlayerSetInsert failed", 0)
-    exit(EXIT_FAILURE)
-  }
-}
-
-func PlayerSetRemove()                        // Command.swift DoQuit()
-{
-  LogIt("DEBUG", 5)
-  let Good = PlayerSet.remove(pPlayer)
-  if Good == nil
-  {
-    LogIt("ERROR PlayerSetRemove failed", 0)
-    exit(EXIT_FAILURE)
   }
 }

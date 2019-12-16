@@ -28,8 +28,8 @@ func LogIt                                    // Called from all over the place
 
 func OpenLog()                                // BigDog.swift StartItUp()
 {
-  LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
-  LogFileName = LOG_FILE_NAME
+  LogPath      = HOME_DIR + "/" + LOG_DIR + "/"
+  LogFileName  = LOG_FILE_NAME
   let FromFile = LogPath + LogFileName + ".empty"
   let ToFile   = LogPath + LogFileName
   let (output, error, status) = RunCmd(cmd: "/bin/cp", args: FromFile, ToFile)
@@ -108,8 +108,8 @@ func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String
 
 func SetTimestampFmt()                        // Utility.swift OpenLog()
 {
-  TimeStampFmt.dateStyle = .full
-  TimeStampFmt.timeStyle = .full
+  TimeStampFmt.dateStyle  = .full
+  TimeStampFmt.timeStyle  = .full
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 }
 

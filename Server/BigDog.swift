@@ -65,8 +65,19 @@ func CheckForNewPlayers()                     // BigDog.swift BigDog()
   if NewConnection == 1
   {
     SocketHandle1 = AcceptNewConnection();    // Socket.c
-    PlayerNew()                               // Player.swift
+    NewPlayer()                               // BigDog.swift
   }
+}
+
+func NewPlayer()                              // BigDog.swift CheckForNewPlayers()
+{
+  LogIt("DEBUG", 5)
+  pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1) // Player.swift
+  Player.Greeting()                           // Player.swift
+  pPlayer.Output += "Name?"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "> "
+  Player.SetInsert()                           // Player.swift
 }
 
 // Get and process player commands
