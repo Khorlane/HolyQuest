@@ -19,14 +19,14 @@ func BigDog()
     CheckForNewPlayers()                      // BigDog.swift
     if PlayerSet.isEmpty
     {
-      LogIt("INFOx No Connections: Going to sleep", 0)
+      GameSleep()                             // BigDog.swift
       while PlayerSet.isEmpty
       {
         Sleep()                               // BigDog.swift
         CheckSocketActivity()                 // BigDog.swift
         CheckForNewPlayers()                  // BigDog.swift
       }
-      LogIt("INFOx Waking up", 0)
+      GameWake()                              // BigDog.swift
     }
     GetPlayerInput()                          // BigDog.swift
     SendPlayerOutput()                        // BigDog.swift
@@ -142,4 +142,14 @@ func ShutItDown()                             // BigDog.swift BigDoc()
 func Sleep()                                  // BigDog.swift
 {
   usleep(useconds_t(SLEEP_TIME))
+}
+
+func GameSleep()
+{
+  LogIt("INFOx No Connections: Going to sleep", 0)
+}
+
+func GameWake()
+{
+  LogIt("INFOx Waking up", 0)
 }
