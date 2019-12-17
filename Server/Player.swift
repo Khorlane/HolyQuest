@@ -252,7 +252,11 @@ class Player
     pTarget = nil
     for p1 in PlayerSet
     {
-      if p1.Name == PlayerTargetName
+      TmpStr1 = p1.Name
+      TmpStr2 = PlayerTargetName
+      TmpStr1.Lower()
+      TmpStr2.Lower()
+      if TmpStr1 == TmpStr2
       {
         pTarget = p1
         break

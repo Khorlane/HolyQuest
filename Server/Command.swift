@@ -167,7 +167,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
     return
   }
   pActor.Output  += "You tell "
-  pActor.Output  += PlayerTargetName
+  pActor.Output  += pTarget.Name
   pActor.Output  += ": "
   pActor.Output  += Command
   pActor.Output  += "\r\n"

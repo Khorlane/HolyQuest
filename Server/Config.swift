@@ -40,6 +40,8 @@ var SqlCode             : Int32           = 0
 var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
+var TmpStr1             : String          = ""
+var TmpStr2             : String          = ""
 
 var pSqlResultSet       : OpaquePointer?
 var pWorldDb            : OpaquePointer?
