@@ -6,6 +6,7 @@
 
 import Foundation   // Not required at this time
 
+// Process commands
 func ProcessCommand()                         // BigDog.swift
 {
   LogIt("DEBUG", 5)
@@ -51,6 +52,7 @@ func ProcessCommand()                         // BigDog.swift
   }
 }
 
+// Get player to Playing state
 func GetPlayerGoing()                         // Command.swift
 {
   LogIt("DEBUG", 5)
@@ -69,6 +71,7 @@ func GetPlayerGoing()                         // Command.swift
   }
 }
 
+// Afk
 func DoAfk()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -87,6 +90,7 @@ func DoAfk()                                  // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+// Look
 func DoLook()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -95,6 +99,7 @@ func DoLook()                                 // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+// Quit
 func DoQuit()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -102,6 +107,7 @@ func DoQuit()                                 // Command.swift ProcessCommand()
   Player.SetRemove()                          // Player.swift
 }
 
+// Say
 func DoSay()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -118,6 +124,7 @@ func DoSay()                                  // Command.swift ProcessCommand()
   SendToRoom()                                // Command.swift
 }
 
+// Shutdown
 func DoShutdown()                             // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -131,6 +138,7 @@ func DoShutdown()                             // Command.swift ProcessCommand()
   GameShutdown = true
 }
 
+// Status
 func DoStatus()                               // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -144,6 +152,7 @@ func DoStatus()                               // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+// Tell
 func DoTell()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -183,6 +192,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
   pTarget.Output += "> "
 }
 
+// Who
 func DoWho()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -211,6 +221,7 @@ func DoWho()                                  // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+// Bad command
 func BadCmdMsg()                              // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
@@ -240,12 +251,13 @@ func BadCmdMsg()                              // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+// Get player name
 func GetPlayerName()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
   pPlayer.Name = MudCmd
   MudCmd = ""
-  if pPlayer.IsValidName()                    // Player.swift
+  if pPlayer.LookUp()                    // Player.swift
   {
     pPlayer.State = Player.States.GetPassword
     pPlayer.Output += "Password?"
@@ -259,6 +271,7 @@ func GetPlayerName()                          // Command.swift GetPlayerGoing()
   pPlayer.Output += "> "
 }
 
+// Get player password
 func GetPlayerPswd()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
@@ -274,6 +287,7 @@ func GetPlayerPswd()                          // Command.swift GetPlayerGoing()
   pPlayer.Output += "> "
 }
 
+// Send greetting
 func SendGreeting()                           // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
@@ -285,6 +299,7 @@ func SendGreeting()                           // Command.swift GetPlayerGoing()
   pPlayer.Output += "> "
 }
 
+// Send message to all players in the room
 func SendToRoom()                             // Command.swift DoSay()
 {
   LogIt("DEBUG", 5)

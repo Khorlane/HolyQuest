@@ -69,6 +69,7 @@ func CheckForNewPlayers()                     // BigDog.swift BigDog()
   }
 }
 
+// We have a new player
 func NewPlayer()                              // BigDog.swift CheckForNewPlayers()
 {
   LogIt("DEBUG", 5)
@@ -80,7 +81,7 @@ func NewPlayer()                              // BigDog.swift CheckForNewPlayers
   Player.SetInsert()                           // Player.swift
 }
 
-// Get and process player commands
+// For each player, Get and process commands
 func GetPlayerInput()                         // BigDog.swift BigDog()
 {
   for p in PlayerSet
@@ -97,7 +98,7 @@ func GetPlayerInput()                         // BigDog.swift BigDog()
   }
 }
 
-// Send output to players
+// For each player, send output
 func SendPlayerOutput()                       // BigDog.swift BigDog()
 {
   for p in PlayerSet
@@ -121,6 +122,7 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
   }
 }
 
+// Start up the game
 func StartItUp()                              // BigDog.swift BigDog()
 {
   OpenLog()                                   // Utility.swift
@@ -132,6 +134,7 @@ func StartItUp()                              // BigDog.swift BigDog()
   LogIt(TmpStr, 0)
 }
 
+// Shut down the game
 func ShutItDown()                             // BigDog.swift BigDoc()
 {
   LogIt("INFOx HolyQuest is stopping...", 0)
@@ -139,16 +142,19 @@ func ShutItDown()                             // BigDog.swift BigDoc()
   CloseLog()                                  // Utility.swift
 }
 
+// Sleep a bit
 func Sleep()                                  // BigDog.swift
 {
   usleep(useconds_t(SLEEP_TIME))
 }
 
+// Nothing to do
 func GameSleep()
 {
   LogIt("INFOx No Connections: Going to sleep", 0)
 }
 
+// Soemthing to do
 func GameWake()
 {
   LogIt("INFOx Waking up", 0)

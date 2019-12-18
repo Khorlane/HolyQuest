@@ -9,6 +9,7 @@ import SQLite3
 
 class Db
 {
+  // Open database
   static func Open()                          // BigDog.swift StartItUp()
   {
     LogIt("DEBUG", 5)
@@ -24,6 +25,7 @@ class Db
     LogIt("INFOx Database open worked!", 0)
   }
 
+  // Close database
   static func Close()                         // BigDog.swift ShutItDown()
   {
     LogIt("DEBUG", 5)
@@ -36,6 +38,7 @@ class Db
     LogIt("INFOx Database close worked!", 0)
   }
 
+  // Execute insert, update, delete SQL statements
   static func DoSqlStmt()                     // No callers, yet
   {
     LogIt("DEBUG", 5)
@@ -47,7 +50,8 @@ class Db
     }
   }
 
-  static func OpenCursor()                    // Player.swift IsValidName()
+  // Open a cursor
+  static func OpenCursor()                    // Player.swift LookUp()
   {
     LogIt("DEBUG", 5)
     SqlStmtLen = Int32(SqlStmt.count)
@@ -59,7 +63,8 @@ class Db
     }
   }
 
-  static func FetchCursor() -> Bool           // Player.swift IsValidName()
+  // Fetch a row
+  static func FetchCursor() -> Bool           // Player.swift LookUp()
   {
     LogIt("DEBUG", 5)
     SqlCode = sqlite3_step(pSqlResultSet)
@@ -73,7 +78,8 @@ class Db
     }
   }
 
-  static func CloseCursor()                   // Player.swift IsValidName()
+  // Close cursor
+  static func CloseCursor()                   // Player.swift LookUp()
   {
     LogIt("DEBUG", 5)
     SqlCode = sqlite3_finalize(pSqlResultSet)
@@ -84,7 +90,8 @@ class Db
     }
   }
 
-  static func GetColInt(ColNbrInSelect: Int) -> Int // Player.swift IsValidName()
+  // Get an integer column
+  static func GetColInt(ColNbrInSelect: Int) -> Int // Player.swift LookUp()
   {
     var x     : Int32 = 0
     var Value : Int   = 0
@@ -95,7 +102,8 @@ class Db
     return Value
   }
 
-  static func GetColTxt(ColNbrInSelect: Int) -> String // Player.swift IsValidName()
+  // Get a text column
+  static func GetColTxt(ColNbrInSelect: Int) -> String // Player.swift LookUp()
   {
     var pTxt : UnsafePointer<UInt8>? = nil
     var Txt  : String                = ""

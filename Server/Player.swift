@@ -61,6 +61,7 @@ class Player
     case Disconnect
   }
 
+  // Initialize a new player
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
     LogIt("DEBUG", 5)
@@ -109,7 +110,8 @@ class Player
     self.WeaponType   = ""
   }
 
-  func IsValidName() -> Bool                  // Command.swift
+  // Get player
+  func LookUp() -> Bool                  // Command.swift
   {
     LogIt("DEBUG", 5)
     SqlStmt = """

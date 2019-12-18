@@ -9,6 +9,7 @@ import Foundation
 // FileHandle
 // URL
 
+// Log messages
 func LogIt                                    // Called from all over the place
   (_ LogMsg:  String,
    _ LogLvl:  Int,
@@ -26,6 +27,7 @@ func LogIt                                    // Called from all over the place
   LogHandle.write(TmpStr.data(using: .utf8)!)
 }
 
+// Open the log
 func OpenLog()                                // BigDog.swift StartItUp()
 {
   LogPath      = HOME_DIR + "/" + LOG_DIR + "/"
@@ -60,6 +62,7 @@ func OpenLog()                                // BigDog.swift StartItUp()
   SetTimestampFmt()                           // Utility.swift
 }
 
+// Close the log
 func CloseLog()                               // BigDog.swift ShutItDown()
 {
   TmpStr =          "-------------------------\r\n"
@@ -70,6 +73,7 @@ func CloseLog()                               // BigDog.swift ShutItDown()
   LogHandle.closeFile()
 }
 
+// Run a shell command
 func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String], exitCode: Int32) // Utility.swift OpenLog()
 {
   var output : [String] = []
@@ -106,6 +110,7 @@ func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String
   return (output, error, status)
 }
 
+// Set up log timestamp format
 func SetTimestampFmt()                        // Utility.swift OpenLog()
 {
   TimeStampFmt.dateStyle  = .full
@@ -113,6 +118,7 @@ func SetTimestampFmt()                        // Utility.swift OpenLog()
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 }
 
+// String class extensions
 extension String
 {
   // Return count of words in a string
