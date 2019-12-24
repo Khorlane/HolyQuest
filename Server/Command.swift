@@ -15,10 +15,10 @@ func ProcessCommand()                         // BigDog.swift
   CommandWordCount = Command.Words
   if CommandWordCount == 0
   {
-    Command = "NOCOMMAND"
+    pPlayer.Output += "\r\n"
+    pPlayer.Output += "> "
+    return
   }
-  // Add code here to check for minimum number of words e.g. the TELL command must have at least 3 words (tell steve hi)
-  MudCmd = Command.Word(1)
   pActor = pPlayer
   if pPlayer.State == Player.States.Disconnect
   {
@@ -30,7 +30,9 @@ func ProcessCommand()                         // BigDog.swift
     GetPlayerGoing()                          // Command.swift
     return
   }
-  if MudCmd == "" {return}
+  if Command == "" {return}
+  MudCmd = Command.Word(1)
+  if MudCmdOk() {} else {return}
   Command.DelFirstWord()
   MudCmd.Lower()
   Command.Strip()
@@ -156,6 +158,13 @@ func DoStatus()                               // Command.swift ProcessCommand()
 func DoTell()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
+  if Command.Words == 0
+  {
+    pActor.Output += "Tell who?"
+    pActor.Output += "\r\n"
+    pActor.Output += "> "
+    return
+  }
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
@@ -164,6 +173,15 @@ func DoTell()                                 // Command.swift ProcessCommand()
   {
     pActor.Output += "I don't see "
     pActor.Output += PlayerTargetName
+    pActor.Output += "\r\n"
+    pActor.Output += "> "
+    return
+  }
+  if Command.Words == 0
+  {
+    pActor.Output += "Tell "
+    pActor.Output += PlayerTargetName
+    pActor.Output += " what?"
     pActor.Output += "\r\n"
     pActor.Output += "> "
     return
@@ -221,6 +239,55 @@ func DoWho()                                  // Command.swift ProcessCommand()
   pActor.Output += "> "
 }
 
+func MudCmdOk() -> Bool
+{
+  LogIt("DEBUG", 5)
+  SqlStmt = """
+    Select
+      Name,
+      Admin,
+      Level,
+      MinPosition,
+      Social,
+      Fight,
+      MinWords,
+      Parts,
+      Message
+    From Command
+    Where Name = '$1'
+  """
+  SqlStmt.Squeeze()
+  SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: MudCmd)
+  Db.OpenCursor()
+  Found = Db.FetchCursor()
+  if !Found
+  {
+    Db.CloseCursor()
+    BadCmdMsg()
+    return false
+  }
+  CommandName          = Db.GetColTxt(ColNbrInSelect: Command_Name)
+  CommandAdmin         = Db.GetColTxt(ColNbrInSelect: Command_Admin)
+  CommandLevel         = Db.GetColInt(ColNbrInSelect: Command_Level)
+  CommandMinPosition   = Db.GetColTxt(ColNbrInSelect: Command_MinPosition)
+  CommandSocial        = Db.GetColTxt(ColNbrInSelect: Command_Social)
+  CommandFight         = Db.GetColTxt(ColNbrInSelect: Command_Fight)
+  CommandMinWords      = Db.GetColInt(ColNbrInSelect: Command_MinWords)
+  CommandParts         = Db.GetColInt(ColNbrInSelect: Command_Parts)
+  CommandMessage       = Db.GetColTxt(ColNbrInSelect: Command_Message)
+  Db.CloseCursor()
+
+  if CommandAdmin == "y"
+  {
+    if pPlayer.Admin == "No"
+    {
+      BadCmdMsg()
+      return false
+    }
+  }
+  return true
+}
+
 // Bad command
 func BadCmdMsg()                              // Command.swift ProcessCommand()
 {
@@ -255,9 +322,9 @@ func BadCmdMsg()                              // Command.swift ProcessCommand()
 func GetPlayerName()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
-  pPlayer.Name = MudCmd
-  MudCmd = ""
-  if pPlayer.LookUp()                    // Player.swift
+  pPlayer.Name = Command
+  Command = ""
+  if pPlayer.LookUp()                         // Player.swift
   {
     pPlayer.State = Player.States.GetPassword
     pPlayer.Output += "Password?"
@@ -275,13 +342,13 @@ func GetPlayerName()                          // Command.swift GetPlayerGoing()
 func GetPlayerPswd()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
-  if pPlayer.Password == MudCmd
+  if pPlayer.Password == Command
   {
     pPlayer.State = Player.States.SendGreeting
     MudCmd = ""
     return
   }
-  MudCmd = ""
+  Command = ""
   pPlayer.Output += "Password mis-match"
   pPlayer.Output += "\r\n"
   pPlayer.Output += "> "

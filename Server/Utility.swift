@@ -73,7 +73,7 @@ func CloseLog()                               // BigDog.swift ShutItDown()
   LogHandle.closeFile()
 }
 
-// Run a shell command
+// Run a shell command                        // Utility.swift OpenLog()
 func RunCmd(cmd : String, args : String...) -> (output: [String], error: [String], exitCode: Int32) // Utility.swift OpenLog()
 {
   var output : [String] = []

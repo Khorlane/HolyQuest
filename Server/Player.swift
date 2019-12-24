@@ -61,7 +61,7 @@ class Player
     case Disconnect
   }
 
-  // Initialize a new player
+  // Initialize a new player                  // BigDog.swift NewPlayer()
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
     LogIt("DEBUG", 5)
@@ -111,7 +111,7 @@ class Player
   }
 
   // Get player
-  func LookUp() -> Bool                  // Command.swift
+  func LookUp() -> Bool                       // Command.swift
   {
     LogIt("DEBUG", 5)
     SqlStmt = """

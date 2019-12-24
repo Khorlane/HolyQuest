@@ -133,6 +133,16 @@ let Command_MinWords    = 7
 let Command_Parts       = 8
 let Command_Message     = 9
 
+var CommandName         : String          = ""
+var CommandAdmin        : String          = ""
+var CommandLevel        : Int             = 0
+var CommandMinPosition  : String          = ""
+var CommandSocial       : String          = ""
+var CommandFight        : String          = ""
+var CommandMinWords     : Int             = 0
+var CommandParts        : Int             = 0
+var CommandMessage      : String          = ""
+
 // Explored
 let Explored_Name       = 1
 let Explored_RoomTrack  = 2
