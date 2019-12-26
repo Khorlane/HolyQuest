@@ -156,11 +156,12 @@ class Player
       Where Name = '$1'
     """
     SqlStmt.Squeeze()
-    SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: pPlayer.Name)
+    SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: PlayerName)
     Db.OpenCursor()
     Found = Db.FetchCursor()
     if Found
     {
+      pPlayer.Name         = Db.GetColTxt(ColNbrInSelect: Player_Name)
       pPlayer.Password     = Db.GetColTxt(ColNbrInSelect: Player_Password)
       pPlayer.Admin        = Db.GetColTxt(ColNbrInSelect: Player_Admin)
       pPlayer.Afk          = Db.GetColTxt(ColNbrInSelect: Player_Afk)

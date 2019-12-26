@@ -15,11 +15,9 @@ func ProcessCommand()                         // BigDog.swift
   CommandWordCount = Command.Words
   if CommandWordCount == 0
   {
-    pPlayer.Output += "\r\n"
-    pPlayer.Output += "> "
+    Prompt()
     return
   }
-  pActor = pPlayer
   if pPlayer.State == Player.States.Disconnect
   {
     DoQuit()
@@ -32,80 +30,59 @@ func ProcessCommand()                         // BigDog.swift
   }
   if Command == "" {return}
   MudCmd = Command.Word(1)
-  if MudCmdOk() {} else {return}
-  Command.DelFirstWord()
   MudCmd.Lower()
+  if CmdOk() {} else {return}
+  Command.DelFirstWord()
   Command.Strip()
-  if ShortCommand[MudCmd] != nil
-  {
-    MudCmd = ShortCommand[MudCmd]!
-  }
   switch MudCmd
   {
-    case "afk"      : DoAfk()                 // Command.swift
-    case "look"     : DoLook()                // Command.swift
-    case "quit"     : DoQuit()                // Command.swift
-    case "say"      : DoSay()                 // Command.swift
-    case "shutdown" : DoShutdown()            // Command.swift
-    case "status"   : DoStatus()              // Command.swift
-    case "tell"     : DoTell()                // Command.swift
-    case "who"      : DoWho()                 // Command.swift
-    default         : BadCmdMsg()             // Command.swift
+    case "afk"      : DoAfk()
+    case "look"     : DoLook()
+    case "quit"     : DoQuit()
+    case "say"      : DoSay()
+    case "shutdown" : DoShutdown()
+    case "status"   : DoStatus()
+    case "tell"     : DoTell()
+    case "title"    : DoTitle()
+    case "who"      : DoWho()
+    default         : ShouldNeverGetHere()
   }
 }
 
-// Get player to Playing state
-func GetPlayerGoing()                         // Command.swift
-{
-  LogIt("DEBUG", 5)
-  if pPlayer.State == Player.States.GetName
-  {
-    GetPlayerName()                           // Command.swift
-    return
-  }
-  if pPlayer.State == Player.States.GetPassword
-  {
-    GetPlayerPswd()                           // Command.swift
-    if pPlayer.State == Player.States.SendGreeting
-    {
-      SendGreeting()                          // Command.swift
-    }
-  }
-}
+//****************
+//* Mud commands *
+//****************
 
 // Afk
 func DoAfk()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  if pActor.Afk == "Yes"
+  if pPlayer.Afk == "Yes"
   {
-    pActor.Afk = "No"
-    pActor.Output += "You are no longer AFK"
-    pActor.Output += "\r\n"
+    pPlayer.Afk = "No"
+    pPlayer.Output += "You are no longer AFK"
   }
   else
   {
-    pActor.Afk = "Yes"
-    pActor.Output += "You are now AFK"
-    pActor.Output += "\r\n"
+    pPlayer.Afk = "Yes"
+    pPlayer.Output += "You are now AFK"
   }
-  pActor.Output += "> "
+  Prompt()
 }
 
 // Look
 func DoLook()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  pActor.Output += "You look around"
-  pActor.Output += "\r\n"
-  pActor.Output += "> "
+  pPlayer.Output += "You look around"
+  Prompt()
 }
 
 // Quit
 func DoQuit()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  DisconnectClient(pActor.SocketHandle)       // Socket.c
+  DisconnectClient(pPlayer.SocketHandle)       // Socket.c
   Player.SetRemove()                          // Player.swift
 }
 
@@ -114,15 +91,14 @@ func DoSay()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
   TmpStr = Command
-  pActor.Output += "You say: "
-  pActor.Output += TmpStr
-  pActor.Output += "\r\n"
-  pActor.Output += "> "
+  pPlayer.Output += "You say: "
+  pPlayer.Output += TmpStr
+  Prompt()
   MsgTxt = ""
-  MsgTxt += pActor.Name
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
   MsgTxt += " says: "
   MsgTxt += TmpStr
-  MsgTxt += "\r\n"
   SendToRoom()                                // Command.swift
 }
 
@@ -144,14 +120,17 @@ func DoShutdown()                             // Command.swift ProcessCommand()
 func DoStatus()                               // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  pActor.Output += "\r\n"
-  pActor.Output += "Name:        "
-  pActor.Output += pActor.Name
-  pActor.Output += "\r\n"
-  pActor.Output += "Armor Class: "
-  pActor.Output += String(pActor.ArmorClass)
-  pActor.Output += "\r\n"
-  pActor.Output += "> "
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Name:        "
+  pPlayer.Output += pPlayer.Name
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Armor Class: "
+  pPlayer.Output += String(pPlayer.ArmorClass)
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Level:       "
+  pPlayer.Output += String(pPlayer.Level)
+  pPlayer.Output += "\r\n"
+  Prompt()
 }
 
 // Tell
@@ -160,88 +139,97 @@ func DoTell()                                 // Command.swift ProcessCommand()
   LogIt("DEBUG", 5)
   if Command.Words == 0
   {
-    pActor.Output += "Tell who?"
-    pActor.Output += "\r\n"
-    pActor.Output += "> "
+    pPlayer.Output += "Tell who?"
+    Prompt()
     return
   }
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
+  MsgTxt = Command
   Player.TargetLookUp()                       // Player.swift
   if pTarget == nil
   {
-    pActor.Output += "I don't see "
-    pActor.Output += PlayerTargetName
-    pActor.Output += "\r\n"
-    pActor.Output += "> "
+    pPlayer.Output += "I don't see "
+    pPlayer.Output += PlayerTargetName
+    Prompt()
     return
   }
   if Command.Words == 0
   {
-    pActor.Output += "Tell "
-    pActor.Output += PlayerTargetName
-    pActor.Output += " what?"
-    pActor.Output += "\r\n"
-    pActor.Output += "> "
+    pPlayer.Output += "Tell "
+    pPlayer.Output += PlayerTargetName
+    pPlayer.Output += " what?"
+    Prompt()
     return
   }
-  if pActor.Name == pTarget.Name
+  if pPlayer.Name == pTarget.Name
   {
-    pActor.Output += "Talking to youself?"
-    pActor.Output += "\r\n"
-    pActor.Output += "> "
+    pPlayer.Output += "Talking to youself?"
+    Prompt()
     return
   }
-  pActor.Output  += "You tell "
-  pActor.Output  += pTarget.Name
-  pActor.Output  += ": "
-  pActor.Output  += Command
-  pActor.Output  += "\r\n"
-  pActor.Output  += "> "
+  pPlayer.Output  += "You tell "
+  pPlayer.Output  += pTarget.Name
+  pPlayer.Output  += ": "
+  pPlayer.Output  += MsgTxt
+  Prompt()
   pTarget.Output  = ""
   pTarget.Output += "\r\n"
   pTarget.Output += Magenta
-  pTarget.Output += pActor.Name
+  pTarget.Output += pPlayer.Name
   pTarget.Output += " tells you: "
-  pTarget.Output += Command
+  pTarget.Output += MsgTxt
   pTarget.Output += Normal
-  pTarget.Output += "\r\n"
-  pTarget.Output += "> "
+  Prompt(pTarget)
+}
+
+// Title
+func DoTitle()
+{
+  pPlayer.Output += "Your title is set"
+  Prompt()
+  return
 }
 
 // Who
 func DoWho()                                  // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  pActor.Output += "\r\n"
-  pActor.Output += "Players online"
-  pActor.Output += "\r\n"
-  pActor.Output += "--------------"
-  pActor.Output += "\r\n"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Players online"
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "--------------"
+  pPlayer.Output += "\r\n"
   for p1 in PlayerSet
   {
     if p1.State == Player.States.Playing
     {
-      pActor.Output += p1.Name
-      pActor.Output += " "
-      pActor.Output += p1.SocketAddr
-      pActor.Output += " "
-      pActor.Output += String(p1.SocketHandle)
-      pActor.Output += " "
+      pPlayer.Output += p1.Name
+      pPlayer.Output += " "
+      pPlayer.Output += p1.SocketAddr
+      pPlayer.Output += " "
+      pPlayer.Output += String(p1.Level)
+      pPlayer.Output += " "
       if p1.Afk == "Yes"
       {
-        pActor.Output += "(AFK)"
+        pPlayer.Output += "(AFK)"
       }
-      pActor.Output += "\r\n"
+      pPlayer.Output += "\r\n"
     }
   }
-  pActor.Output += "> "
+  Prompt()
 }
 
-func MudCmdOk() -> Bool
+//********************
+//* Helper functions *
+//********************
+
+// Validate the command
+func CmdOk() -> Bool
 {
   LogIt("DEBUG", 5)
+  IsSynonym()
   SqlStmt = """
     Select
       Name,
@@ -266,6 +254,7 @@ func MudCmdOk() -> Bool
     BadCmdMsg()
     return false
   }
+  // We have a valid command
   CommandName          = Db.GetColTxt(ColNbrInSelect: Command_Name)
   CommandAdmin         = Db.GetColTxt(ColNbrInSelect: Command_Admin)
   CommandLevel         = Db.GetColInt(ColNbrInSelect: Command_Level)
@@ -276,7 +265,7 @@ func MudCmdOk() -> Bool
   CommandParts         = Db.GetColInt(ColNbrInSelect: Command_Parts)
   CommandMessage       = Db.GetColTxt(ColNbrInSelect: Command_Message)
   Db.CloseCursor()
-
+  // Does the command require Admin Rights?
   if CommandAdmin == "y"
   {
     if pPlayer.Admin == "No"
@@ -285,7 +274,40 @@ func MudCmdOk() -> Bool
       return false
     }
   }
+  if pPlayer.Level < CommandLevel
+  {
+    pPlayer.Output = "You must attain a higher level before using this command"
+    Prompt()
+    return false
+  }
   return true
+}
+
+func IsSynonym()
+{
+  SqlStmt = """
+    Select
+      Name,
+      Command,
+      Info
+    From Synonym
+    Where Name = '$1'
+  """
+  SqlStmt.Squeeze()
+  SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: MudCmd)
+  Db.OpenCursor()
+  Found = Db.FetchCursor()
+  if !Found
+  {
+    Db.CloseCursor()
+    return
+  }
+  // We have a valid synonym
+  SynonymName          = Db.GetColTxt(ColNbrInSelect: Synonym_Name)
+  SynonymCommand       = Db.GetColTxt(ColNbrInSelect: Synonym_Command)
+  SynonymInfo          = Db.GetColTxt(ColNbrInSelect: Synonym_Info)
+  Db.CloseCursor()
+  MudCmd = SynonymCommand
 }
 
 // Bad command
@@ -313,29 +335,46 @@ func BadCmdMsg()                              // Command.swift ProcessCommand()
   default :
     TmpStr = "Your command is not clear."
   }
-  pActor.Output += TmpStr
-  pActor.Output += "\r\n"
-  pActor.Output += "> "
+  pPlayer.Output += TmpStr
+  Prompt()
+}
+
+// Get player to Playing state
+func GetPlayerGoing()                         // Command.swift
+{
+  LogIt("DEBUG", 5)
+  if pPlayer.State == Player.States.GetName
+  {
+    GetPlayerName()                           // Command.swift
+    return
+  }
+  if pPlayer.State == Player.States.GetPassword
+  {
+    GetPlayerPswd()                           // Command.swift
+    if pPlayer.State == Player.States.SendGreeting
+    {
+      SendGreeting()                          // Command.swift
+    }
+  }
 }
 
 // Get player name
 func GetPlayerName()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
-  pPlayer.Name = Command
+  PlayerName = Command
+  PlayerName.CapFirst()
   Command = ""
   if pPlayer.LookUp()                         // Player.swift
   {
     pPlayer.State = Player.States.GetPassword
     pPlayer.Output += "Password?"
-    pPlayer.Output += "\r\n"
-    pPlayer.Output += "> "
+    Prompt()
     return
   }
   pPlayer.Name = "*"
   pPlayer.Output += "Didn't find that name."
-  pPlayer.Output += "\r\n"
-  pPlayer.Output += "> "
+  Prompt()
 }
 
 // Get player password
@@ -350,8 +389,14 @@ func GetPlayerPswd()                          // Command.swift GetPlayerGoing()
   }
   Command = ""
   pPlayer.Output += "Password mis-match"
-  pPlayer.Output += "\r\n"
-  pPlayer.Output += "> "
+  Prompt()
+}
+
+// Create player prompt
+func Prompt(_ p1: Player! = pPlayer)
+{
+  p1.Output += "\r\n"
+  p1.Output += "> "
 }
 
 // Send greetting
@@ -362,8 +407,7 @@ func SendGreeting()                           // Command.swift GetPlayerGoing()
   pPlayer.Output += "\r\n"
   pPlayer.Output += "May your travels be safe!"
   pPlayer.Output += "\r\n"
-  pPlayer.Output += "\r\n"
-  pPlayer.Output += "> "
+  Prompt()
 }
 
 // Send message to all players in the room
@@ -372,11 +416,16 @@ func SendToRoom()                             // Command.swift DoSay()
   LogIt("DEBUG", 5)
   for p1 in PlayerSet
   {
-    if p1.Name == pActor.Name {continue}
-    if p1.RoomNbr == pActor.RoomNbr
+    if p1.Name == pPlayer.Name {continue}
+    if p1.RoomNbr == pPlayer.RoomNbr
     {
       p1.Output += MsgTxt
-      p1.Output += "> "
+      Prompt(p1)
     }
   }
+}
+
+func ShouldNeverGetHere()
+{
+  LogIt("Bad MudCmd, but you should never see this message", 1)
 }

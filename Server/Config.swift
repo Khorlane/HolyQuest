@@ -46,18 +46,10 @@ var TmpStr2             : String          = ""
 var pSqlResultSet       : OpaquePointer?
 var pWorldDb            : OpaquePointer?
 
-var pActor              : Player!         = nil
 var pPlayer             : Player!         = nil
 var pTarget             : Player!         = nil
 
 var pCh                 : UnsafeMutablePointer<Int8>?
-
-let ShortCommand =
-  [
-    "i":"inventory",
-    "l":"look",
-    "k":"kill"
-  ]
 
 //let HOST_ADDRESS_IPV4 = "127.0.0.1"
 //let HOST_ADDRESS_IPV6 = "::1"

@@ -238,6 +238,43 @@ let Player_WeaponDamage = 34
 let Player_WeaponDesc1  = 35
 let Player_WeaponType   = 36
 
+var PlayerName          : String          = ""
+var PlayerPassword      : String          = ""
+var PlayerAdmin         : String          = ""
+var PlayerAfk           : String          = ""
+var PlayerAllowAssist   : String          = ""
+var PlayerAllowGroup    : String          = ""
+var PlayerArmorClass    : Int             = 0
+var PlayerBorn          : Int             = 0
+var PlayerColor         : String          = ""
+var PlayerExperience    : Int             = 0
+var PlayerGoToArrive    : String          = ""
+var PlayerGoToDepart    : String          = ""
+var PlayerHitPoints     : Int             = 0
+var PlayerHunger        : Int             = 0
+var PlayerInvisible     : String          = ""
+var PlayerLevel         : Int             = 0
+var PlayerMovePoints    : Int             = 0
+var PlayerOneWhack      : String          = ""
+var PlayerOnline        : String          = ""
+var PlayerPosition      : String          = ""
+var PlayerRoomInfo      : String          = ""
+var PlayerSex           : String          = ""
+var PlayerSilver        : Int             = 0
+var PlayerSkillAxe      : Int             = 0
+var PlayerSkillClub     : Int             = 0
+var PlayerSkillDagger   : Int             = 0
+var PlayerSkillHammer   : Int             = 0
+var PlayerSkillSpear    : Int             = 0
+var PlayerSkillStaff    : Int             = 0
+var PlayerSkillSword    : Int             = 0
+var PlayerThirst        : Int             = 0
+var PlayerTimePlayed    : Int             = 0
+var PlayerTitle         : String          = ""
+var PlayerWeaponDamage  : Int             = 0
+var PlayerWeaponDesc1   : String          = ""
+var PlayerWeaponType    : String          = ""
+
 // PlayerMob
 let PlayerMob_Name      = 1
 let PlayerMob_MobNbr    = 2
@@ -307,6 +344,10 @@ let Spawn_Years         = 10
 let Synonym_Name        = 1
 let Synonym_Command     = 2
 let Synonym_Info        = 3
+
+var SynonymName         : String          = ""
+var SynonymCommand      : String          = ""
+var SynonymInfo         : String          = ""
 
 // Talk
 let Talk_TalkId         = 1

@@ -158,6 +158,13 @@ extension String
     self = self.lowercased()
   }
 
+  // Force string to all lower case and then capitalize first letter
+  mutating func CapFirst()
+  {
+    self = self.lowercased()
+    self = self.capitalized
+  }
+
   // Return the nth word in a string
   func Word(_ Nbr: Int) -> String
   {
