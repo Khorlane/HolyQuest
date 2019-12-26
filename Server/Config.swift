@@ -34,9 +34,10 @@ var ReadBytes           : Int             = 0
 var SocketAddr          : String          = ""
 var SocketHandle1       : Int32           = 0
 var SockLocAdr          : String          = ""
+var SqlCode             : Int32           = 0
+var SqlSetPart          : String          = ""
 var SqlStmt             : String          = ""
 var SqlStmtLen          : Int32           = 0
-var SqlCode             : Int32           = 0
 var TimeStamp           : Date            = Date()
 var TimeStampFmt        : DateFormatter   = DateFormatter()
 var TmpStr              : String          = ""
@@ -70,3 +71,4 @@ let SLEEP_TIME          = 0100000
 // Color codes
 let Normal              = "\u{001B}[0;m"
 let Magenta             = "\u{001B}[1;35m"
+let White               = "\u{001B}[1;37m"

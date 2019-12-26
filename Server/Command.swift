@@ -36,6 +36,7 @@ func ProcessCommand()                         // BigDog.swift
   Command.Strip()
   switch MudCmd
   {
+    case "advance"  : DoAdvance()
     case "afk"      : DoAfk()
     case "look"     : DoLook()
     case "quit"     : DoQuit()
@@ -53,6 +54,38 @@ func ProcessCommand()                         // BigDog.swift
 //* Mud commands *
 //****************
 
+// Advance
+func DoAdvance()
+{
+  LogIt("DEBUG", 5)
+  PlayerTargetName = Command.Word(1)
+  Command.DelFirstWord()
+  Command.Strip()
+  PlayerLevel = Int(Command)!
+  Player.TargetLookUp()
+  if pTarget == nil
+  {
+    pPlayer.Output += "I don't see "
+    pPlayer.Output += PlayerTargetName
+    Prompt()
+    return
+  }
+  pPlayer.Output += "You advance "
+  pPlayer.Output += pTarget.Name
+  pPlayer.Output += " to level "
+  pPlayer.Output += String(PlayerLevel)
+  Prompt()
+  pTarget.Output += pPlayer.Name
+  pTarget.Output += " advances you to level "
+  pTarget.Output += String(PlayerLevel)
+  pTarget.Output += "!"
+  Prompt(pTarget)
+  pTarget.Level = PlayerLevel
+  SqlSetPart = "Level = $1"
+  SqlSetPart.Replace("$1", String(PlayerLevel))
+  Player.Update(pTarget)
+}
+
 // Afk
 func DoAfk()                                  // Command.swift ProcessCommand()
 {
@@ -67,6 +100,9 @@ func DoAfk()                                  // Command.swift ProcessCommand()
     pPlayer.Afk = "Yes"
     pPlayer.Output += "You are now AFK"
   }
+  SqlSetPart = "Afk = '$1'"
+  SqlSetPart.Replace("$1", pPlayer.Afk)
+  Player.Update()
   Prompt()
 }
 
@@ -82,8 +118,11 @@ func DoLook()                                 // Command.swift ProcessCommand()
 func DoQuit()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  DisconnectClient(pPlayer.SocketHandle)       // Socket.c
-  Player.SetRemove()                          // Player.swift
+  DisconnectClient(pPlayer.SocketHandle)      // Socket.c
+  Player.SetRemove()
+  SqlSetPart  = "Afk    = 'No',"
+  SqlSetPart += "Online = 'No'"
+  Player.Update()
 }
 
 // Say
@@ -106,14 +145,15 @@ func DoSay()                                  // Command.swift ProcessCommand()
 func DoShutdown()                             // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
+  GameShutdown = true
+  MsgTxt = "HolyQuest is shutting down!"
+  SendToAll()
+  SqlSetPart  = "Afk    = 'No',"
+  SqlSetPart += "Online = 'No'"
   for p1 in PlayerSet
   {
-    if p1.State == Player.States.Playing
-    {
-      DisconnectClient(p1.SocketHandle)       // Socket.c
-    }
+    Player.Update(p1)
   }
-  GameShutdown = true
 }
 
 // Status
@@ -137,29 +177,15 @@ func DoStatus()                               // Command.swift ProcessCommand()
 func DoTell()                                 // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
-  if Command.Words == 0
-  {
-    pPlayer.Output += "Tell who?"
-    Prompt()
-    return
-  }
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
   MsgTxt = Command
-  Player.TargetLookUp()                       // Player.swift
+  Player.TargetLookUp()
   if pTarget == nil
   {
     pPlayer.Output += "I don't see "
     pPlayer.Output += PlayerTargetName
-    Prompt()
-    return
-  }
-  if Command.Words == 0
-  {
-    pPlayer.Output += "Tell "
-    pPlayer.Output += PlayerTargetName
-    pPlayer.Output += " what?"
     Prompt()
     return
   }
@@ -176,20 +202,38 @@ func DoTell()                                 // Command.swift ProcessCommand()
   Prompt()
   pTarget.Output  = ""
   pTarget.Output += "\r\n"
-  pTarget.Output += Magenta
+  pTarget.Output += "&M"
   pTarget.Output += pPlayer.Name
   pTarget.Output += " tells you: "
   pTarget.Output += MsgTxt
-  pTarget.Output += Normal
+  pTarget.Output += "&N"
   Prompt(pTarget)
 }
 
 // Title
 func DoTitle()
 {
-  pPlayer.Output += "Your title is set"
+  PlayerTitle = Command
+  if CommandWordCount == 1
+  {
+    if pPlayer.Title == ""
+    {
+      pPlayer.Output += "You don't have a title."
+      Prompt()
+      return
+    }
+    pPlayer.Output += "Your title is: "
+    pPlayer.Output += pPlayer.Title
+    Prompt()
+    return
+  }
+  pPlayer.Output += "Your title is set to: "
+  pPlayer.Output += PlayerTitle
   Prompt()
-  return
+  pPlayer.Title = PlayerTitle
+  SqlSetPart = "Title = '$1'"
+  SqlSetPart.Replace("$1", PlayerTitle)
+  Player.Update()
 }
 
 // Who
@@ -205,15 +249,23 @@ func DoWho()                                  // Command.swift ProcessCommand()
   {
     if p1.State == Player.States.Playing
     {
-      pPlayer.Output += p1.Name
-      pPlayer.Output += " "
-      pPlayer.Output += p1.SocketAddr
-      pPlayer.Output += " "
-      pPlayer.Output += String(p1.Level)
-      pPlayer.Output += " "
+      TmpStr = p1.Name
+      TmpStr.Pad(8)
+      pPlayer.Output += TmpStr
+      TmpStr = String(p1.Level)
+      TmpStr.Pad(3, "L")
+      TmpStr.Pad(4)
+      pPlayer.Output += TmpStr
+      TmpStr = ""
       if p1.Afk == "Yes"
       {
-        pPlayer.Output += "(AFK)"
+        TmpStr = "(AFK)"
+      }
+      TmpStr.Pad(6)
+      pPlayer.Output += TmpStr
+      if !p1.Title.isEmpty
+      {
+        pPlayer.Output += p1.Title
       }
       pPlayer.Output += "\r\n"
     }
@@ -274,9 +326,17 @@ func CmdOk() -> Bool
       return false
     }
   }
+  // Is there a level restriction for this command?
   if pPlayer.Level < CommandLevel
   {
-    pPlayer.Output = "You must attain a higher level before using this command"
+    pPlayer.Output += "You must attain a higher level before using this command"
+    Prompt()
+    return false
+  }
+  // Does the command have the minimum number of words?
+  if CommandWordCount < CommandMinWords
+  {
+    pPlayer.Output += CommandMessage
     Prompt()
     return false
   }
@@ -354,6 +414,9 @@ func GetPlayerGoing()                         // Command.swift
     if pPlayer.State == Player.States.SendGreeting
     {
       SendGreeting()                          // Command.swift
+      SqlSetPart  = "Afk    = 'No',"
+      SqlSetPart += "Online = 'Yes'"
+      Player.Update()
     }
   }
 }
@@ -408,6 +471,19 @@ func SendGreeting()                           // Command.swift GetPlayerGoing()
   pPlayer.Output += "May your travels be safe!"
   pPlayer.Output += "\r\n"
   Prompt()
+}
+
+// Send message to all players
+func SendToAll()
+{
+  for p1 in PlayerSet
+  {
+    if p1.State == Player.States.Playing
+    {
+      p1.Output += MsgTxt
+      p1.Output += "\r\n"
+    }
+  }
 }
 
 // Send message to all players in the room

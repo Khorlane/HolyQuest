@@ -266,6 +266,20 @@ class Player
       }
     }
   }
+
+  static func Update(_ p1: Player = pPlayer)
+  {
+    LogIt("DEBUG", 5)
+    SqlStmt = """
+      Update Player
+        Set $1
+      Where Name = '$2'
+    """
+    SqlStmt.Squeeze()
+    SqlStmt.Replace("$1", SqlSetPart)
+    SqlStmt.Replace("$2", p1.Name)
+    Db.DoSqlStmt()
+  }
 }
 
 extension Player: Hashable

@@ -105,6 +105,7 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
   {
     if p.Output.count > 0
     {
+      Color(p)
       pCh = p.Output.GetStrPointer()          // Utility.swift
       SetBuffer(pCh)                          // Socket.c
       SendClient(p.SocketHandle)              // Socket.c
@@ -120,6 +121,14 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
       p.Output = ""
     }
   }
+}
+
+// Colorize player's output
+func Color(_ p: Player)
+{
+  p.Output.Replace("&N", Normal)
+  p.Output.Replace("&M", Magenta)
+  p.Output.Replace("&W", White)
 }
 
 // Start up the game
@@ -138,6 +147,13 @@ func StartItUp()                              // BigDog.swift BigDog()
 func ShutItDown()                             // BigDog.swift BigDoc()
 {
   LogIt("INFOx HolyQuest is stopping...", 0)
+  for p1 in PlayerSet
+  {
+    if p1.State == Player.States.Playing
+    {
+      DisconnectClient(p1.SocketHandle)       // Socket.c
+    }
+  }
   Db.Close()                                  // Db.swift
   CloseLog()                                  // Utility.swift
 }

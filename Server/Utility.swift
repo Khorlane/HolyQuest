@@ -118,13 +118,75 @@ func SetTimestampFmt()                        // Utility.swift OpenLog()
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 }
 
-// String class extensions
+//***************************
+//* String class extensions *
+//***************************
 extension String
 {
-  // Return count of words in a string
-  var Words : Int
+  // Force string to all lower case and then capitalize first letter
+  mutating func CapFirst()
   {
-    return self.split(separator: " ").count
+    self = self.lowercased()
+    self = self.capitalized
+  }
+
+  // Delete first word from a string
+  mutating func DelFirstWord()
+  {
+    self = String(self.dropFirst(self.Word(1).count+1))
+  }
+
+  // Get pointer to a string so we can use it like a C string
+  func GetStrPointer() -> UnsafeMutablePointer<Int8>
+  {
+    var Count  : Int
+    var Result : UnsafeMutablePointer<Int8>
+
+    Count = self.utf8.count + 1
+    Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
+    self.withCString
+      { (BaseAddress) in
+        Result.initialize(from: BaseAddress, count: Count)
+    }
+    return Result
+  }
+
+  // Force string to lowercase
+  mutating func Lower()
+  {
+    self = self.lowercased()
+  }
+
+  // Pad a string to a specified length
+  mutating func Pad(_ Length: Int, _ LeftOrRight: String = "R")
+  {
+    if LeftOrRight == "R"
+    {
+      self.PadRight(Length)
+    }
+    if LeftOrRight == "L"
+    {
+      self.PadLeft(Length)
+    }
+  }
+
+  mutating func PadRight(_ Length: Int)
+  {
+    if self.count > Length {return}
+    self = self.padding(toLength: Length, withPad: " ", startingAt: 0)
+  }
+
+  mutating func PadLeft(_ Length: Int)
+  {
+    let ToPad = Length - self.count;
+    if ToPad < 1 {return}
+    self = "".padding(toLength: ToPad, withPad: " ", startingAt: 0) + self;
+  }
+
+  // Relace stuff in a string
+  mutating func Replace(_ From: String, _ To: String)
+  {
+    self = self.replacingOccurrences(of: From, with: To)
   }
 
   // Remove extra whitespace
@@ -146,25 +208,6 @@ extension String
     self = self.trimmingCharacters(in: .whitespacesAndNewlines)
   }
 
-  // Delete first word from a string
-  mutating func DelFirstWord()
-  {
-    self = String(self.dropFirst(self.Word(1).count+1))
-  }
-
-  // Force string to lowercase
-  mutating func Lower()
-  {
-    self = self.lowercased()
-  }
-
-  // Force string to all lower case and then capitalize first letter
-  mutating func CapFirst()
-  {
-    self = self.lowercased()
-    self = self.capitalized
-  }
-
   // Return the nth word in a string
   func Word(_ Nbr: Int) -> String
   {
@@ -172,18 +215,9 @@ extension String
     return String(self.split(separator: " ")[Nbr-1])
   }
 
-  // Get pointer to a string so we can use it like a C string
-  func GetStrPointer() -> UnsafeMutablePointer<Int8>
+  // Return count of words in a string
+  var Words : Int
   {
-    var Count  : Int
-    var Result : UnsafeMutablePointer<Int8>
-
-    Count = self.utf8.count + 1
-    Result = UnsafeMutablePointer<Int8>.allocate(capacity: Count)
-    self.withCString
-      { (BaseAddress) in
-        Result.initialize(from: BaseAddress, count: Count)
-    }
-    return Result
+    return self.split(separator: " ").count
   }
 }
