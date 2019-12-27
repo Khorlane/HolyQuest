@@ -118,6 +118,15 @@ func SetTimestampFmt()                        // Utility.swift OpenLog()
   TimeStampFmt.dateFormat = "yyyy-MM-dd HH:mm:ss.SSS"
 }
 
+// Add commas to a number
+func FormatCommas(_ x: Int) -> String
+{
+  let numberFormatter = NumberFormatter()
+  numberFormatter.numberStyle = .decimal
+  let y = numberFormatter.string(from: NSNumber(value:x))!
+  return y
+}
+
 //***************************
 //* String class extensions *
 //***************************

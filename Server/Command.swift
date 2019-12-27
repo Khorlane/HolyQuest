@@ -70,19 +70,40 @@ func DoAdvance()
     Prompt()
     return
   }
+  if PlayerLevel == pTarget.Level
+  {
+    pPlayer.Output += pTarget.Name
+    pPlayer.Output += " is at level "
+    pPlayer.Output += String(PlayerLevel)
+    pPlayer.Output += " already."
+    Prompt()
+    return
+  }
+  // Message to player
   pPlayer.Output += "You advance "
   pPlayer.Output += pTarget.Name
   pPlayer.Output += " to level "
   pPlayer.Output += String(PlayerLevel)
   Prompt()
+  // Message to target
+  pTarget.Output += "\r\n"
   pTarget.Output += pPlayer.Name
+
   pTarget.Output += " advances you to level "
   pTarget.Output += String(PlayerLevel)
   pTarget.Output += "!"
   Prompt(pTarget)
-  pTarget.Level = PlayerLevel
-  SqlSetPart = "Level = $1"
-  SqlSetPart.Replace("$1", String(PlayerLevel))
+  // Update target's variables
+  pTarget.Level      = PlayerLevel
+  pTarget.Experience = Int(Player.CalcLevelExperience(PlayerLevel))
+  pTarget.HitPoints  = PlayerLevel * HIT_POINTS_PER_LEVEL
+  // Update db
+  SqlSetPart  = "Level      = $1,"
+  SqlSetPart += "Experience = $2,"
+  SqlSetPart += "HitPoints  = $3"
+  SqlSetPart.Replace("$1", String(pTarget.Level))
+  SqlSetPart.Replace("$2", String(pTarget.Experience))
+  SqlSetPart.Replace("$3", String(pTarget.HitPoints))
   Player.Update(pTarget)
 }
 
@@ -146,7 +167,7 @@ func DoShutdown()                             // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
   GameShutdown = true
-  MsgTxt = "HolyQuest is shutting down!"
+  MsgTxt += "HolyQuest is shutting down!"
   SendToAll()
   SqlSetPart  = "Afk    = 'No',"
   SqlSetPart += "Online = 'No'"
@@ -161,14 +182,63 @@ func DoStatus()                               // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
   pPlayer.Output += "\r\n"
-  pPlayer.Output += "Name:        "
+  // Name
+  pPlayer.Output += "Name:         "
   pPlayer.Output += pPlayer.Name
   pPlayer.Output += "\r\n"
-  pPlayer.Output += "Armor Class: "
+  // Level
+  pPlayer.Output += "Level:        "
+  pPlayer.Output += String(pPlayer.Level)
+  pPlayer.Output += "\r\n"
+  // Hit points
+  pPlayer.Output += "Hit Points:   "
+  pPlayer.Output += String(pPlayer.HitPoints)
+  pPlayer.Output += "/"
+  pPlayer.Output += String(pPlayer.Level * HIT_POINTS_PER_LEVEL)
+  pPlayer.Output += "\r\n"
+  // Experience
+  TmpStr1 = FormatCommas(pPlayer.Experience)
+  x = pPlayer.Level + 1
+  y = Int(Player.CalcLevelExperience(x))
+  TmpStr2 = FormatCommas(y)
+  TmpStr1.Pad(TmpStr2.count,"L")
+  pPlayer.Output += "Experience:   "
+  pPlayer.Output += TmpStr1
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Next Level:   "
+  pPlayer.Output += String(TmpStr2)
+  pPlayer.Output += "\r\n"
+  // Armor class
+  pPlayer.Output += "Armor Class:  "
   pPlayer.Output += String(pPlayer.ArmorClass)
   pPlayer.Output += "\r\n"
-  pPlayer.Output += "Level:       "
-  pPlayer.Output += String(pPlayer.Level)
+  // Color
+  pPlayer.Output += "Color:        "
+  pPlayer.Output += String(pPlayer.Color)
+  pPlayer.Output += "\r\n"
+  // Allow Group
+  pPlayer.Output += "Allow Group:  "
+  pPlayer.Output += String(pPlayer.AllowGroup)
+  pPlayer.Output += "\r\n"
+  // Allow assist
+  pPlayer.Output += "Allow Assist: "
+  pPlayer.Output += String(pPlayer.AllowAssist)
+  pPlayer.Output += "\r\n"
+  // Position
+  pPlayer.Output += "Position:     "
+  pPlayer.Output += String(pPlayer.Position)
+  pPlayer.Output += "\r\n"
+  // Silver
+  pPlayer.Output += "Silver:       "
+  pPlayer.Output += String(pPlayer.Silver)
+  pPlayer.Output += "\r\n"
+  // Hunger
+  pPlayer.Output += "Hunger:       "
+  pPlayer.Output += String(pPlayer.Hunger)
+  pPlayer.Output += "\r\n"
+  // Thirst
+  pPlayer.Output += "Thirst:       "
+  pPlayer.Output += String(pPlayer.Thirst)
   pPlayer.Output += "\r\n"
   Prompt()
 }
@@ -478,6 +548,10 @@ func SendToAll()
 {
   for p1 in PlayerSet
   {
+    if p1.Name != pPlayer.Name
+    {
+      p1.Output += "\r\n"
+    }
     if p1.State == Player.States.Playing
     {
       p1.Output += MsgTxt

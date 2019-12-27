@@ -61,6 +61,10 @@ class Player
     case Disconnect
   }
 
+  //*********************************
+  //* One-time per player functions *
+  //*********************************
+
   // Initialize a new player                  // BigDog.swift NewPlayer()
   init(Name: String, SocketAddr: String, SocketHandle: Int32)
   {
@@ -156,7 +160,7 @@ class Player
       Where Name = '$1'
     """
     SqlStmt.Squeeze()
-    SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: PlayerName)
+    SqlStmt.Replace("$1", PlayerName)
     Db.OpenCursor()
     Found = Db.FetchCursor()
     if Found
@@ -207,6 +211,7 @@ class Player
     }
   }
 
+  // Insert new player into set of players
   static func SetInsert()                     // BigDog.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
@@ -218,6 +223,7 @@ class Player
     }
   }
 
+  // Remove leaving player from set of players
   static func SetRemove()                     // Command.swift DoQuit()
   {
     LogIt("DEBUG", 5)
@@ -229,6 +235,7 @@ class Player
     }
   }
 
+  // Send greeting to new player
   static func Greeting()                      // Player.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
@@ -249,6 +256,35 @@ class Player
     pPlayer.Output += "\r\n"
   }
 
+  //**********************
+  //* Gameplay functions *
+  //**********************
+
+  static func CalcLevelExperience(_ Level : Int) -> Float
+  {
+    let BaseExp  = CalcLevelExperienceBase(Level)
+    let AddExp   = CalcLevelExperienceAdd(Level, BaseExp)
+    let TotalExp = BaseExp + AddExp
+    return TotalExp
+  }
+
+  static func CalcLevelExperienceAdd(_ Level: Int, _ BaseExp: Float) -> Float
+  {
+    var LogLevel: Double
+    var AddExp  : Float
+
+    LogLevel = log10(Double(Level)+20.0)
+    AddExp   = Float(pow(Double(BaseExp),Double(LogLevel)) * Double(Double(Level)/10000.0))
+    return AddExp
+  }
+
+  static func CalcLevelExperienceBase(_ Level: Int) -> Float
+  {
+    if Level < 2 {return 0}
+    return Float((Level * 1000)) + CalcLevelExperienceBase(Level-1)
+  }
+
+  // Lookup target player in player set
   static func TargetLookUp()                  // Command.swift
   {
     LogIt("DEBUG", 5)
@@ -267,6 +303,7 @@ class Player
     }
   }
 
+  // Update player in db
   static func Update(_ p1: Player = pPlayer)
   {
     LogIt("DEBUG", 5)
@@ -282,6 +319,7 @@ class Player
   }
 }
 
+// Required in order to have a 'set of players'
 extension Player: Hashable
 {
   static func == (lhs: Player, rhs: Player) -> Bool
