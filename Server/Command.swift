@@ -38,6 +38,7 @@ func ProcessCommand()                         // BigDog.swift
   {
     case "advance"  : DoAdvance()
     case "afk"      : DoAfk()
+    case "color"    : DoColor()
     case "look"     : DoLook()
     case "quit"     : DoQuit()
     case "say"      : DoSay()
@@ -127,6 +128,67 @@ func DoAfk()                                  // Command.swift ProcessCommand()
   Prompt()
 }
 
+// Color
+func DoColor()
+{
+  LogIt("DEBUG", 5)
+  TmpStr = Command
+  TmpStr.Lower()
+  // Report color status
+  if TmpStr == ""
+  {
+    if pPlayer.Color == "Yes"
+    {
+      pPlayer.Output += "&CColor&N is &Mon&N."
+    }
+    else
+    {
+      pPlayer.Output += "Color is off."
+    }
+    Prompt()
+    return
+  }
+  // Something other than 'on' or 'off' was given
+  if TmpStr != "on" && TmpStr != "off"
+  {
+    pPlayer.Output += "Color {on|off}"
+    Prompt()
+    return
+  }
+  // Color already on
+  if TmpStr == "on" && pPlayer.Color == "Yes"
+  {
+    pPlayer.Output += "&CColor&N is ALREADY &Mon&N."
+    Prompt()
+    return
+  }
+  // Color already off
+  if TmpStr == "off" && pPlayer.Color == "No"
+  {
+    pPlayer.Output += "Color is ALREADY off"
+    Prompt()
+    return
+  }
+  // Turn color on
+  if TmpStr == "on"
+  {
+    PlayerColor = "Yes"
+    pPlayer.Output += "You will now see &RP&Gr&Ye&Bt&Mt&Cy&N &RC&Go&Yl&Bo&Mr&Cs&N.";
+  }
+  // Turn color off
+  if TmpStr == "off"
+  {
+    PlayerColor = "No"
+    pPlayer.Output += "Color is off.";
+  }
+  // Update player's color setting
+  pPlayer.Color = PlayerColor
+  SqlSetPart = "Color = '$1'"
+  SqlSetPart.Replace("$1", pPlayer.Color)
+  Player.Update()
+  Prompt()
+}
+
 // Look
 func DoLook()                                 // Command.swift ProcessCommand()
 {
@@ -167,7 +229,7 @@ func DoShutdown()                             // Command.swift ProcessCommand()
 {
   LogIt("DEBUG", 5)
   GameShutdown = true
-  MsgTxt += "HolyQuest is shutting down!"
+  MsgTxt = "HolyQuest is shutting down!"
   SendToAll()
   SqlSetPart  = "Afk    = 'No',"
   SqlSetPart += "Online = 'No'"

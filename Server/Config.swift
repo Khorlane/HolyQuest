@@ -78,6 +78,12 @@ let LOG_FILE_NAME        = "Log.txt"
 let WORLD_FILE_NAME      = "World.db3"
 
 // Color codes
-let Normal               = "\u{001B}[0;m"
-let Magenta              = "\u{001B}[1;35m"
-let White                = "\u{001B}[1;37m"
+let Normal               = "\u{001B}[0;m"     // &N
+let Black                = "\u{001B}[1;30m"   // &K
+let Red                  = "\u{001B}[1;31m"   // &R
+let Green                = "\u{001B}[1;32m"   // &G
+let Yellow               = "\u{001B}[1;33m"   // &Y
+let Blue                 = "\u{001B}[1;34m"   // &B
+let Magenta              = "\u{001B}[1;35m"   // &M
+let Cyan                 = "\u{001B}[1;36m"   // &C
+let White                = "\u{001B}[1;37m"   // &W

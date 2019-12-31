@@ -123,12 +123,33 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
   }
 }
 
-// Colorize player's output
+// Colorize player's output or not colorize
 func Color(_ p: Player)
 {
-  p.Output.Replace("&N", Normal)
-  p.Output.Replace("&M", Magenta)
-  p.Output.Replace("&W", White)
+  if p.Color == "Yes"
+  {
+    p.Output.Replace("&N", Normal)
+    p.Output.Replace("&K", Black)
+    p.Output.Replace("&R", Red)
+    p.Output.Replace("&G", Green)
+    p.Output.Replace("&Y", Yellow)
+    p.Output.Replace("&B", Blue)
+    p.Output.Replace("&M", Magenta)
+    p.Output.Replace("&C", Cyan)
+    p.Output.Replace("&W", White)
+  }
+  else
+  {
+    p.Output.Replace("&N", "")
+    p.Output.Replace("&K", "")
+    p.Output.Replace("&R", "")
+    p.Output.Replace("&G", "")
+    p.Output.Replace("&Y", "")
+    p.Output.Replace("&B", "")
+    p.Output.Replace("&M", "")
+    p.Output.Replace("&C", "")
+    p.Output.Replace("&W", "")
+  }
 }
 
 // Start up the game
