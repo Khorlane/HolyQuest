@@ -54,6 +54,7 @@ class Player
   
   enum States
   {
+    case IsNew
     case GetName
     case GetPassword
     case SendGreeting
@@ -74,7 +75,7 @@ class Player
     self.RoomNbr      = START_ROOM
     self.SocketAddr   = SocketAddr
     self.SocketHandle = SocketHandle
-    self.State        = States.GetName
+    self.State        = States.IsNew
     // Initialize file variables
     self.Name         = Name
     self.Password     = ""
@@ -236,7 +237,7 @@ class Player
   }
 
   // Send greeting to new player
-  static func Greeting()                      // Player.swift PlayerNew()
+  static func Banner()                      // Player.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
     let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"

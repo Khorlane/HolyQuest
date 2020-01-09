@@ -535,6 +535,11 @@ func BadCmdMsg()                              // Command.swift ProcessCommand()
 func GetPlayerGoing()                         // Command.swift
 {
   LogIt("DEBUG", 5)
+  if pPlayer.State == Player.States.IsNew
+  {
+    IsPlayerNew()
+    return
+  }
   if pPlayer.State == Player.States.GetName
   {
     GetPlayerName()                           // Command.swift
@@ -551,6 +556,30 @@ func GetPlayerGoing()                         // Command.swift
       Player.Update()
     }
   }
+}
+
+// Is Player a new player?
+func IsPlayerNew()
+{
+  TmpStr = Command
+  TmpStr.Lower()
+  if TmpStr != "y" && TmpStr != "n"
+  {
+    pPlayer.Output += "You must give Y or N."
+    Prompt()
+    return
+  }
+  if TmpStr == "y"
+  {
+    pPlayer.Output += "No new players accepted at this time."
+    Prompt()
+    return
+  }
+  // TmpStr must be "n"
+  pPlayer.State = Player.States.GetName
+  pPlayer.Output += "\r\n"
+  pPlayer.Output += "Name?"
+  Prompt()
 }
 
 // Get player name

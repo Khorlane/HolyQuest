@@ -87,3 +87,7 @@ let Blue                 = "\u{001B}[1;34m"   // &B
 let Magenta              = "\u{001B}[1;35m"   // &M
 let Cyan                 = "\u{001B}[1;36m"   // &C
 let White                = "\u{001B}[1;37m"   // &W
+
+// Messages
+let GameSleepMsg         = "INFOx No Connections: Going to sleep"
+let GameWakeMsg          = "INFOx Waking up"

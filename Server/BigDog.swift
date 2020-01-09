@@ -19,20 +19,20 @@ func BigDog()
     CheckForNewPlayers()                      // BigDog.swift
     if PlayerSet.isEmpty
     {
-      GameSleep()                             // BigDog.swift
+      LogIt(GameSleepMsg, 0)                  // Utility.swift
       while PlayerSet.isEmpty
       {
         Sleep()                               // BigDog.swift
         CheckSocketActivity()                 // BigDog.swift
         CheckForNewPlayers()                  // BigDog.swift
       }
-      GameWake()                              // BigDog.swift
+      LogIt(GameWakeMsg, 0)                   // Utility.swift
     }
     GetPlayerInput()                          // BigDog.swift
     SendPlayerOutput()                        // BigDog.swift
     Sleep()                                   // BigDog.swift
   }
-  ShutItDown()
+  ShutItDown()                                // BigDog.swift
 }
 
 // Tasks not directly related a player's command
@@ -74,11 +74,9 @@ func NewPlayer()                              // BigDog.swift CheckForNewPlayers
 {
   LogIt("DEBUG", 5)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1) // Player.swift
-  Player.Greeting()                           // Player.swift
-  pPlayer.Output += "Name?"
-  pPlayer.Output += "\r\n"
-  pPlayer.Output += "> "
-  Player.SetInsert()                           // Player.swift
+  Player.Banner()                             // Player.swift
+  Prompt()                                    // Command.swift
+  Player.SetInsert()                          // Player.swift
 }
 
 // For each player, Get and process commands
@@ -105,7 +103,7 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
   {
     if p.Output.count > 0
     {
-      Color(p)
+      Color(p)                                // BigDog.swift
       pCh = p.Output.GetStrPointer()          // Utility.swift
       SetBuffer(pCh)                          // Socket.c
       SendClient(p.SocketHandle)              // Socket.c
@@ -124,7 +122,7 @@ func SendPlayerOutput()                       // BigDog.swift BigDog()
 }
 
 // Colorize player's output or not colorize
-func Color(_ p: Player)
+func Color(_ p: Player)                       // BigDog.swift SendPlayerOutput()
 {
   if p.Color == "Yes"
   {
@@ -161,13 +159,13 @@ func StartItUp()                              // BigDog.swift BigDog()
   ListenSocket = SocketServerListen(Int32(PORT_NUMBER)) // Socket.c
   TmpStr = "INFOx HolyQuest is Listening on Port "
   TmpStr += String(PORT_NUMBER)
-  LogIt(TmpStr, 0)
+  LogIt(TmpStr, 0)                            // Utility.swift
 }
 
 // Shut down the game
 func ShutItDown()                             // BigDog.swift BigDoc()
 {
-  LogIt("INFOx HolyQuest is stopping...", 0)
+  LogIt("INFOx HolyQuest is stopping...", 0)  // Utility.swift
   for p1 in PlayerSet
   {
     if p1.State == Player.States.Playing
@@ -180,19 +178,7 @@ func ShutItDown()                             // BigDog.swift BigDoc()
 }
 
 // Sleep a bit
-func Sleep()                                  // BigDog.swift
+func Sleep()                                  // BigDog.swift BigDog()
 {
   usleep(useconds_t(SLEEP_TIME))
-}
-
-// Nothing to do
-func GameSleep()
-{
-  LogIt("INFOx No Connections: Going to sleep", 0)
-}
-
-// Soemthing to do
-func GameWake()
-{
-  LogIt("INFOx Waking up", 0)
 }
