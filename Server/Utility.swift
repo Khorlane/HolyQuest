@@ -127,6 +127,31 @@ func FormatCommas(_ x: Int) -> String
   return y
 }
 
+func GetPosNbr(_ Position: String) -> Int
+{
+  switch Position
+  {
+    case "sleep" : return 1
+    case "sit"   : return 2
+    case "stand" : return 3
+    default      : return 0
+  }
+}
+
+func RoomsVisited()
+{
+  var RoomsVisited = [UInt8]()
+  var Bits : UInt8
+  var Flip : UInt8
+  Bits = 0b00000000
+  RoomsVisited.append(Bits)
+  RoomsVisited.append(Bits)
+  Flip = 0b00000100
+  Bits = Bits | Flip
+  RoomsVisited[0] = Bits
+  RoomsVisited[1] = Bits
+}
+
 //***************************
 //* String class extensions *
 //***************************
@@ -215,6 +240,51 @@ extension String
   mutating func Strip()
   {
     self = self.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+
+  // Substitute appropriate pronouns
+  mutating func SubPronoun()
+  {
+    // Player
+    if pPlayer.Sex == "M"
+    {
+      PronounHeShe          = "he";
+      PronounHimHer         = "him";
+      PronounHisHers        = "his";
+      PronounHimselfHerself = "himself";
+    }
+    else
+    {
+      PronounHeShe          = "she";
+      PronounHimHer         = "her";
+      PronounHisHers        = "hers";
+      PronounHimselfHerself = "herself";
+    }
+    self.Replace("$P",               pPlayer.Name)
+    self.Replace("$pHeShe",          PronounHeShe)
+    self.Replace("$pHimHer",         PronounHimHer)
+    self.Replace("$pHisHers",        PronounHisHers)
+    self.Replace("$pHimselfHerself", PronounHimselfHerself)
+    // Target
+    if pTarget.Sex == "M"
+    {
+      PronounHeShe          = "he";
+      PronounHimHer         = "him";
+      PronounHisHers        = "his";
+      PronounHimselfHerself = "himself";
+    }
+    else
+    {
+      PronounHeShe          = "she";
+      PronounHimHer         = "her";
+      PronounHisHers        = "hers";
+      PronounHimselfHerself = "herself";
+    }
+    self.Replace("$T",               pPlayer.Name)
+    self.Replace("$tHeShe",          PronounHeShe)
+    self.Replace("$tHimHer",         PronounHimHer)
+    self.Replace("$tHisHers",        PronounHisHers)
+    self.Replace("$tHimselfHerself", PronounHimselfHerself)
   }
 
   // Return the nth word in a string

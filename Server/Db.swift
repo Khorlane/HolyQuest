@@ -91,272 +91,328 @@ class Db
   }
 
   // Get an integer column
-  static func GetColInt(ColNbrInSelect: Int) -> Int // Player.swift LookUp()
+  static func GetColInt() -> Int // Player.swift LookUp()
   {
-    var x     : Int32 = 0
-    var Value : Int   = 0
-
     LogIt("DEBUG", 5)
-    x = Int32(ColNbrInSelect - 1)  // SQLite uses index 0 for 1st column
-    Value = Int(sqlite3_column_int(pSqlResultSet, x))
-    return Value
+    ColInt = Int(sqlite3_column_int(pSqlResultSet, ColNbr))
+    ColNbr += 1
+    return ColInt
   }
 
   // Get a text column
-  static func GetColTxt(ColNbrInSelect: Int) -> String // Player.swift LookUp()
+  static func GetColTxt() -> String // Player.swift LookUp()
   {
-    var pTxt : UnsafePointer<UInt8>? = nil
-    var Txt  : String                = ""
-    var x    : Int32                 = 0
+
 
     LogIt("DEBUG", 5)
-    x = Int32(ColNbrInSelect - 1)  // SQLite uses index 0 for 1st column
-    pTxt = sqlite3_column_text(pSqlResultSet, x)
-    Txt = String(cString: pTxt!)
-    return Txt
+    pColTxt = sqlite3_column_text(pSqlResultSet, ColNbr)
+    ColTxt = String(cString: pColTxt!)
+    ColNbr += 1
+    return ColTxt
   }
 }
 
 // Calendar
-let Calendar_Type       = 1
-let Calendar_SeqNbr     = 2
-let Calendar_Desc       = 3
+struct stbCalendar
+{
+  var `Type`            : String = ""
+  var `SeqNbr`          : Int    = 0
+  var `Desc`            : String = ""
+}
+var tbCalendar = stbCalendar()
 
 // Command
-let Command_Name        = 1
-let Command_Admin       = 2
-let Command_Level       = 3
-let Command_MinPosition = 4
-let Command_Social      = 5
-let Command_Fight       = 6
-let Command_MinWords    = 7
-let Command_Parts       = 8
-let Command_Message     = 9
-
-var CommandName         : String          = ""
-var CommandAdmin        : String          = ""
-var CommandLevel        : Int             = 0
-var CommandMinPosition  : String          = ""
-var CommandSocial       : String          = ""
-var CommandFight        : String          = ""
-var CommandMinWords     : Int             = 0
-var CommandParts        : Int             = 0
-var CommandMessage      : String          = ""
+struct stbCommand
+{
+  var `Name`            : String = ""
+  var `Admin`           : String = ""
+  var `Level`           : Int    = 0
+  var `MinPosition`     : String = ""
+  var `Social`          : String = ""
+  var `Fight`           : String = ""
+  var `MinWords`        : Int    = 0
+  var `Parts`           : Int    = 0
+  var `Message`         : String = ""
+}
+var tbCommand = stbCommand()
 
 // Explored
-let Explored_Name       = 1
-let Explored_RoomTrack  = 2
+struct stbExplored
+{
+  var `Name`            : String = ""
+  var `RoomTrack`       : String = ""
+}
+var tbExplored = stbExplored()
 
 // Loot
-let Loot_Loot_Id        = 1
+struct stbLoot
+{
+  var `LootId`          : String = ""
+}
+var tbLoot = stbLoot()
 
 // LootObject
-let LootObject_Loot_Id  = 1
-let LootObject_ObjectId = 2
-let LootObject_Count    = 3
-let LootObject_Percent  = 4
+struct stbLootObject
+{
+  var `LootId`          : String = ""
+  var `ObjectId`        : String = ""
+  var `Count`           : Int    = 0
+  var `Percent`         : Int    = 0
+}
+var tbLootObject = stbLootObject()
 
 // Mob
-let Mob_MobNbr          = 1
-let Mob_MobileId        = 2
-let Mob_HitPoints       = 3
+struct stbMob
+{
+  var `MobNbr`          : Int    = 0
+  var `MobileId`        : String = ""
+  var `HitPoints`       : Int    = 0
+}
+var tbMob = stbMob()
 
 // Mobile
-let Mobile_MobileId     = 1
-let Mobile_Sex          = 2
-let Mobile_Desc1        = 3
-let Mobile_Desc2        = 4
-let Mobile_Desc3        = 5
-let Mobile_Action       = 6
-let Mobile_Faction      = 7
-let Mobile_Level        = 8
-let Mobile_HitPoints    = 9
-let Mobile_Armor        = 10
-let Mobile_Attack       = 11
-let Mobile_Damage       = 12
-let Mobile_ExpPoints    = 13
-let Mobile_LootId       = 14
-let Mobile_TalkId       = 15
-let Mobile_InWorld      = 16
+struct stbMobile
+{
+  var `MobileId`        : String = ""
+  var `Sex`             : String = ""
+  var `Desc1`           : String = ""
+  var `Desc2`           : String = ""
+  var `Desc3`           : String = ""
+  var `Action`          : String = ""
+  var `Faction`         : String = ""
+  var `Level`           : Int    = 0
+  var `HitPoints`       : Int    = 0
+  var `Armor`           : Int    = 0
+  var `Attack`          : String = ""
+  var `Damage`          : Int    = 0
+  var `ExpPoints`       : Int    = 0
+  var `LootId`          : String = ""
+  var `TalkId`          : String = ""
+  var `InWorld`         : Int    = 0
+}
+var tbMobile = stbMobile()
 
 // NextMobNbr
-let NextMobNbr_MobNbr   = 1
+struct stbNextMobNbr
+{
+  var `MobNbr`          : Int    = 0
+}
+var tbNextMobNbr = stbNextMobNbr()
 
 // NextObjNbr
-let NextObjNbr_ObjNbr   = 1
+struct stbNextObjNbr
+{
+  var `ObjNbr`          : Int    = 0
+}
+var tbNextObjNbr = stbNextObjNbr()
 
 // Obj
-let Obj_ObjNbr          = 1
-let Obj_ObjectId        = 2
+struct stbObj
+{
+  var `ObjNbr`          : Int    = 0
+  var `ObjectId`        : String = ""
+}
+var tbObj = stbObj()
 
 // Object
-let Object_ObjectId     = 1
-let Object_Desc1        = 2
-let Object_Desc2        = 3
-let Object_Desc3        = 4
-let Object_Weight       = 5
-let Object_Cost         = 6
-let Object_Type         = 7
-let Object_SubType      = 8
-let Object_Value        = 9
+struct stbObject
+{
+  var `ObjectId`        : String = ""
+  var `Desc1`           : String = ""
+  var `Desc2`           : String = ""
+  var `Desc3`           : String = ""
+  var `Weight`          : Int    = 0
+  var `Cost`            : Int    = 0
+  var `Type`            : String = ""
+  var `SubType`         : String = ""
+  var `Value`           : Int    = 0
+}
+var tbObject = stbObject()
 
 // Player
-let Player_Name         = 1
-let Player_Password     = 2
-let Player_Admin        = 3
-let Player_Afk          = 4
-let Player_AllowAssist  = 5
-let Player_AllowGroup   = 6
-let Player_ArmorClass   = 7
-let Player_Born         = 8
-let Player_Color        = 9
-let Player_Experience   = 10
-let Player_GoToArrive   = 11
-let Player_GoToDepart   = 12
-let Player_HitPoints    = 13
-let Player_Hunger       = 14
-let Player_Invisible    = 15
-let Player_Level        = 16
-let Player_MovePoints   = 17
-let Player_OneWhack     = 18
-let Player_Online       = 19
-let Player_Position     = 20
-let Player_RoomInfo     = 21
-let Player_Sex          = 22
-let Player_Silver       = 23
-let Player_SkillAxe     = 24
-let Player_SkillClub    = 25
-let Player_SkillDagger  = 26
-let Player_SkillHammer  = 27
-let Player_SkillSpear   = 28
-let Player_SkillStaff   = 29
-let Player_SkillSword   = 30
-let Player_Thirst       = 31
-let Player_TimePlayed   = 32
-let Player_Title        = 33
-let Player_WeaponDamage = 34
-let Player_WeaponDesc1  = 35
-let Player_WeaponType   = 36
-
-var PlayerName          : String          = ""
-var PlayerPassword      : String          = ""
-var PlayerAdmin         : String          = ""
-var PlayerAfk           : String          = ""
-var PlayerAllowAssist   : String          = ""
-var PlayerAllowGroup    : String          = ""
-var PlayerArmorClass    : Int             = 0
-var PlayerBorn          : Int             = 0
-var PlayerColor         : String          = ""
-var PlayerExperience    : Int             = 0
-var PlayerGoToArrive    : String          = ""
-var PlayerGoToDepart    : String          = ""
-var PlayerHitPoints     : Int             = 0
-var PlayerHunger        : Int             = 0
-var PlayerInvisible     : String          = ""
-var PlayerLevel         : Int             = 0
-var PlayerMovePoints    : Int             = 0
-var PlayerOneWhack      : String          = ""
-var PlayerOnline        : String          = ""
-var PlayerPosition      : String          = ""
-var PlayerRoomInfo      : String          = ""
-var PlayerSex           : String          = ""
-var PlayerSilver        : Int             = 0
-var PlayerSkillAxe      : Int             = 0
-var PlayerSkillClub     : Int             = 0
-var PlayerSkillDagger   : Int             = 0
-var PlayerSkillHammer   : Int             = 0
-var PlayerSkillSpear    : Int             = 0
-var PlayerSkillStaff    : Int             = 0
-var PlayerSkillSword    : Int             = 0
-var PlayerThirst        : Int             = 0
-var PlayerTimePlayed    : Int             = 0
-var PlayerTitle         : String          = ""
-var PlayerWeaponDamage  : Int             = 0
-var PlayerWeaponDesc1   : String          = ""
-var PlayerWeaponType    : String          = ""
+struct stbPlayer
+{
+  var `Name`              : String = ""
+  var `Password`          : String = ""
+  var `Admin`             : String = ""
+  var `Afk`               : String = ""
+  var `AllowAssist`       : String = ""
+  var `AllowGroup`        : String = ""
+  var `ArmorClass`        : Int    = 0
+  var `Born`              : Int    = 0
+  var `Color`             : String = ""
+  var `Experience`        : Int    = 0
+  var `GoToArrive`        : String = ""
+  var `GoToDepart`        : String = ""
+  var `HitPoints`         : Int    = 0
+  var `Hunger`            : Int    = 0
+  var `Invisible`         : String = ""
+  var `Level`             : Int    = 0
+  var `MovePoints`        : Int    = 0
+  var `OneWhack`          : String = ""
+  var `Online`            : String = ""
+  var `Position`          : String = ""
+  var `RoomInfo`          : String = ""
+  var `Sex`               : String = ""
+  var `Silver`            : Int    = 0
+  var `SkillAxe`          : Int    = 0
+  var `SkillClub`         : Int    = 0
+  var `SkillDagger`       : Int    = 0
+  var `SkillHammer`       : Int    = 0
+  var `SkillSpear`        : Int    = 0
+  var `SkillStaff`        : Int    = 0
+  var `SkillSword`        : Int    = 0
+  var `Thirst`            : Int    = 0
+  var `TimePlayed`        : Int    = 0
+  var `Title`             : String = ""
+  var `WeaponDamage`      : Int    = 0
+  var `WeaponDesc1`       : String = ""
+  var `WeaponType`        : String = ""
+}
+var tbPlayer = stbPlayer()
 
 // PlayerMob
-let PlayerMob_Name      = 1
-let PlayerMob_MobNbr    = 2
-let PlayerMob_Action    = 3
+struct stbPlayerMob
+{
+  var `Name`              : String = ""
+  var `MobNbr`            : Int    = 0
+  var `Action`            : String = ""
+}
+var tbPlayerMob = stbPlayerMob()
 
 // PlayerObj
-let PlayerObj_Name      = 1
-let PlayerObj_ObjNbr    = 2
-let PlayerObj_Position  = 3
+struct stbPlayerObj
+{
+  var `Name`              : String = ""
+  var `ObjNbr`            : Int    = 0
+  var `Position`          : String = ""
+}
+var tbPlayerObj = stbPlayerObj()
 
 // PlayerRoom
-let PlayerRoom_Name     = 1
-let PlayerRoom_RoomNbr  = 2
+struct stbPlayerRoom
+{
+  var Name                : String = ""
+  var RoomNbr             : Int    = 0
+}
+var tbPlayerRoom = stbPlayerRoom()
 
 // Room
-let Room_RoomNbr        = 1
-let Room_Terrain        = 2
-let Room_Type           = 3
-let Room_Name           = 4
-let Room_Desc           = 5
+struct stbRoom
+{
+  var `RoomNbr`           : Int    = 0
+  var `Terrain`           : String = ""
+  var `Type`              : String = ""
+  var `Name`              : String = ""
+  var `Desc`              : String = ""
+}
+var tbRoom = stbRoom()
 
 // RoomExit
-let RoomExit_RoomNbr    = 1
-let RoomExit_Direction  = 2
-let RoomExit_ToRoomNbr  = 3
-let RoomExit_Desc       = 4
+struct stbRoomExit
+{
+  var `RoomNbr`           : Int    = 0
+  var `Direction`         : Int    = 0
+  var `ToRoomNbr`         : Int    = 0
+  var `Desc`              : String = ""
+}
+var tbRoomExit = stbRoomExit()
 
 // RoomList
-let RoomList_ListNbr    = 1
-let RoomList_RoomNbr    = 2
+struct stbRoomList
+{
+  var `ListNbr`           : Int    = 0
+  var `RoomNbr`           : Int    = 0
+}
+var tbRoomList = stbRoomList()
 
 // RoomMob
-let RoomMob_RoomNbr     = 1
-let RoomMob_MobNbr      = 2
+struct stbRoomMob
+{
+  var `RoomNbr`           : Int    = 0
+  var `MobNbr`            : Int    = 0
+}
+var tbRoomMob = stbRoomMob()
 
 // RoomObj
-let RoomObj_RoomNbr     = 1
-let RoomObj_ObjNbr      = 2
+struct stbRoomObj
+{
+  var `RoomNbr`           : Int    = 0
+  var `ObjNbr`            : Int    = 0
+}
+var tbRoomObj = stbRoomObj()
 
 // Shop
-let Shop_RoomNbr        = 1
-let Shop_Name           = 2
-let Shop_Desc           = 3
+struct stbShop
+{
+  var `RoomNbr`           : Int    = 0
+  var `Name`              : String = ""
+  var `Desc`              : String = ""
+}
+var tbShop = stbShop()
 
 // ShopObject
-let ShopObject_RoomNbr  = 1
-let ShopObject_ObjectId = 2
+struct stbShopObject
+{
+  var `RoomNbr`           : Int    = 0
+  var `ObjectId`          : String = ""
+}
+var tbShopObject = stbShopObject()
 
 // Social
-let Social_Name         = 1
-let Social_MessageNbr   = 2
-let Social_Message      = 3
+struct stbSocial
+{
+  var `Name`              : String = ""
+  var `MessageNbr`        : Int    = 0
+  var `Message`           : String = ""
+}
+var tbSocial = stbSocial()
 
 // Spawn
-let Spawn_MobileId      = 1
-let Spawn_ListNbr       = 2
-let Spawn_Maximum       = 3
-let Spawn_Seconds       = 4
-let Spawn_Minutes       = 5
-let Spawn_Hours         = 6
-let Spawn_Days          = 7
-let Spawn_Weeks         = 8
-let Spawn_Months        = 9
-let Spawn_Years         = 10
+struct stbSpawn
+{
+  var `MobileId`          : String = ""
+  var `ListNbr`           : Int    = 0
+  var `Maximum`           : Int    = 0
+  var `Seconds`           : Int    = 0
+  var `Minutes`           : Int    = 0
+  var `Hours`             : Int    = 0
+  var `Days`              : Int    = 0
+  var `Weeks`             : Int    = 0
+  var `Months`            : Int    = 0
+  var `Years`             : Int    = 0
+}
+var tbSpawn = stbSpawn()
 
 // Synonym
-let Synonym_Name        = 1
-let Synonym_Command     = 2
-let Synonym_Info        = 3
-
-var SynonymName         : String          = ""
-var SynonymCommand      : String          = ""
-var SynonymInfo         : String          = ""
+struct stbSynonym
+{
+  var `Name`              : String = ""
+  var `Command`           : String = ""
+  var `Info`              : String = ""
+}
+var tbSynonym = stbSynonym()
 
 // Talk
-let Talk_TalkId         = 1
+struct stbTalk
+{
+  var `TalkId`            : String = ""
+}
+var tbTalk = stbTalk()
 
 // TalkMsg
-let TalkMsg_TalkId      = 1
-let TalkMsg_MessageNbr  = 2
-let TalkMsg_Message     = 3
+struct stbTalkMsg
+{
+  var `TalkId`            : String = ""
+  var `MessageNbr`        : Int    = 0
+  var `Message`           : String = ""
+}
+var tbTalkMsg = stbTalkMsg()
 
 // ValidName
-let ValidName_Name      = 1
-let ValidName_Sex       = 2
+struct stbValidName
+{
+  var `Name`              : String = ""
+  var `Sex`               : String = ""
+}
+var tbValidName = stbValidName()

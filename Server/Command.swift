@@ -34,6 +34,11 @@ func ProcessCommand()                         // BigDog.swift
   if CmdOk() {} else {return}
   Command.DelFirstWord()
   Command.Strip()
+  if tbCommand.Social == "y"
+  {
+    Socialize()
+    return
+  }
   switch MudCmd
   {
     case "advance"  : DoAdvance()
@@ -62,7 +67,7 @@ func DoAdvance()
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
-  PlayerLevel = Int(Command)!
+  tbPlayer.Level = Int(Command)!
   Player.TargetLookUp()
   if pTarget == nil
   {
@@ -71,11 +76,11 @@ func DoAdvance()
     Prompt()
     return
   }
-  if PlayerLevel == pTarget.Level
+  if tbPlayer.Level == pTarget.Level
   {
     pPlayer.Output += pTarget.Name
     pPlayer.Output += " is at level "
-    pPlayer.Output += String(PlayerLevel)
+    pPlayer.Output += String(tbPlayer.Level)
     pPlayer.Output += " already."
     Prompt()
     return
@@ -84,20 +89,20 @@ func DoAdvance()
   pPlayer.Output += "You advance "
   pPlayer.Output += pTarget.Name
   pPlayer.Output += " to level "
-  pPlayer.Output += String(PlayerLevel)
+  pPlayer.Output += String(tbPlayer.Level)
   Prompt()
   // Message to target
   pTarget.Output += "\r\n"
   pTarget.Output += pPlayer.Name
 
   pTarget.Output += " advances you to level "
-  pTarget.Output += String(PlayerLevel)
+  pTarget.Output += String(tbPlayer.Level)
   pTarget.Output += "!"
   Prompt(pTarget)
   // Update target's variables
-  pTarget.Level      = PlayerLevel
-  pTarget.Experience = Int(Player.CalcLevelExperience(PlayerLevel))
-  pTarget.HitPoints  = PlayerLevel * HIT_POINTS_PER_LEVEL
+  pTarget.Level      = tbPlayer.Level
+  pTarget.Experience = Int(Player.CalcLevelExperience(tbPlayer.Level))
+  pTarget.HitPoints  = tbPlayer.Level * HIT_POINTS_PER_LEVEL
   // Update db
   SqlSetPart  = "Level      = $1,"
   SqlSetPart += "Experience = $2,"
@@ -172,17 +177,17 @@ func DoColor()
   // Turn color on
   if TmpStr == "on"
   {
-    PlayerColor = "Yes"
+    tbPlayer.Color = "Yes"
     pPlayer.Output += "You will now see &RP&Gr&Ye&Bt&Mt&Cy&N &RC&Go&Yl&Bo&Mr&Cs&N.";
   }
   // Turn color off
   if TmpStr == "off"
   {
-    PlayerColor = "No"
+    tbPlayer.Color = "No"
     pPlayer.Output += "Color is off.";
   }
   // Update player's color setting
-  pPlayer.Color = PlayerColor
+  pPlayer.Color = tbPlayer.Color
   SqlSetPart = "Color = '$1'"
   SqlSetPart.Replace("$1", pPlayer.Color)
   Player.Update()
@@ -345,7 +350,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
 // Title
 func DoTitle()
 {
-  PlayerTitle = Command
+  tbPlayer.Title = Command
   if CommandWordCount == 1
   {
     if pPlayer.Title == ""
@@ -360,11 +365,11 @@ func DoTitle()
     return
   }
   pPlayer.Output += "Your title is set to: "
-  pPlayer.Output += PlayerTitle
+  pPlayer.Output += tbPlayer.Title
   Prompt()
-  pPlayer.Title = PlayerTitle
+  pPlayer.Title = tbPlayer.Title
   SqlSetPart = "Title = '$1'"
-  SqlSetPart.Replace("$1", PlayerTitle)
+  SqlSetPart.Replace("$1", tbPlayer.Title)
   Player.Update()
 }
 
@@ -405,6 +410,56 @@ func DoWho()                                  // Command.swift ProcessCommand()
   Prompt()
 }
 
+// Process social commands
+func Socialize()
+{
+  PlayerTargetName = Command.Word(1)
+  if PlayerTargetName.isEmpty
+  {
+    SocializeGetMsg(1)
+    tbSocial.Message.SubPronoun()
+    pPlayer.Output += tbSocial.Message
+    Prompt()
+    SocializeGetMsg(2)
+    tbSocial.Message.SubPronoun()
+    MsgTxt = tbSocial.Message
+    SendToRoom()
+    return
+  }
+}
+
+// Get social message
+func SocializeGetMsg(_ MsgNbr : Int)
+{
+  SqlStmt = """
+    Select
+      Name,
+      MessageNbr,
+      Message
+    From Social
+    Where Name = '$1'
+      And MessageNbr = $2
+  """
+  SqlStmt.Squeeze()
+  SqlStmt = SqlStmt.replacingOccurrences(of: "$1", with: MudCmd)
+  Db.OpenCursor()
+  Found = Db.FetchCursor()
+  if !Found
+  {
+    Db.CloseCursor()
+    TmpStr  = "ERROR reading Social table"
+    TmpStr += MudCmd
+    TmpStr += String(MsgNbr)
+    LogIt(TmpStr, 0)
+    return
+  }
+  // We have a social message
+  ColNbr = 0
+  tbSocial.Name          = Db.GetColTxt()
+  tbSocial.MessageNbr    = Db.GetColInt()
+  tbSocial.Message       = Db.GetColTxt()
+}
+
 //********************
 //* Helper functions *
 //********************
@@ -439,18 +494,19 @@ func CmdOk() -> Bool
     return false
   }
   // We have a valid command
-  CommandName          = Db.GetColTxt(ColNbrInSelect: Command_Name)
-  CommandAdmin         = Db.GetColTxt(ColNbrInSelect: Command_Admin)
-  CommandLevel         = Db.GetColInt(ColNbrInSelect: Command_Level)
-  CommandMinPosition   = Db.GetColTxt(ColNbrInSelect: Command_MinPosition)
-  CommandSocial        = Db.GetColTxt(ColNbrInSelect: Command_Social)
-  CommandFight         = Db.GetColTxt(ColNbrInSelect: Command_Fight)
-  CommandMinWords      = Db.GetColInt(ColNbrInSelect: Command_MinWords)
-  CommandParts         = Db.GetColInt(ColNbrInSelect: Command_Parts)
-  CommandMessage       = Db.GetColTxt(ColNbrInSelect: Command_Message)
+  ColNbr = 0
+  tbCommand.Name          = Db.GetColTxt()
+  tbCommand.Admin         = Db.GetColTxt()
+  tbCommand.Level         = Db.GetColInt()
+  tbCommand.MinPosition   = Db.GetColTxt()
+  tbCommand.Social        = Db.GetColTxt()
+  tbCommand.Fight         = Db.GetColTxt()
+  tbCommand.MinWords      = Db.GetColInt()
+  tbCommand.Parts         = Db.GetColInt()
+  tbCommand.Message       = Db.GetColTxt()
   Db.CloseCursor()
   // Does the command require Admin Rights?
-  if CommandAdmin == "y"
+  if tbCommand.Admin == "y"
   {
     if pPlayer.Admin == "No"
     {
@@ -459,16 +515,38 @@ func CmdOk() -> Bool
     }
   }
   // Is there a level restriction for this command?
-  if pPlayer.Level < CommandLevel
+  if pPlayer.Level < tbCommand.Level
   {
     pPlayer.Output += "You must attain a higher level before using this command"
     Prompt()
     return false
   }
   // Does the command have the minimum number of words?
-  if CommandWordCount < CommandMinWords
+  if CommandWordCount < tbCommand.MinWords
   {
-    pPlayer.Output += CommandMessage
+    pPlayer.Output += tbCommand.Message
+    Prompt()
+    return false
+  }
+  // Player is sleeping and command OK while sleeping?
+  if pPlayer.Position == "sleep" && tbCommand.MinPosition == "sleep"
+  {
+    return true
+  }
+  // Player is sleeping
+  if pPlayer.Position == "sleep"
+  {
+    SleepMsg()
+    return false
+  }
+  // Is player in a valid position for the command given
+  let PosNbr1 = GetPosNbr(pPlayer.Position)
+  let PosNbr2 = GetPosNbr(tbCommand.MinPosition)
+  if PosNbr1 < PosNbr2
+  {
+    pPlayer.Output += "You must be "
+    pPlayer.Output += tbCommand.MinPosition
+    pPlayer.Output += "ing to do that."
     Prompt()
     return false
   }
@@ -495,15 +573,16 @@ func IsSynonym()
     return
   }
   // We have a valid synonym
-  SynonymName          = Db.GetColTxt(ColNbrInSelect: Synonym_Name)
-  SynonymCommand       = Db.GetColTxt(ColNbrInSelect: Synonym_Command)
-  SynonymInfo          = Db.GetColTxt(ColNbrInSelect: Synonym_Info)
+  ColNbr = 0
+  tbSynonym.Name          = Db.GetColTxt()
+  tbSynonym.Command       = Db.GetColTxt()
+  tbSynonym.Info          = Db.GetColTxt()
   Db.CloseCursor()
-  MudCmd = SynonymCommand
+  MudCmd = tbSynonym.Command
 }
 
 // Bad command
-func BadCmdMsg()                              // Command.swift ProcessCommand()
+func BadCmdMsg()                              // Command.swift CmdOk()
 {
   LogIt("DEBUG", 5)
   let x = Int.random(in: 1 ... 5)
@@ -526,6 +605,35 @@ func BadCmdMsg()                              // Command.swift ProcessCommand()
     break;
   default :
     TmpStr = "Your command is not clear."
+  }
+  pPlayer.Output += TmpStr
+  Prompt()
+}
+
+// Sleep message
+func SleepMsg()                               // Command.swift CmdOk()
+{
+  LogIt("DEBUG", 5)
+  let x = Int.random(in: 1 ... 5)
+  switch x
+  {
+  case 1:
+    TmpStr = "You must be dreaming."
+    break;
+  case 2:
+    TmpStr = "You dream about doing something."
+    break;
+  case 3:
+    TmpStr = "It's such a nice dream, please don't wake me."
+    break;
+  case 4:
+    TmpStr = "Your snoring almost wakes you up."
+    break;
+  case 5:
+    TmpStr = "Dream, dream, dreeeeaaaammmm, all I do is dream."
+    break;
+  default :
+    TmpStr = "You must be dreaming."
   }
   pPlayer.Output += TmpStr
   Prompt()
@@ -586,8 +694,8 @@ func IsPlayerNew()
 func GetPlayerName()                          // Command.swift GetPlayerGoing()
 {
   LogIt("DEBUG", 5)
-  PlayerName = Command
-  PlayerName.CapFirst()
+  tbPlayer.Name = Command
+  tbPlayer.Name.CapFirst()
   Command = ""
   if pPlayer.LookUp()                         // Player.swift
   {
@@ -639,15 +747,10 @@ func SendToAll()
 {
   for p1 in PlayerSet
   {
-    if p1.Name != pPlayer.Name
-    {
-      p1.Output += "\r\n"
-    }
-    if p1.State == Player.States.Playing
-    {
-      p1.Output += MsgTxt
-      p1.Output += "\r\n"
-    }
+    if p1.Name == pPlayer.Name            {continue}
+    if p1.State != Player.States.Playing  {continue}
+    p1.Output += MsgTxt
+    Prompt(p1)
   }
 }
 
@@ -657,12 +760,11 @@ func SendToRoom()                             // Command.swift DoSay()
   LogIt("DEBUG", 5)
   for p1 in PlayerSet
   {
-    if p1.Name == pPlayer.Name {continue}
-    if p1.RoomNbr == pPlayer.RoomNbr
-    {
-      p1.Output += MsgTxt
-      Prompt(p1)
-    }
+    if p1.Name == pPlayer.Name            {continue}
+    if p1.State != Player.States.Playing  {continue}
+    if p1.RoomNbr != pPlayer.RoomNbr      {continue}
+    p1.Output += MsgTxt
+    Prompt(p1)
   }
 }
 

@@ -10,6 +10,7 @@ class Player
 {
   // Player variables
   var Output        : String
+  var PosNbr        : Int
   var RoomNbr       : Int
   var SocketHandle  : Int32
   var SocketAddr    : String
@@ -72,6 +73,7 @@ class Player
     LogIt("DEBUG", 5)
     // Initialize variables
     self.Output       = ""
+    self.PosNbr       = 0
     self.RoomNbr      = START_ROOM
     self.SocketAddr   = SocketAddr
     self.SocketHandle = SocketHandle
@@ -161,55 +163,54 @@ class Player
       Where Name = '$1'
     """
     SqlStmt.Squeeze()
-    SqlStmt.Replace("$1", PlayerName)
+    SqlStmt.Replace("$1", tbPlayer.Name)
     Db.OpenCursor()
     Found = Db.FetchCursor()
-    if Found
+    ColNbr = 0
+    if !Found
     {
-      pPlayer.Name         = Db.GetColTxt(ColNbrInSelect: Player_Name)
-      pPlayer.Password     = Db.GetColTxt(ColNbrInSelect: Player_Password)
-      pPlayer.Admin        = Db.GetColTxt(ColNbrInSelect: Player_Admin)
-      pPlayer.Afk          = Db.GetColTxt(ColNbrInSelect: Player_Afk)
-      pPlayer.AllowAssist  = Db.GetColTxt(ColNbrInSelect: Player_AllowAssist)
-      pPlayer.AllowGroup   = Db.GetColTxt(ColNbrInSelect: Player_AllowGroup)
-      pPlayer.ArmorClass   = Db.GetColInt(ColNbrInSelect: Player_ArmorClass)
-      pPlayer.Born         = Db.GetColInt(ColNbrInSelect: Player_Born)
-      pPlayer.Color        = Db.GetColTxt(ColNbrInSelect: Player_Color)
-      pPlayer.Experience   = Db.GetColInt(ColNbrInSelect: Player_Experience)
-      pPlayer.GoToArrive   = Db.GetColTxt(ColNbrInSelect: Player_GoToArrive)
-      pPlayer.GoToDepart   = Db.GetColTxt(ColNbrInSelect: Player_GoToDepart)
-      pPlayer.HitPoints    = Db.GetColInt(ColNbrInSelect: Player_HitPoints)
-      pPlayer.Hunger       = Db.GetColInt(ColNbrInSelect: Player_Hunger)
-      pPlayer.Invisible    = Db.GetColTxt(ColNbrInSelect: Player_Invisible)
-      pPlayer.Level        = Db.GetColInt(ColNbrInSelect: Player_Level)
-      pPlayer.MovePoints   = Db.GetColInt(ColNbrInSelect: Player_MovePoints)
-      pPlayer.OneWhack     = Db.GetColTxt(ColNbrInSelect: Player_OneWhack)
-      pPlayer.Online       = Db.GetColTxt(ColNbrInSelect: Player_Online)
-      pPlayer.Position     = Db.GetColTxt(ColNbrInSelect: Player_Position)
-      pPlayer.RoomInfo     = Db.GetColTxt(ColNbrInSelect: Player_RoomInfo)
-      pPlayer.Sex          = Db.GetColTxt(ColNbrInSelect: Player_Sex)
-      pPlayer.Silver       = Db.GetColInt(ColNbrInSelect: Player_Silver)
-      pPlayer.SkillAxe     = Db.GetColInt(ColNbrInSelect: Player_SkillAxe)
-      pPlayer.SkillClub    = Db.GetColInt(ColNbrInSelect: Player_SkillClub)
-      pPlayer.SkillDagger  = Db.GetColInt(ColNbrInSelect: Player_SkillDagger)
-      pPlayer.SkillHammer  = Db.GetColInt(ColNbrInSelect: Player_SkillHammer)
-      pPlayer.SkillSpear   = Db.GetColInt(ColNbrInSelect: Player_SkillSpear)
-      pPlayer.SkillStaff   = Db.GetColInt(ColNbrInSelect: Player_SkillStaff)
-      pPlayer.SkillSword   = Db.GetColInt(ColNbrInSelect: Player_SkillSword)
-      pPlayer.Thirst       = Db.GetColInt(ColNbrInSelect: Player_Thirst)
-      pPlayer.TimePlayed   = Db.GetColInt(ColNbrInSelect: Player_TimePlayed)
-      pPlayer.Title        = Db.GetColTxt(ColNbrInSelect: Player_Title)
-      pPlayer.WeaponDamage = Db.GetColInt(ColNbrInSelect: Player_WeaponDamage)
-      pPlayer.WeaponDesc1  = Db.GetColTxt(ColNbrInSelect: Player_WeaponDesc1)
-      pPlayer.WeaponType   = Db.GetColTxt(ColNbrInSelect: Player_WeaponType)
       Db.CloseCursor()
-      return true
-    }
-    else
-    {
-      Db.CloseCursor()                        // Db.swift
       return false
     }
+    ColNbr = 0
+    pPlayer.Name         = Db.GetColTxt()
+    pPlayer.Password     = Db.GetColTxt()
+    pPlayer.Admin        = Db.GetColTxt()
+    pPlayer.Afk          = Db.GetColTxt()
+    pPlayer.AllowAssist  = Db.GetColTxt()
+    pPlayer.AllowGroup   = Db.GetColTxt()
+    pPlayer.ArmorClass   = Db.GetColInt()
+    pPlayer.Born         = Db.GetColInt()
+    pPlayer.Color        = Db.GetColTxt()
+    pPlayer.Experience   = Db.GetColInt()
+    pPlayer.GoToArrive   = Db.GetColTxt()
+    pPlayer.GoToDepart   = Db.GetColTxt()
+    pPlayer.HitPoints    = Db.GetColInt()
+    pPlayer.Hunger       = Db.GetColInt()
+    pPlayer.Invisible    = Db.GetColTxt()
+    pPlayer.Level        = Db.GetColInt()
+    pPlayer.MovePoints   = Db.GetColInt()
+    pPlayer.OneWhack     = Db.GetColTxt()
+    pPlayer.Online       = Db.GetColTxt()
+    pPlayer.Position     = Db.GetColTxt()
+    pPlayer.RoomInfo     = Db.GetColTxt()
+    pPlayer.Sex          = Db.GetColTxt()
+    pPlayer.Silver       = Db.GetColInt()
+    pPlayer.SkillAxe     = Db.GetColInt()
+    pPlayer.SkillClub    = Db.GetColInt()
+    pPlayer.SkillDagger  = Db.GetColInt()
+    pPlayer.SkillHammer  = Db.GetColInt()
+    pPlayer.SkillSpear   = Db.GetColInt()
+    pPlayer.SkillStaff   = Db.GetColInt()
+    pPlayer.SkillSword   = Db.GetColInt()
+    pPlayer.Thirst       = Db.GetColInt()
+    pPlayer.TimePlayed   = Db.GetColInt()
+    pPlayer.Title        = Db.GetColTxt()
+    pPlayer.WeaponDamage = Db.GetColInt()
+    pPlayer.WeaponDesc1  = Db.GetColTxt()
+    pPlayer.WeaponType   = Db.GetColTxt()
+    Db.CloseCursor()
+    return true
   }
 
   // Insert new player into set of players
