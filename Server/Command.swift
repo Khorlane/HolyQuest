@@ -48,9 +48,13 @@ func ProcessCommand()                         // BigDog.swift
     case "quit"     : DoQuit()
     case "say"      : DoSay()
     case "shutdown" : DoShutdown()
+    case "sit"      : DoSit()
+    case "sleep"    : DoSleep()
+    case "stand"    : DoStand()
     case "status"   : DoStatus()
     case "tell"     : DoTell()
     case "title"    : DoTitle()
+    case "wake"     : DoWake()
     case "who"      : DoWho()
     default         : ShouldNeverGetHere()
   }
@@ -67,7 +71,7 @@ func DoAdvance()
   PlayerTargetName = Command.Word(1)
   Command.DelFirstWord()
   Command.Strip()
-  tbPlayer.Level = Int(Command)!
+  TmpInt = Int(Command)!
   Player.TargetLookUp()
   if pTarget == nil
   {
@@ -76,33 +80,33 @@ func DoAdvance()
     Prompt()
     return
   }
-  if tbPlayer.Level == pTarget.Level
+  if TmpInt == pTarget.Level
   {
     pPlayer.Output += pTarget.Name
     pPlayer.Output += " is at level "
-    pPlayer.Output += String(tbPlayer.Level)
+    pPlayer.Output += String(TmpInt)
     pPlayer.Output += " already."
     Prompt()
     return
   }
+  pTarget.Level = TmpInt
   // Message to player
   pPlayer.Output += "You advance "
   pPlayer.Output += pTarget.Name
   pPlayer.Output += " to level "
-  pPlayer.Output += String(tbPlayer.Level)
+  pPlayer.Output += String(pTarget.Level)
   Prompt()
   // Message to target
   pTarget.Output += "\r\n"
   pTarget.Output += pPlayer.Name
 
   pTarget.Output += " advances you to level "
-  pTarget.Output += String(tbPlayer.Level)
+  pTarget.Output += String(pTarget.Level)
   pTarget.Output += "!"
   Prompt(pTarget)
   // Update target's variables
-  pTarget.Level      = tbPlayer.Level
-  pTarget.Experience = Int(Player.CalcLevelExperience(tbPlayer.Level))
-  pTarget.HitPoints  = tbPlayer.Level * HIT_POINTS_PER_LEVEL
+  pTarget.Experience = Int(Player.CalcLevelExperience(pTarget.Level))
+  pTarget.HitPoints  = pTarget.Level * HIT_POINTS_PER_LEVEL
   // Update db
   SqlSetPart  = "Level      = $1,"
   SqlSetPart += "Experience = $2,"
@@ -177,17 +181,16 @@ func DoColor()
   // Turn color on
   if TmpStr == "on"
   {
-    tbPlayer.Color = "Yes"
+    pPlayer.Color = "Yes"
     pPlayer.Output += "You will now see &RP&Gr&Ye&Bt&Mt&Cy&N &RC&Go&Yl&Bo&Mr&Cs&N.";
   }
   // Turn color off
   if TmpStr == "off"
   {
-    tbPlayer.Color = "No"
+    pPlayer.Color = "No"
     pPlayer.Output += "Color is off.";
   }
   // Update player's color setting
-  pPlayer.Color = tbPlayer.Color
   SqlSetPart = "Color = '$1'"
   SqlSetPart.Replace("$1", pPlayer.Color)
   Player.Update()
@@ -242,6 +245,57 @@ func DoShutdown()                             // Command.swift ProcessCommand()
   {
     Player.Update(p1)
   }
+}
+
+// Sit
+func DoSit()
+{
+  LogIt("DEBUG", 5)
+  pPlayer.Position = "sit"
+  pPlayer.Output += "You sit down."
+  MsgTxt = ""
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
+  MsgTxt += " sits down."
+  SendToRoom()
+  // Update player's position
+  SqlSetPart = "Position = 'sit'"
+  Player.Update()
+  Prompt()
+}
+
+// Sleep
+func DoSleep()
+{
+  LogIt("DEBUG", 5)
+  pPlayer.Position = "sleep"
+  pPlayer.Output += "You fall asleep."
+  MsgTxt = ""
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
+  MsgTxt += " falls asleep."
+  SendToRoom()
+  // Update player's position
+  SqlSetPart = "Position = 'sleep'"
+  Player.Update()
+  Prompt()
+}
+
+// Stand
+func DoStand()
+{
+  LogIt("DEBUG", 5)
+  pPlayer.Position = "stand"
+  pPlayer.Output += "You stand up."
+  MsgTxt = ""
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
+  MsgTxt += " stands up."
+  SendToRoom()
+  // Update player's position
+  SqlSetPart = "Position = 'stand'"
+  Player.Update()
+  Prompt()
 }
 
 // Status
@@ -350,7 +404,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
 // Title
 func DoTitle()
 {
-  tbPlayer.Title = Command
+  TmpStr = Command
   if CommandWordCount == 1
   {
     if pPlayer.Title == ""
@@ -364,13 +418,30 @@ func DoTitle()
     Prompt()
     return
   }
+  pPlayer.Title = TmpStr
   pPlayer.Output += "Your title is set to: "
-  pPlayer.Output += tbPlayer.Title
+  pPlayer.Output += pPlayer.Title
   Prompt()
-  pPlayer.Title = tbPlayer.Title
   SqlSetPart = "Title = '$1'"
-  SqlSetPart.Replace("$1", tbPlayer.Title)
+  SqlSetPart.Replace("$1", pPlayer.Title)
   Player.Update()
+}
+
+// Wake
+func DoWake()
+{
+  LogIt("DEBUG", 5)
+  pPlayer.Position = "sit"
+  pPlayer.Output += "You awake and sit up."
+  MsgTxt = ""
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
+  MsgTxt += " wakes up."
+  SendToRoom()
+  // Update player's position
+  SqlSetPart = "Position = 'sit'"
+  Player.Update()
+  Prompt()
 }
 
 // Who
@@ -539,10 +610,20 @@ func CmdOk() -> Bool
     SleepMsg()
     return false
   }
-  // Is player in a valid position for the command given
-  let PosNbr1 = GetPosNbr(pPlayer.Position)
-  let PosNbr2 = GetPosNbr(tbCommand.MinPosition)
-  if PosNbr1 < PosNbr2
+  PosNbr1 = GetPosNbr(MudCmd)
+  PosNbr2 = GetPosNbr(pPlayer.Position)
+  PosNbr3 = GetPosNbr(tbCommand.MinPosition)
+  // Is player already in that position?
+  if PosNbr1 == PosNbr2
+  {
+    pPlayer.Output += "You are already "
+    pPlayer.Output += pPlayer.Position
+    pPlayer.Output += "ing."
+    Prompt()
+    return false
+  }
+  // Is player in a valid position for the command given?
+  if PosNbr2 < PosNbr3
   {
     pPlayer.Output += "You must be "
     pPlayer.Output += tbCommand.MinPosition
@@ -585,7 +666,7 @@ func IsSynonym()
 func BadCmdMsg()                              // Command.swift CmdOk()
 {
   LogIt("DEBUG", 5)
-  let x = Int.random(in: 1 ... 5)
+  x = Int.random(in: 1 ... 5)
   switch x
   {
   case 1:
@@ -614,7 +695,7 @@ func BadCmdMsg()                              // Command.swift CmdOk()
 func SleepMsg()                               // Command.swift CmdOk()
 {
   LogIt("DEBUG", 5)
-  let x = Int.random(in: 1 ... 5)
+  x = Int.random(in: 1 ... 5)
   switch x
   {
   case 1:

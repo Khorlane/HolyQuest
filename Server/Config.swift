@@ -9,44 +9,63 @@ import Foundation
 // DateFormatter
 // FileHandle
 // URL
-
+var AddExp                : Float                 = 0
+var BaseExp               : Float                 = 0
 var Command               : String                = ""
 var CommandWordCount      : Int                   = 0
+var Contents              : String                = ""
 var Found                 : Bool                  = false
 var GameShutdown          : Bool                  = false
 var GotInput              : Int32                 = 0
 var HostAdr               : String                = ""
 var Index                 : Int                   = 0
+var Lines                 : Array<Substring>      = []
 var ListenSocket          : Int32                 = 0
-var LogFile               : URL                   = URL.init(fileURLWithPath: "/")
-var LogFileName           : String                = ""
-var LogHandle             : FileHandle            = FileHandle()
-var LogPath               : String                = ""
 var LogLvlMax             : Int                   = 1
 var MaxSocketHandle       : Int32                 = 0
 var MsgTxt                : String                = ""
 var MudCmd                : String                = ""
 var NewConnection         : Int32                 = 0
-var PlayerTargetName      : String                = ""
 var PlayerSet                                     = Set<Player>()
+var PlayerTargetName      : String                = ""
 var PortNbr               : Int                   = 0
+var PosNbr1               : Int                   = 0
+var PosNbr2               : Int                   = 0
+var PosNbr3               : Int                   = 0
 var PronounHeShe          : String                = ""
 var PronounHimHer         : String                = ""
-var PronounHisHers        : String                = ""
 var PronounHimselfHerself : String                = ""
+var PronounHisHers        : String                = ""
 var ReadBytes             : Int                   = 0
+var SetInsertOk           : Bool                  = false
+var SockLocAdr            : String                = ""
 var SocketAddr            : String                = ""
 var SocketHandle1         : Int32                 = 0
-var SockLocAdr            : String                = ""
 var SqlCode               : Int32                 = 0
 var SqlSetPart            : String                = ""
 var SqlStmt               : String                = ""
 var SqlStmtLen            : Int32                 = 0
 var TimeStamp             : Date                  = Date()
 var TimeStampFmt          : DateFormatter         = DateFormatter()
+var TmpInt                : Int                   = 0
 var TmpStr                : String                = ""
 var TmpStr1               : String                = ""
 var TmpStr2               : String                = ""
+var TotalExp              : Float                 = 0
+
+// File related variables
+var GreetingFile          : String                = ""
+var GreetingFileName      : String                = ""
+var GreetingPath          : String                = ""
+var LogFile               : URL                   = URL.init(fileURLWithPath: "/")
+var LogFileName           : String                = ""
+var LogFromFile           : String                = ""
+var LogHandle             : FileHandle            = FileHandle()
+var LogPath               : String                = ""
+var LogToFile             : String                = ""
+var WorldFile             : String                = ""
+var WorldFileName         : String                = ""
+var WorldPath             : String                = ""
 
 // Single letter variables
 var x                     : Int                   = 0
@@ -55,6 +74,8 @@ var y                     : Int                   = 0
 // Player pointers
 var pPlayer               : Player!               = nil
 var pTarget               : Player!               = nil
+var pRemove               : Player!               = nil
+var pInsert               : Player!               = nil
 
 // SQLite pointers
 var pColTxt               : UnsafePointer<UInt8>? = nil

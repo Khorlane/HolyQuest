@@ -13,9 +13,9 @@ class Db
   static func Open()                          // BigDog.swift StartItUp()
   {
     LogIt("DEBUG", 5)
-    let WorldPath     = HOME_DIR + "/" + WORLD_DIR + "/"
-    let WorldFileName = WORLD_FILE_NAME
-    let WorldFile     = WorldPath + WorldFileName
+    WorldPath     = HOME_DIR + "/" + WORLD_DIR + "/"
+    WorldFileName = WORLD_FILE_NAME
+    WorldFile     = WorldPath + WorldFileName
     SqlCode = sqlite3_open(WorldFile, &pWorldDb)
     if SqlCode != SQLITE_OK
     {
@@ -51,7 +51,7 @@ class Db
   }
 
   // Open a cursor
-  static func OpenCursor()                    // Player.swift LookUp()
+  static func OpenCursor()
   {
     LogIt("DEBUG", 5)
     SqlStmtLen = Int32(SqlStmt.count)
@@ -64,7 +64,7 @@ class Db
   }
 
   // Fetch a row
-  static func FetchCursor() -> Bool           // Player.swift LookUp()
+  static func FetchCursor() -> Bool
   {
     LogIt("DEBUG", 5)
     SqlCode = sqlite3_step(pSqlResultSet)
@@ -79,7 +79,7 @@ class Db
   }
 
   // Close cursor
-  static func CloseCursor()                   // Player.swift LookUp()
+  static func CloseCursor()
   {
     LogIt("DEBUG", 5)
     SqlCode = sqlite3_finalize(pSqlResultSet)
@@ -91,7 +91,7 @@ class Db
   }
 
   // Get an integer column
-  static func GetColInt() -> Int // Player.swift LookUp()
+  static func GetColInt() -> Int
   {
     LogIt("DEBUG", 5)
     ColInt = Int(sqlite3_column_int(pSqlResultSet, ColNbr))
@@ -100,10 +100,8 @@ class Db
   }
 
   // Get a text column
-  static func GetColTxt() -> String // Player.swift LookUp()
+  static func GetColTxt() -> String
   {
-
-
     LogIt("DEBUG", 5)
     pColTxt = sqlite3_column_text(pSqlResultSet, ColNbr)
     ColTxt = String(cString: pColTxt!)

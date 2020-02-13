@@ -217,10 +217,15 @@ class Player
   static func SetInsert()                     // BigDog.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
-    let Good = PlayerSet.insert(pPlayer)
-    if Good.inserted == false
+    (SetInsertOk, pInsert) = PlayerSet.insert(pPlayer)
+    if SetInsertOk == false
     {
-      LogIt("ERROR PlayerSetInsert failed", 0)
+      LogIt("ERROR PlayerSetInsert failed - AddOk is false", 0)
+      exit(EXIT_FAILURE)
+    }
+    if pPlayer != pInsert
+    {
+      LogIt("ERROR PlayerSetInsert failed - pPlayer != pInsert", 0)
       exit(EXIT_FAILURE)
     }
   }
@@ -229,10 +234,15 @@ class Player
   static func SetRemove()                     // Command.swift DoQuit()
   {
     LogIt("DEBUG", 5)
-    let Good = PlayerSet.remove(pPlayer)
-    if Good == nil
+    pRemove = PlayerSet.remove(pPlayer)
+    if pRemove == nil
     {
-      LogIt("ERROR PlayerSetRemove failed", 0)
+      LogIt("ERROR PlayerSetRemove failed - nil pointer", 0)
+      exit(EXIT_FAILURE)
+    }
+    if pRemove != pPlayer
+    {
+      LogIt("ERROR PlayerSetRemove failed - pRemove != pPlayer", 0)
       exit(EXIT_FAILURE)
     }
   }
@@ -241,18 +251,17 @@ class Player
   static func Banner()                      // Player.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
-    let GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
-    let GreetingFileName = GREETING_FILE_NAME
-    let GreetingFile     = GreetingPath + GreetingFileName
+    GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
+    GreetingFileName = GREETING_FILE_NAME
+    GreetingFile     = GreetingPath + GreetingFileName
 
     // Read the contents of the specified file
-    let contents = try! String(contentsOfFile: GreetingFile)
+    Contents = try! String(contentsOfFile: GreetingFile)
 
     // Split the file into separate lines
-    let lines = contents.split(separator:"\n")
-
-    // Iterate over each line and print the line
-    for line in lines {
+    Lines = Contents.split(separator:"\n")
+    // Iterate over each line, sending each to the player
+    for line in Lines {
       pPlayer.Output += line
     }
     pPlayer.Output += "\r\n"
@@ -264,9 +273,9 @@ class Player
 
   static func CalcLevelExperience(_ Level : Int) -> Float
   {
-    let BaseExp  = CalcLevelExperienceBase(Level)
-    let AddExp   = CalcLevelExperienceAdd(Level, BaseExp)
-    let TotalExp = BaseExp + AddExp
+    BaseExp  = CalcLevelExperienceBase(Level)
+    AddExp   = CalcLevelExperienceAdd(Level, BaseExp)
+    TotalExp = BaseExp + AddExp
     return TotalExp
   }
 
@@ -286,7 +295,7 @@ class Player
     return Float((Level * 1000)) + CalcLevelExperienceBase(Level-1)
   }
 
-  // Lookup target player in player set
+  // Look up target player in player set
   static func TargetLookUp()                  // Command.swift
   {
     LogIt("DEBUG", 5)

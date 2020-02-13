@@ -30,11 +30,11 @@ func LogIt                                    // Called from all over the place
 // Open the log
 func OpenLog()                                // BigDog.swift StartItUp()
 {
-  LogPath      = HOME_DIR + "/" + LOG_DIR + "/"
-  LogFileName  = LOG_FILE_NAME
-  let FromFile = LogPath + LogFileName + ".empty"
-  let ToFile   = LogPath + LogFileName
-  let (output, error, status) = RunCmd(cmd: "/bin/cp", args: FromFile, ToFile)
+  LogPath     = HOME_DIR + "/" + LOG_DIR + "/"
+  LogFileName = LOG_FILE_NAME
+  LogFromFile = LogPath + LogFileName + ".empty"
+  LogToFile   = LogPath + LogFileName
+  let (output, error, status) = RunCmd(cmd: "/bin/cp", args: LogFromFile, LogToFile)
   if status != 0
   {
     print("Program exited with status \(status)")

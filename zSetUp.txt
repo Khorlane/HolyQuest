@@ -1,3 +1,5 @@
+print(type(of: Lines))
+
 $ git init
 Initialized empty Git repository in /Users/stephenbryant/Projects/HolyQuest/.git/
 $ git add .
