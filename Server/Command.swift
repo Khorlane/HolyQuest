@@ -44,6 +44,7 @@ func ProcessCommand()                         // BigDog.swift
     case "advance"  : DoAdvance()
     case "afk"      : DoAfk()
     case "color"    : DoColor()
+    case "help"     : DoHelp()
     case "look"     : DoLook()
     case "quit"     : DoQuit()
     case "say"      : DoSay()
@@ -195,6 +196,28 @@ func DoColor()
   SqlSetPart.Replace("$1", pPlayer.Color)
   Player.Update()
   Prompt()
+}
+
+// Help
+func DoHelp()
+{
+  LogIt("DEBUG", 5)
+  HelpPath     = HOME_DIR + "/" + HELP_DIR + "/"
+  HelpFileName = HELP_FILE_NAME
+  HelpFile     = HelpPath + HelpFileName
+  // Read the contents of the specified file
+  Contents = try! String(contentsOfFile: HelpFile)
+  // Split the file into separate lines
+  Lines = Contents.split(separator:"\r\n")
+  // Iterate over each line, sending each to the player
+  x = 0
+  for line in Lines
+  {
+    pPlayer.Output += line
+    x = x + 1
+    if x > 10 {return}
+  }
+  pPlayer.Output += "\r\n"
 }
 
 // Look

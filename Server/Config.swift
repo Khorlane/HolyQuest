@@ -57,6 +57,9 @@ var TotalExp              : Float                 = 0
 var GreetingFile          : String                = ""
 var GreetingFileName      : String                = ""
 var GreetingPath          : String                = ""
+var HelpFile              : String                = ""
+var HelpFileName          : String                = ""
+var HelpPath              : String                = ""
 var LogFile               : URL                   = URL.init(fileURLWithPath: "/")
 var LogFileName           : String                = ""
 var LogFromFile           : String                = ""
@@ -97,12 +100,14 @@ let SLEEP_TIME           = 0100000
 let START_ROOM           = 86
 
 // Game directories
+let HELP_DIR             = "Library"
 let HOME_DIR             = "/Users/stephenbryant/Projects/HolyQuest"
 let GREETING_DIR         = "Library"
 let LOG_DIR              = "Log"
 let WORLD_DIR            = "Library"
 
 // File names
+let HELP_FILE_NAME       = "Help.txt"
 let GREETING_FILE_NAME   = "Greeting.txt"
 let LOG_FILE_NAME        = "Log.txt"
 let WORLD_FILE_NAME      = "World.db3"

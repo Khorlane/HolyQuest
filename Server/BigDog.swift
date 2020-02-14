@@ -74,7 +74,7 @@ func NewPlayer()                              // BigDog.swift CheckForNewPlayers
 {
   LogIt("DEBUG", 5)
   pPlayer = Player.init(Name: "*", SocketAddr: SocketAddr, SocketHandle: SocketHandle1) // Player.swift
-  Player.Banner()                             // Player.swift
+  Player.Greeting()                           // Player.swift
   Prompt()                                    // Command.swift
   Player.SetInsert()                          // Player.swift
 }

@@ -248,7 +248,7 @@ class Player
   }
 
   // Send greeting to new player
-  static func Banner()                      // Player.swift PlayerNew()
+  static func Greeting()                      // Player.swift PlayerNew()
   {
     LogIt("DEBUG", 5)
     GreetingPath     = HOME_DIR + "/" + GREETING_DIR + "/"
@@ -259,12 +259,13 @@ class Player
     Contents = try! String(contentsOfFile: GreetingFile)
 
     // Split the file into separate lines
-    Lines = Contents.split(separator:"\n")
+    Lines = Contents.split(separator: "\r\n", omittingEmptySubsequences: false)
     // Iterate over each line, sending each to the player
-    for line in Lines {
+    for line in Lines
+    {
       pPlayer.Output += line
+      pPlayer.Output += "\r\n"
     }
-    pPlayer.Output += "\r\n"
   }
 
   //**********************
