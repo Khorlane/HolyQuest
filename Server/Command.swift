@@ -201,23 +201,71 @@ func DoColor()
 // Help
 func DoHelp()
 {
+  var HelpFound : Bool = false
+
+  func GetHelp()
+  {
+    for line in Lines
+    {
+      TmpStr1 = String(line)
+      TmpStr1.Lower()
+      if !HelpFound
+      {
+        if TmpStr1.Word(1) != "help:"+TmpStr {continue}
+        HelpFound = true
+        pPlayer.Output += line
+        pPlayer.Output += "\r\n"
+        continue
+      }
+      // Help topic found
+      pPlayer.Output += line
+      pPlayer.Output += "\r\n"
+      if TmpStr1.Word(1) == "related" {break}
+    }
+  }
+
   LogIt("DEBUG", 5)
+  // Open and read help file
   HelpPath     = HOME_DIR + "/" + HELP_DIR + "/"
   HelpFileName = HELP_FILE_NAME
   HelpFile     = HelpPath + HelpFileName
   // Read the contents of the specified file
   Contents = try! String(contentsOfFile: HelpFile)
   // Split the file into separate lines
-  Lines = Contents.split(separator:"\r\n")
-  // Iterate over each line, sending each to the player
-  x = 0
-  for line in Lines
+  Lines = Contents.split(separator: "\r\n", omittingEmptySubsequences: false)
+  // Process help command
+  TmpStr = Command
+  TmpStr.Lower()
+  // General help
+  if TmpStr == ""
   {
-    pPlayer.Output += line
-    x = x + 1
-    if x > 10 {return}
+    x = 0
+    for line in Lines
+    {
+      pPlayer.Output += line
+      x = x + 1
+      if x > 23 {break}
+      pPlayer.Output += "\r\n"
+    }
+    Prompt()
+    return
   }
-  pPlayer.Output += "\r\n"
+  // Look for specific help topic
+  GetHelp()
+  if HelpFound
+  {
+    Prompt()
+    return
+  }
+  // That help topic was not found
+  TmpStr = "notfound"
+  GetHelp()
+  if !HelpFound
+  { // There really is NO help!
+    pPlayer.Output += "There is no help!!"
+    pPlayer.Output += "\r\n"
+  }
+  Prompt()
 }
 
 // Look

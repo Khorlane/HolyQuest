@@ -45,7 +45,7 @@ int       SocketHandle1;
 int       SocketHandle2;
 socklen_t SocketSize;
 
-char    Buffer[1025];
+char    Buffer[2048];
 
 struct  linger      Linger;
 struct  sockaddr_in Socket;
