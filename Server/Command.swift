@@ -48,6 +48,7 @@ func ProcessCommand()                         // BigDog.swift
     case "look"     : DoLook()
     case "quit"     : DoQuit()
     case "say"      : DoSay()
+    case "show"     : DoShow()
     case "shutdown" : DoShutdown()
     case "sit"      : DoSit()
     case "sleep"    : DoSleep()
@@ -203,6 +204,7 @@ func DoHelp()
 {
   var HelpFound : Bool = false
 
+  LogIt("DEBUG", 5)
   func GetHelp()
   {
     for line in Lines
@@ -223,8 +225,6 @@ func DoHelp()
       if TmpStr1.Word(1) == "related" {break}
     }
   }
-
-  LogIt("DEBUG", 5)
   // Open and read help file
   HelpPath     = HOME_DIR + "/" + HELP_DIR + "/"
   HelpFileName = HELP_FILE_NAME
@@ -236,6 +236,20 @@ func DoHelp()
   // Process help command
   TmpStr = Command
   TmpStr.Lower()
+  if TmpStr == "helptopicsonly"
+  {
+    pPlayer.Output += "Help Topics\r\n"
+    pPlayer.Output += "-----------"
+    for line in Lines
+    {
+      if line.prefix(5) == "Help:"
+      {
+        pPlayer.Output += line.suffix(line.count - 5)
+        pPlayer.Output += "\r\n"
+      }
+    }
+    return
+  }
   // General help
   if TmpStr == ""
   {
@@ -301,6 +315,96 @@ func DoSay()                                  // Command.swift ProcessCommand()
   MsgTxt += " says: "
   MsgTxt += TmpStr
   SendToRoom()                                // Command.swift
+}
+
+// Show
+func DoShow()
+{
+  LogIt("DEBUG", 5)
+  func GetRows()
+  {
+    SqlStmt.Squeeze()
+    Db.OpenCursor()
+    Found = Db.FetchCursor()
+    while Found
+    {
+      ColNbr = 0
+      tbCommand.Name = Db.GetColTxt()
+      pPlayer.Output += tbCommand.Name
+      pPlayer.Output += "\r\n"
+      Found = Db.FetchCursor()
+    }
+    Db.CloseCursor()
+  }
+  func ShowCommands()
+  {
+    SqlStmt = """
+      Select
+        Name
+      From Command
+      Where Admin in ("$1","$2")
+        And Social = "n"
+      Order By Name
+    """
+    pPlayer.Output += "Commands\r\n"
+    pPlayer.Output += "--------\r\n"
+    if pPlayer.Admin == "Yes"
+    {
+      SqlStmt.Replace("$1", "y")
+      SqlStmt.Replace("$2", "n")
+    }
+    else
+    {
+      SqlStmt.Replace("$1", "n")
+      SqlStmt.Replace("$2", "n")
+    }
+    GetRows()
+  }
+  func ShowSocials()
+  {
+    SqlStmt = """
+      Select
+        Name
+      From Command
+      Where Social = "y"
+      Order By Name
+    """
+    pPlayer.Output += "Socials\r\n"
+    pPlayer.Output += "-------\r\n"
+    if pPlayer.Admin == "Yes"
+    {
+      SqlStmt.Replace("$1", "y")
+    }
+    else
+    {
+      SqlStmt.Replace("$1", "n")
+    }
+    GetRows()
+  }
+  TmpStr = Command
+  TmpStr.Lower()
+  if TmpStr == "commands"
+  {
+    ShowCommands()
+    Prompt()
+    return
+  }
+  if TmpStr == "socials"
+  {
+    ShowSocials()
+    Prompt()
+    return
+  }
+  if TmpStr == "help"
+  {
+    Command = "HelpTopicsOnly"
+    DoHelp()
+    Prompt()
+    return
+  }
+  // Valid options: commands, socials, help ONLY
+  pPlayer.Output += "Show what?"
+  Prompt()
 }
 
 // Shutdown
@@ -475,6 +579,7 @@ func DoTell()                                 // Command.swift ProcessCommand()
 // Title
 func DoTitle()
 {
+  LogIt("DEBUG", 5)
   TmpStr = Command
   if CommandWordCount == 1
   {
@@ -555,6 +660,7 @@ func DoWho()                                  // Command.swift ProcessCommand()
 // Process social commands
 func Socialize()
 {
+  LogIt("DEBUG", 5)
   PlayerTargetName = Command.Word(1)
   if PlayerTargetName.isEmpty
   {
@@ -573,6 +679,7 @@ func Socialize()
 // Get social message
 func SocializeGetMsg(_ MsgNbr : Int)
 {
+  LogIt("DEBUG", 5)
   SqlStmt = """
     Select
       Name,
@@ -707,6 +814,7 @@ func CmdOk() -> Bool
 
 func IsSynonym()
 {
+  LogIt("DEBUG", 5)
   SqlStmt = """
     Select
       Name,
@@ -821,6 +929,7 @@ func GetPlayerGoing()                         // Command.swift
 // Is Player a new player?
 func IsPlayerNew()
 {
+  LogIt("DEBUG", 5)
   TmpStr = Command
   TmpStr.Lower()
   if TmpStr != "y" && TmpStr != "n"
@@ -897,6 +1006,7 @@ func SendGreeting()                           // Command.swift GetPlayerGoing()
 // Send message to all players
 func SendToAll()
 {
+  LogIt("DEBUG", 5)
   for p1 in PlayerSet
   {
     if p1.Name == pPlayer.Name            {continue}
