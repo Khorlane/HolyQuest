@@ -43,6 +43,7 @@ func ProcessCommand()                         // BigDog.swift
   {
     case "advance"  : DoAdvance()
     case "afk"      : DoAfk()
+    case "chat"     : DoChat()
     case "color"    : DoColor()
     case "help"     : DoHelp()
     case "look"     : DoLook()
@@ -137,6 +138,22 @@ func DoAfk()                                  // Command.swift ProcessCommand()
   SqlSetPart.Replace("$1", pPlayer.Afk)
   Player.Update()
   Prompt()
+}
+
+// Chat
+func DoChat()
+{
+  LogIt("DEBUG", 5)
+  TmpStr = Command
+  pPlayer.Output += "You chat: "
+  pPlayer.Output += TmpStr
+  Prompt()
+  MsgTxt = ""
+  MsgTxt += "\r\n"
+  MsgTxt += pPlayer.Name
+  MsgTxt += " chats: "
+  MsgTxt += TmpStr
+  SendToAll()                                // Command.swift
 }
 
 // Color
