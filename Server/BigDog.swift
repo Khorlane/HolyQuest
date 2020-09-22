@@ -11,7 +11,6 @@ import Foundation
 func BigDog()
 {
   StartItUp()                                 // BigDog.swift
-
   while !GameShutdown
   {
     HeartBeat()                               // BigDog.swift
