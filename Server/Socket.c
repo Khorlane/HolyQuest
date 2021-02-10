@@ -24,7 +24,7 @@
 #define COMMS_WAIT_USEC 1
 #define DEBUGIT(x)      if (DEBUGIT_LVL >= x) {printf("*** ");printf(__FUNCTION__);printf(" ***\r\n");}
 #define DEBUGIT_LVL     1
-#define MSG_NOSIGNAL    0x2000 /* don't raise SIGPIPE */
+//#define MSG_NOSIGNAL    0x2000 /* don't raise SIGPIPE */
 
 int       BindResult;
 size_t    BufferLen;

@@ -920,7 +920,7 @@ func SleepMsg()                               // Command.swift CmdOk()
 func GetPlayerGoing()                         // Command.swift
 {
   LogIt("DEBUG", 5)
-  if pPlayer.State == Player.States.IsNew
+  if pPlayer.State == Player.States.Connected
   {
     IsPlayerNew()
     return

@@ -55,7 +55,7 @@ class Player
   
   enum States
   {
-    case IsNew
+    case Connected
     case GetName
     case GetPassword
     case SendGreeting
@@ -77,7 +77,7 @@ class Player
     self.RoomNbr      = START_ROOM
     self.SocketAddr   = SocketAddr
     self.SocketHandle = SocketHandle
-    self.State        = States.IsNew
+    self.State        = States.Connected
     // Initialize file variables
     self.Name         = Name
     self.Password     = ""
