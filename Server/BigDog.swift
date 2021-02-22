@@ -2,7 +2,7 @@
 // BigDog.swift
 // Game loop
 // Created by Steve Bryant on 08/23/2019.
-// Copyright 2019 CodePlain. All rights reserved.
+// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 // usleep
@@ -44,11 +44,11 @@ func HeartBeat()                              // BigDog.swift BigDog()
 // Do we have any activity on any of our sockets?
 func CheckSocketActivity()                    // BigDog.swift BigDog()
 {
-  PrepForSelectMaster()                       // Socket.c
+  SocketSelectPrep1()                         // Socket.c
   MaxSocketHandle = ListenSocket
   for p in PlayerSet
   {
-    PrepForSelectPlayer(p.SocketHandle)       // Socket.c
+    SocketSelectPrep2(p.SocketHandle)         // Socket.c
     if p.SocketHandle > MaxSocketHandle
     {
       MaxSocketHandle = p.SocketHandle

@@ -1,8 +1,8 @@
 // HolyQuest
-// MySocket.h
+// Socket.h
 // Sockets
 // Created by Steve Bryant on 05/09/2019.
-// Copyright 2019 CodePlain. All rights reserved.
+// Copyright 2021 CodePlain. All rights reserved.
 
 #ifndef Socket_h
 #define Socket_h
@@ -18,7 +18,7 @@ int   SocketServerListen(int Port);
 long  ReadClient(int SocketHandle1);
 void  SendClient(int SocketHandle1);
 void  SetBuffer(char * StringInp);
-void  PrepForSelectMaster(void);
-void  PrepForSelectPlayer(int SocketHandle);
+void  SocketSelectPrep1(void);
+void  SocketSelectPrep2(int SocketHandle);
 
 #endif /* Socket_h */

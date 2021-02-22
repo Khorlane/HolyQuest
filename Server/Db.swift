@@ -2,7 +2,7 @@
 // Db.swift
 // SQLite database
 // Created by Steve Bryant on 06/03/2019.
-// Copyright 2019 CodePlain. All rights reserved.
+// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 import SQLite3
@@ -16,7 +16,7 @@ class Db
     WorldPath     = HOME_DIR + "/" + WORLD_DIR + "/"
     WorldFileName = WORLD_FILE_NAME
     WorldFile     = WorldPath + WorldFileName
-    SqlCode = sqlite3_open(WorldFile, &pWorldDb)
+    SqlCode       = sqlite3_open(WorldFile, &pWorldDb)
     if SqlCode != SQLITE_OK
     {
       LogIt("ERROR Database Open Failed", 0)
@@ -55,7 +55,7 @@ class Db
   {
     LogIt("DEBUG", 5)
     SqlStmtLen = Int32(SqlStmt.count)
-    SqlCode = sqlite3_prepare(pWorldDb, SqlStmt, SqlStmtLen, &pSqlResultSet, nil)
+    SqlCode    = sqlite3_prepare(pWorldDb, SqlStmt, SqlStmtLen, &pSqlResultSet, nil)
     if SqlCode != SQLITE_OK
     {
       LogIt("ERROR Database prepare SQL failed", 0)

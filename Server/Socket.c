@@ -1,8 +1,8 @@
 // HolyQuest
-// MySocket.c
+// Socket.c
 // Sockets
 // Created by Steve Bryant on 05/09/2019.
-// Copyright 2019 CodePlain. All rights reserved.
+// Copyright 2021 CodePlain. All rights reserved.
 
 // Mud Server includes
 #include <fcntl.h>
@@ -149,7 +149,7 @@ int SocketServerListen(int Port)              // BigDog.swift
   return ListenSocket;
 }
 
-void PrepForSelectMaster(void)                // BigDog.swift
+void SocketSelectPrep1(void)                // BigDog.swift
 {
   //*********************************
   // Add master socket to input set *
@@ -159,7 +159,7 @@ void PrepForSelectMaster(void)                // BigDog.swift
   FD_SET(ListenSocket, &InpSet);
 }
 
-void PrepForSelectPlayer(int SocketHandle)    // BigDog.swift
+void SocketSelectPrep2(int SocketHandle)    // BigDog.swift
 {
   //**********************************
   // Add player sockets to input set *

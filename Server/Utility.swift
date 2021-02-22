@@ -2,7 +2,7 @@
 // Utility.swift
 // Utility functions
 // Created by Steve Bryant on 12/25/2018.
-// Copyright 2019 CodePlain. All rights reserved.
+// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 // Date()
@@ -127,6 +127,7 @@ func FormatCommas(_ x: Int) -> String
   return y
 }
 
+// Translate Player Position to a number
 func GetPosNbr(_ Position: String) -> Int
 {
   switch Position
@@ -138,6 +139,7 @@ func GetPosNbr(_ Position: String) -> Int
   }
 }
 
+// Track rooms that have been visited in a Bit Array
 func RoomsVisited()
 {
   var RoomsVisited = [UInt8]()
