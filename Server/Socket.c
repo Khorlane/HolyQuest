@@ -2,7 +2,6 @@
 // Socket.c
 // Sockets
 // Created by Steve Bryant on 05/09/2019.
-// Copyright 2021 CodePlain. All rights reserved.
 
 // Mud Server includes
 #include <fcntl.h>

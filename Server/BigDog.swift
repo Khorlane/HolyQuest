@@ -1,8 +1,7 @@
 // HolyQuest
 // BigDog.swift
-// Game loop
+// Game loop!
 // Created by Steve Bryant on 08/23/2019.
-// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 // usleep

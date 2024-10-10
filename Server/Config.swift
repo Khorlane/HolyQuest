@@ -2,7 +2,6 @@
 // Config.swift
 // Configuration file
 // Created by Steve Bryant on 12/25/2018.
-// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 // Date
@@ -95,7 +94,7 @@ var pCh                   : UnsafeMutablePointer<Int8>?
 
 // Some literals
 let HIT_POINTS_PER_LEVEL = 31
-let PORT_NUMBER          = 7777
+let PORT_NUMBER          = 8000
 let SLEEP_TIME           = 0100000
 let START_ROOM           = 86
 

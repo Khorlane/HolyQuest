@@ -2,7 +2,6 @@
 // Db.swift
 // SQLite database
 // Created by Steve Bryant on 06/03/2019.
-// Copyright 2021 CodePlain. All rights reserved.
 
 import Foundation
 import SQLite3
